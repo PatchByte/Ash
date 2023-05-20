@@ -10,6 +10,8 @@ namespace ash
     {
     public:
         AshBuffer();
+        // Import Constructor
+        AshBuffer(AshPointer Pointer, AshSize Size);
         virtual ~AshBuffer();
 
         virtual bool AllocateSize(AshSize Size);

@@ -11,14 +11,26 @@ namespace ash
             buffer = nullptr;
             bufferMode = AshStreamMode::INVALID;
             bufferCursor = 0;
-            hasErrorOccurred = false;
+            flags.value = 0;
+        }
+
+        void SetErrorHasOccurred()
+        {
+            flags.bits.hasErrorOccurred = true;
         }
 
         AshBuffer* buffer;
         AshStreamMode bufferMode;
         AshSize bufferCursor;
 
-        bool hasErrorOccurred;
+        union
+        {
+            unsigned char value;
+            struct {
+                bool hasErrorOccurred;
+                bool isSingleUseBuffer;
+            } bits;
+        } flags;
     };
 
     AshStream::AshStream(AshBuffer* Buffer, AshStreamMode BufferMode)
@@ -31,7 +43,17 @@ namespace ash
 
     AshStream::~AshStream()
     {
+        if(classInternalAshStream->flags.bits.isSingleUseBuffer)
+        {
+            delete classInternalAshStream->buffer;
+        }
         ASH_CLASS_IMPLEMENT_INTERNAL_OBJECT_DEALLOCATION(AshStream);
+    }
+
+    bool AshStream::SetSingleUseBuffer()
+    {
+        classInternalAshStream->flags.bits.isSingleUseBuffer = true;
+        return true;
     }
 
     AshResult AshStream::ReadRawIntoPointer(void* Buffer, AshSize BufferSize)
@@ -43,13 +65,13 @@ namespace ash
 
         if(IsEndOfFile())
         {
-            classInternalAshStream->hasErrorOccurred = true;
+            classInternalAshStream->SetErrorHasOccurred();
             return AshResult(false, "Stream is eof.");
         }
 
         if((classInternalAshStream->bufferCursor + BufferSize) > classInternalAshStream->buffer->GetSize())
         {
-            classInternalAshStream->hasErrorOccurred = true;
+            classInternalAshStream->SetErrorHasOccurred();
             return AshResult(false, "Size is overlapping the eof.");
         }
 
@@ -71,13 +93,13 @@ namespace ash
 
         if(IsEndOfFile())
         {
-            classInternalAshStream->hasErrorOccurred = true;
+            classInternalAshStream->SetErrorHasOccurred();
             return AshResult(false, "Stream is eof.");
         }
 
         if((classInternalAshStream->bufferCursor + BufferSize) > classInternalAshStream->buffer->GetSize())
         {
-            classInternalAshStream->hasErrorOccurred = true;
+            classInternalAshStream->SetErrorHasOccurred();
             return AshResult(false, "Size is overlapping the eof.");
         }
 
@@ -107,7 +129,7 @@ namespace ash
 
     bool AshStream::HasErrorOccurred()
     {
-        return classInternalAshStream->hasErrorOccurred;
+        return classInternalAshStream->flags.bits.hasErrorOccurred;
     }
 
     AshStreamMode AshStream::GetStreamMode()

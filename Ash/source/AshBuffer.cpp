@@ -20,7 +20,7 @@ namespace ash
         }
 
         union {
-            int value;
+            unsigned char value;
             struct {
                 bool isAllocated : 1;
                 bool isImported : 1;
@@ -37,6 +37,12 @@ namespace ash
         ASH_CLASS_IMPLEMENT_INTERNAL_OBJECT_ALLOCATION(AshBuffer);
         // Reset
         this->ReleaseMemory();
+    }
+
+    AshBuffer::AshBuffer(AshPointer Pointer, AshSize Size):
+        AshBuffer::AshBuffer()
+    {
+        this->ImportPointer(Pointer, Size);
     }
 
     AshBuffer::~AshBuffer()

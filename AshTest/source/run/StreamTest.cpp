@@ -11,37 +11,36 @@ ash::AshResult StreamRunTest::Do()
     {
         // Write test
 
-        ash::AshBuffer* buffer = new ash::AshBuffer();
-        buffer->ImportPointer(blob, sizeof(blob));
-
-        ash::AshStream* stream = new ash::AshStream(buffer, ash::AshStreamMode::WRITE);
+        ash::AshStream* stream = new ash::AshStream(new ash::AshBuffer(blob, sizeof(blob)), ash::AshStreamMode::WRITE);
+        stream->SetSingleUseBuffer();
 
         for(int i = 0; i < 64; i++)
         {
             stream->Write(&i);
         }
+        
+        if(stream->IsEndOfFile() == false)
+        {
+            return ash::AshResult(false, "Stream is not eof.");
+        }
 
-        delete buffer;
         delete stream;
     }
     {
         // Read Test
 
-        ash::AshBuffer* buffer = new ash::AshBuffer();
-        buffer->ImportPointer(blob, sizeof(blob));
-
-        ash::AshStream* stream = new ash::AshStream(buffer, ash::AshStreamMode::READ);
+        ash::AshStream* stream = new ash::AshStream(new ash::AshBuffer(blob, sizeof(blob)), ash::AshStreamMode::READ);
+        stream->SetSingleUseBuffer();
 
         for(int i = 0; i < 64; i++)
         {
             int a = stream->Read<int>();
             if(a != i)
             {
-                return ash::AshResult(false, "Missmatch.");
+                return ash::AshResult(false, "Mismatch.");
             }
         }
 
-        delete buffer;
         delete stream;
     }
 

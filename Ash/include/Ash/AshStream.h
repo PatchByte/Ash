@@ -18,6 +18,9 @@ namespace ash
         AshStream(AshBuffer* Buffer, AshStreamMode BufferMode);
         virtual ~AshStream();
 
+        // If you set this the AshBuffer* will be deallocate after use.
+        virtual bool SetSingleUseBuffer();
+
         template<typename T>
         inline T* Read(T* Buffer)
         {
