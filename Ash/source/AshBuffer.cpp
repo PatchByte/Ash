@@ -1,5 +1,7 @@
 #include "Ash/AshBuffer.h"
 #include <iostream>
+#include <cstring>
+
 namespace ash
 {
 
