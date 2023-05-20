@@ -1,10 +1,12 @@
 #pragma once
 #include "AshClass.h"
+#include <vector>
 
 namespace ash
 {
     using AshPointer = void*;
     using AshSize = size_t;
+    using AshBytesVector = std::vector<unsigned char>;
 
     class AshBuffer
     {
@@ -21,6 +23,9 @@ namespace ash
 
         virtual bool ImportPointer(AshPointer Pointer, AshSize Size);
 
+        // This will actually allocate memory that will be later on released.
+        virtual bool ImportBytesVector(AshBytesVector Vector);
+
         // ReleaseMemory is also like a sort of "Reset" function
         virtual bool ReleaseMemory();
 
@@ -33,6 +38,12 @@ namespace ash
 
         template<typename T> T* GetBuffer() { return static_cast< T* >( GetPointer() ); }
         virtual unsigned char* GetBytes() { return static_cast<unsigned char*>( GetPointer() ); }
+        inline virtual AshBytesVector GetBytesAsVector() 
+        {
+            AshBytesVector vector = {};
+            vector.insert(vector.end(), GetBytes(), GetBytes() + GetSize());
+            return vector;
+        }
         
         virtual AshPointer GetPointer();
         AshSize GetSize();

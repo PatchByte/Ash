@@ -1,5 +1,5 @@
 #include "Ash/AshBuffer.h"
-
+#include <iostream>
 namespace ash
 {
 
@@ -35,7 +35,6 @@ namespace ash
     AshBuffer::AshBuffer()
     {
         ASH_CLASS_IMPLEMENT_INTERNAL_OBJECT_ALLOCATION(AshBuffer);
-        // Reset
         this->ReleaseMemory();
     }
 
@@ -108,6 +107,18 @@ namespace ash
 
         classInternalAshBuffer->Reset();
         return false;
+    }
+
+    bool AshBuffer::ImportBytesVector(AshBytesVector Vector)
+    {
+        this->ReleaseMemory();
+        if(this->AllocateSize(Vector.size()) == false)
+        {
+            return false;
+        }
+
+        memcpy(this->GetPointer(), Vector.data(), Vector.size());
+        return true;
     }
 
     bool AshBuffer::SetReleasable(bool Releasable)

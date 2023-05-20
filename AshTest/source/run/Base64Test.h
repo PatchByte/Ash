@@ -1,7 +1,7 @@
 #pragma once
 #include "BaseRunTest.h"
 
-class BufferRunTest : public AshBaseRunTest
+class Base64RunTest : public AshBaseRunTest
 {
 public:
     ash::AshResult Do();
