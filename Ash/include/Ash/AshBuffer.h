@@ -1,5 +1,9 @@
 #pragma once
 #include "AshClass.h"
+#include "AshResult.h"
+
+#include <iostream>
+#include <filesystem>
 #include <vector>
 
 namespace ash
@@ -47,6 +51,10 @@ namespace ash
         
         virtual AshPointer GetPointer();
         AshSize GetSize();
+
+        // File Utils
+        AshResult ReadFromFile(std::filesystem::path Path);
+        AshResult WriteToFile(std::filesystem::path Path);
     private:
         ASH_CLASS_ADD_INTERNAL_OBJECT(AshBuffer);
     };

@@ -1,6 +1,7 @@
 #include "Ash/AshBuffer.h"
 #include <iostream>
 #include <cstring>
+#include <fstream>
 
 namespace ash
 {
@@ -169,6 +170,56 @@ namespace ash
     AshSize AshBuffer::GetSize()
     {
         return classInternalAshBuffer->bufferSize;
+    }
+
+    // File Utilities
+
+    AshResult AshBuffer::ReadFromFile(std::filesystem::path Path)
+    {
+        ReleaseMemory();
+
+        if(std::filesystem::exists(Path) == false)
+        {
+            return AshResult(false, "File does not exist.");
+        }
+
+        std::ifstream istream = std::ifstream();
+        ash::AshSize istreamSize = 0;
+
+        istream.open(Path, std::ios::binary);
+
+        if(istream.bad())
+        {
+            istream.close();
+            return AshResult(false, "Stream is bad.");
+        }
+
+        istream.seekg(0, std::ios::end);
+        istreamSize = istream.tellg();
+        istream.seekg(0);
+        
+        this->AllocateSize(istreamSize);
+        istream.read(reinterpret_cast<char*>(this->GetPointer()), istreamSize);
+        istream.close();
+
+        return AshResult(true);
+    }
+
+    AshResult AshBuffer::WriteToFile(std::filesystem::path Path)
+    {
+        std::ofstream ostream = std::ofstream();
+
+        ostream.open(Path, std::ios::binary | std::ios::trunc);
+
+        if(ostream.bad())
+        {
+            return AshResult(false, "Stream is bad.");
+        }
+
+        ostream.write(reinterpret_cast<char*>(this->GetPointer()), this->GetSize());
+        ostream.close();
+
+        return AshResult(true);
     }
 
 }
