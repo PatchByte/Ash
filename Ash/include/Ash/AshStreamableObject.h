@@ -1,7 +1,7 @@
 #pragma once
 #include "AshStream.h"
 
-#define ASH_STREAMABLE_OBJECT_IMPLEMENT_SIMPLE(name) const char* GetName() { return name ; } bool Import(AshStream* Stream); bool Export(AshStream* Stream);
+#define ASH_STREAMABLE_OBJECT_IMPLEMENT_SIMPLE(name) const char* GetName() { return name ; } bool Import(AshStream* Stream); bool Export(AshStream* Stream); AshSize GetExportSize();
 
 namespace ash
 {
