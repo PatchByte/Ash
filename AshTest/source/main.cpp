@@ -7,6 +7,7 @@
 #include "run/BufferTest.h"
 #include "run/StreamTest.h"
 #include "run/Base64Test.h"
+#include "run/StringObjectTest.h"
 
 #include <iostream>
 #include <unordered_map>
@@ -15,7 +16,8 @@ static std::unordered_map<std::string, AshBaseRunTest*> smTestRegister =
 {
     { "Buffer Test", new BufferRunTest() },
     { "Stream Test", new StreamRunTest() },
-    { "Base64 Test", new Base64RunTest() }
+    { "Base64 Test", new Base64RunTest() },
+    { "String Object Test", new StringObjectTest() }
 };
 
 int main()
