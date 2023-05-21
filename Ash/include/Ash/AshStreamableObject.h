@@ -13,6 +13,7 @@ namespace ash
         virtual const char* GetName() { return "AshStreamableObject(Non implemented)"; }
         virtual bool Import(AshStream* Stream) { return false; }
         virtual bool Export(AshStream* Stream) { return false; }
+        virtual AshSize GetExportSize() { return 0; }
     };
 
 }
