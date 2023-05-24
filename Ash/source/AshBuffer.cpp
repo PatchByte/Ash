@@ -197,6 +197,11 @@ namespace ash
         istream.seekg(0, std::ios::end);
         istreamSize = istream.tellg();
         istream.seekg(0);
+
+        if(istreamSize <= 0)
+        {
+            return AshResult(false, "File size is zero or well less.");
+        }
         
         this->AllocateSize(istreamSize);
         istream.read(reinterpret_cast<char*>(this->GetPointer()), istreamSize);
@@ -207,6 +212,11 @@ namespace ash
 
     AshResult AshBuffer::WriteToFile(std::filesystem::path Path)
     {
+        if(this->GetPointer() == nullptr)
+        {
+            return AshResult(false, "Buffer is nullptr.");
+        }
+
         std::ofstream ostream = std::ofstream();
 
         ostream.open(Path, std::ios::binary | std::ios::trunc);
