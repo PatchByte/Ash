@@ -1,4 +1,4 @@
-#include "AshObjects/AshDataBufferPlug.h"
+#include "AshObjects/AshBufferPlug.h"
 
 /*
  * AshDataBufferPlug Recipe
