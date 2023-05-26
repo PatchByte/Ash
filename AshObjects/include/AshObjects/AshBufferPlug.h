@@ -8,7 +8,7 @@ namespace ash::objects
     {
     public:
         // Dont forget to deallocate when using this.
-        inline AshBufferPlug() {}
+        AshBufferPlug();
         AshBufferPlug(ash::AshBuffer* Buffer);
         inline ~AshBufferPlug() = default;
 
@@ -16,11 +16,14 @@ namespace ash::objects
 
         inline ash::AshBuffer* GetBuffer() { return buffer; }
         inline ash::AshSize GetBufferSizeLimit() { return bufferSizeLimit; }
+        
+        inline bool IsBufferEmpty() { return bufferEmpty; }
 
         ASH_STREAMABLE_OBJECT_IMPLEMENT_SIMPLE("AshBufferPlug");
     private:
         ash::AshBuffer* buffer;
         ash::AshSize bufferSizeLimit;
+        bool bufferEmpty;
     };
 
 }
