@@ -12,6 +12,9 @@ namespace ash::objects
 
     static constexpr ash::AshSize smAshBufferPlugBufferSizeLimit = 0x1fff;
 
+    AshBufferPlug::AshBufferPlug()
+    {}
+
     AshBufferPlug::AshBufferPlug(ash::AshBuffer* Buffer):
         buffer(Buffer),
         bufferSizeLimit(smAshBufferPlugBufferSizeLimit)
@@ -26,6 +29,12 @@ namespace ash::objects
             return false;
         }
 
+        if(bufferSize <= 0)
+        {
+            this->bufferEmpty = true;
+            return true;
+        }
+
         this->buffer = new ash::AshBuffer();
         this->buffer->AllocateSize(bufferSize);
         
@@ -37,6 +46,12 @@ namespace ash::objects
     bool AshBufferPlug::Export(ash::AshStream* Stream)
     {
         Stream->Write<AshSize>(this->buffer->GetSize());
+
+        if(this->buffer->GetSize() <= 0)
+        {
+            return Stream->HasErrorOccurred() == false;
+        }
+        
         Stream->WriteRawFromPointer(this->buffer->GetPointer(), this->buffer->GetSize());
 
         return Stream->HasErrorOccurred() == false;
