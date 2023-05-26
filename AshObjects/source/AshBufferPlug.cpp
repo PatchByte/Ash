@@ -1,7 +1,7 @@
-#include "AshObjects/AshBufferPlug.h"
+#include "AshObjects/AshDataBufferPlug.h"
 
 /*
- * AshBufferPlug Recipe
+ * AshDataBufferPlug Recipe
  *
  * <AshSize : 8 : buffer length>
  * <unsigned char[] : 1 * buffer length : buffer data>
@@ -10,21 +10,21 @@
 namespace ash::objects
 {
 
-    static constexpr ash::AshSize smAshBufferPlugBufferSizeLimit = 0x1fff;
+    static constexpr ash::AshSize smAshDataBufferPlugBufferSizeLimit = 0x1fff;
 
-    AshBufferPlug::AshBufferPlug():
+    AshDataBufferPlug::AshDataBufferPlug():
         buffer(nullptr),
         bufferEmpty(false),
-        bufferSizeLimit(smAshBufferPlugBufferSizeLimit)
+        bufferSizeLimit(smAshDataBufferPlugBufferSizeLimit)
     {}
 
-    AshBufferPlug::AshBufferPlug(ash::AshBuffer* Buffer):
+    AshDataBufferPlug::AshDataBufferPlug(ash::AshBuffer* Buffer):
         buffer(nullptr),
         bufferEmpty(false),
-        bufferSizeLimit(smAshBufferPlugBufferSizeLimit)
+        bufferSizeLimit(smAshDataBufferPlugBufferSizeLimit)
     {}
 
-    bool AshBufferPlug::Import(ash::AshStream* Stream)
+    bool AshDataBufferPlug::Import(ash::AshStream* Stream)
     {
         if(this->buffer != nullptr)
         {
@@ -54,7 +54,7 @@ namespace ash::objects
         return Stream->HasErrorOccurred() == false;
     }
 
-    bool AshBufferPlug::Export(ash::AshStream* Stream)
+    bool AshDataBufferPlug::Export(ash::AshStream* Stream)
     {
         if(this->buffer == nullptr)
         {
@@ -76,7 +76,7 @@ namespace ash::objects
         return Stream->HasErrorOccurred() == false;
     }
 
-    AshSize AshBufferPlug::GetExportSize()
+    AshSize AshDataBufferPlug::GetExportSize()
     {
         return (
             sizeof(AshSize) +

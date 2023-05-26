@@ -4,13 +4,13 @@
 namespace ash::objects
 {
 
-    class AshBufferPlug : public AshStreamableObject
+    class AshDataBufferPlug : public AshStreamableObject
     {
     public:
         // Dont forget to deallocate when using this.
-        AshBufferPlug();
-        AshBufferPlug(ash::AshBuffer* Buffer);
-        inline ~AshBufferPlug() = default;
+        AshDataBufferPlug();
+        AshDataBufferPlug(ash::AshBuffer* Buffer);
+        inline ~AshDataBufferPlug() = default;
 
         inline bool SetBufferSizeLimit(ash::AshSize BufferSizeLimit) { bufferSizeLimit = BufferSizeLimit; return true; }
 
@@ -19,7 +19,7 @@ namespace ash::objects
         
         inline bool IsBufferEmpty() { return bufferEmpty; }
 
-        ASH_STREAMABLE_OBJECT_IMPLEMENT_SIMPLE("AshBufferPlug");
+        ASH_STREAMABLE_OBJECT_IMPLEMENT_SIMPLE("AshDataBufferPlug");
     private:
         ash::AshBuffer* buffer;
         ash::AshSize bufferSizeLimit;
