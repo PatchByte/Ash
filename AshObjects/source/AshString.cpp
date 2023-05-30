@@ -14,27 +14,29 @@ namespace ash::objects
 {
 
     static constexpr AshStringLength smAshStringLimitLength = 512;
+    
+    // AshAsciiString
 
-    AshString::AshString():
+    AshAsciiString::AshAsciiString():
         textLimitLength(smAshStringLimitLength)
     {}
 
-    AshString::AshString(std::string Text):
+    AshAsciiString::AshAsciiString(std::string Text):
         textLimitLength(smAshStringLimitLength),
         text(Text)
     {}
 
-    AshString::AshString(std::string_view Text):
+    AshAsciiString::AshAsciiString(std::string_view Text):
         textLimitLength(smAshStringLimitLength),
         text(Text)
     {}
 
-    AshString::AshString(const char* Text):
+    AshAsciiString::AshAsciiString(const char* Text):
         textLimitLength(smAshStringLimitLength),
         text(Text)
     {}
 
-    bool AshString::Import(ash::AshStream* Stream)
+    bool AshAsciiString::Import(ash::AshStream* Stream)
     {
         unsigned char textSeed = Stream->Read<unsigned char>();
         AshStringLength textLength = Stream->Read<AshStringLength>();
@@ -57,7 +59,7 @@ namespace ash::objects
         return Stream->HasErrorOccurred() == false;
     }
 
-    bool AshString::Export(ash::AshStream* Stream)
+    bool AshAsciiString::Export(ash::AshStream* Stream)
     {
         std::random_device rd;
         std::mt19937 engine(rd());
@@ -75,7 +77,7 @@ namespace ash::objects
         return Stream->HasErrorOccurred() == false;
     }
 
-    AshSize AshString::GetExportSize()
+    AshSize AshAsciiString::GetExportSize()
     {
         return (
             sizeof(unsigned char) +
