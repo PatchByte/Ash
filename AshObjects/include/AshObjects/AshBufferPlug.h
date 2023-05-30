@@ -1,5 +1,6 @@
 #pragma once
 #include <Ash/AshStreamableObject.h>
+#include <functional>
 
 namespace ash::objects
 {
@@ -10,7 +11,7 @@ namespace ash::objects
         // Dont forget to deallocate when using this.
         AshDataBufferPlug();
         AshDataBufferPlug(ash::AshBuffer* Buffer);
-        inline ~AshDataBufferPlug() = default;
+        ~AshDataBufferPlug() = default;
 
         inline bool SetBufferSizeLimit(ash::AshSize BufferSizeLimit) { bufferSizeLimit = BufferSizeLimit; return true; }
 
@@ -24,6 +25,25 @@ namespace ash::objects
         ash::AshBuffer* buffer;
         ash::AshSize bufferSizeLimit;
         bool bufferEmpty;
+    };
+
+    class AshFunctionBufferPlug : public AshStreamableObject
+    {
+    public:
+        using ExportFunctionDelegate = std::function<ash::AshBuffer*()>;
+        using ImportFunctionDelegate = std::function<void(ash::AshBuffer*)>;
+
+        AshFunctionBufferPlug();
+        ~AshFunctionBufferPlug();
+
+        inline bool SetExportFunction(ExportFunctionDelegate ExportFunction) { exportFunction = ExportFunction; return true; }
+        inline bool SetImportFunction(ImportFunctionDelegate ImportFunction) { importFunction = ImportFunction; return true; }
+
+        ASH_STREAMABLE_OBJECT_IMPLEMENT_SIMPLE("AshFunctionBufferPlug");
+    private:
+        ExportFunctionDelegate exportFunction;
+        ImportFunctionDelegate importFunction;
+        ash::AshBuffer* cachedBuffer;
     };
 
 }
