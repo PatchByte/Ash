@@ -7,13 +7,13 @@ namespace ash::objects
     using AshStringLength = unsigned short;
 
     // Secure String
-    class AshString : public AshStreamableObject
+    class AshAsciiString : public AshStreamableObject
     {
     public:
-        AshString();
-        AshString(std::string Text);
-        AshString(std::string_view Text);
-        AshString(const char* Text);
+        AshAsciiString();
+        AshAsciiString(std::string Text);
+        AshAsciiString(std::string_view Text);
+        AshAsciiString(const char* Text);
         
         inline void operator=(std::string Text)
         {
@@ -40,7 +40,7 @@ namespace ash::objects
             return text;
         }
 
-        ASH_STREAMABLE_OBJECT_IMPLEMENT_SIMPLE("AshString");
+        ASH_STREAMABLE_OBJECT_IMPLEMENT_SIMPLE("AshAsciiString");
     private:
         std::string text;
         AshStringLength textLimitLength;
