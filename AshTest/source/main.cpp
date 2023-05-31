@@ -17,7 +17,8 @@ static std::unordered_map<std::string, AshBaseRunTest*> smTestRegister =
     { "Buffer Test", new BufferRunTest() },
     { "Stream Test", new StreamRunTest() },
     { "Base64 Test", new Base64RunTest() },
-    { "String Object Test", new StringObjectTest() }
+    { "String Ascii Object Test", new StringAsciiObjectTest() },
+    { "String Wide Object Test", new StringWideObjectTest() }
 };
 
 int main()
