@@ -38,16 +38,12 @@ ash::AshResult SerializerRunTest::Do()
         int testInteger1 = testBufferStream->Read<int>();
         int testInteger2 = testBufferStream->Read<int>();
 
-        if(
-            testInteger1 != testInteger1Expected
-        )
+        if(testInteger1 != testInteger1Expected)
         {
             return ash::AshResult(false, "The var testInteger1 didn't match with testInteger1Expected");
         }
 
-        if(
-            testInteger2 != testInteger2Expected
-        )
+        if(testInteger2 != testInteger2Expected)
         {
             return ash::AshResult(false, "The var testInteger1 didn't match with testInteger1Expected");
         }
