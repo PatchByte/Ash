@@ -12,11 +12,11 @@ if(ASH_ENABLE_DEVELOPMENT_ENVIRONMENT)
 endif(ASH_ENABLE_DEVELOPMENT_ENVIRONMENT)
 
 if(ASH_ENABLE_TESTS)
+    enable_testing()
     add_subdirectory("AshTest")
 endif(ASH_ENABLE_TESTS)
 
 add_subdirectory("Ash")
-
 
 if(ASH_ENABLE_OBJECTS)
     add_subdirectory("AshObjects")
