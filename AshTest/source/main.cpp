@@ -6,6 +6,7 @@
 #include "run/Base64Test.h"
 #include "run/BaseRunTest.h"
 #include "run/BufferTest.h"
+#include "run/CRCTest.h"
 #include "run/SerializerTest.h"
 #include "run/StreamTest.h"
 #include "run/StringObjectTest.h"
@@ -20,7 +21,8 @@ static std::unordered_map<std::string, AshBaseRunTest*> smTestRegister =
     { "Base64 Test", new Base64RunTest() },
     { "String Ascii Object Test", new StringAsciiObjectTest() },
     { "String Wide Object Test", new StringWideObjectTest() },
-    { "Serializer Test", new SerializerRunTest() }
+    { "Serializer Test", new SerializerRunTest() },
+    { "CRC32 Test", new CRC32RunTest() }
 };
 
 int main()
