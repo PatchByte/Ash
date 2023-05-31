@@ -23,7 +23,7 @@ static std::unordered_map<std::string, AshBaseRunTest*> smTestRegister =
 
 int main()
 {
-    if(InnerClassTest::InnerClassTest().GetVar() != InnerClassTest::GetExpectedVar())
+    if(InnerClassTest().GetVar() != InnerClassTest::GetExpectedVar())
     {
         std::cerr << "InnerClassTest GetVar test does not match up." << std::endl;
         return -1;
