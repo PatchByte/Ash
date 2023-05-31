@@ -3,10 +3,11 @@
 #include "compile/InnerClassTest.h"
 #include "compile/InstanceClassTest.h"
 
+#include "run/Base64Test.h"
 #include "run/BaseRunTest.h"
 #include "run/BufferTest.h"
+#include "run/SerializerTest.h"
 #include "run/StreamTest.h"
-#include "run/Base64Test.h"
 #include "run/StringObjectTest.h"
 
 #include <iostream>
@@ -18,7 +19,8 @@ static std::unordered_map<std::string, AshBaseRunTest*> smTestRegister =
     { "Stream Test", new StreamRunTest() },
     { "Base64 Test", new Base64RunTest() },
     { "String Ascii Object Test", new StringAsciiObjectTest() },
-    { "String Wide Object Test", new StringWideObjectTest() }
+    { "String Wide Object Test", new StringWideObjectTest() },
+    { "Serializer Test", new SerializerRunTest() }
 };
 
 int main()

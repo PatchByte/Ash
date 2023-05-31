@@ -12,6 +12,13 @@ namespace ash
     using AshSize = size_t;
     using AshBytesVector = std::vector<unsigned char>;
 
+    enum class AshBufferStreamMode
+    {
+        INVALID,
+        READ,
+        WRITE
+    };
+
     class AshBuffer
     {
     public:
@@ -50,11 +57,11 @@ namespace ash
         }
         
         virtual AshPointer GetPointer();
-        AshSize GetSize();
+        virtual AshSize GetSize();
 
         // File Utils
-        AshResult ReadFromFile(std::filesystem::path Path);
-        AshResult WriteToFile(std::filesystem::path Path);
+        virtual AshResult ReadFromFile(std::filesystem::path Path);
+        virtual AshResult WriteToFile(std::filesystem::path Path);
     private:
         ASH_CLASS_ADD_INTERNAL_OBJECT(AshBuffer);
     };
