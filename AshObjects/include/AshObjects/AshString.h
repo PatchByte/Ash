@@ -46,4 +46,43 @@ namespace ash::objects
         AshStringLength textLimitLength;
     };
 
+    class AshWideString : public AshStreamableObject 
+    {
+    public:
+        AshWideString();
+        AshWideString(std::wstring Text);
+        AshWideString(std::wstring_view Text);
+        AshWideString(const wchar_t* Text);
+
+        inline void operator=(std::wstring Text)
+        {
+            text = Text;
+        }
+
+        inline void operator=(std::wstring_view Text)
+        {
+            text = Text;
+        }
+
+        inline void operator=(const wchar_t* Text)
+        {
+            text = Text;
+        }
+
+        inline AshStringLength GetTextLimitLength()
+        {
+            return textLimitLength;
+        }
+
+        inline std::wstring GetText()
+        {
+            return text;
+        }
+
+        ASH_STREAMABLE_OBJECT_IMPLEMENT_SIMPLE("AshWideString");
+    private:
+        std::wstring text;
+        AshStringLength textLimitLength;
+    };
+
 }
