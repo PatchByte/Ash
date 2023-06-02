@@ -4,6 +4,7 @@ project("AshBuild")
 option(ASH_ENABLE_DEVELOPMENT_ENVIRONMENT "Enables a few specific tweaks to be able to develope ash" OFF)
 option(ASH_ENABLE_TESTS "Enable ash tests." OFF)
 option(ASH_ENABLE_OBJECTS "Enable ash objects." ON)
+option(ASH_ENABLE_CRYPTO "Enable ash crypto, does require OpenSSL tho." OFF)
 
 if(ASH_ENABLE_DEVELOPMENT_ENVIRONMENT)
     set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
@@ -11,13 +12,13 @@ if(ASH_ENABLE_DEVELOPMENT_ENVIRONMENT)
     set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 endif(ASH_ENABLE_DEVELOPMENT_ENVIRONMENT)
 
-if(ASH_ENABLE_TESTS)
-    enable_testing()
-    add_subdirectory("AshTest")
-endif(ASH_ENABLE_TESTS)
-
 add_subdirectory("Ash")
 
 if(ASH_ENABLE_OBJECTS)
     add_subdirectory("AshObjects")
 endif(ASH_ENABLE_OBJECTS)
+
+if(ASH_ENABLE_TESTS)
+    enable_testing()
+    add_subdirectory("AshTest")
+endif(ASH_ENABLE_TESTS)
