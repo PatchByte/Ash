@@ -70,7 +70,8 @@
         "xlocmes": "cpp",
         "xlocmon": "cpp",
         "xloctime": "cpp",
-        "xtree": "cpp"
+        "xtree": "cpp",
+        "random": "cpp"
     },
     "github-actions.workflows.pinned.workflows": [
         ".github/workflows/cmake.yml"

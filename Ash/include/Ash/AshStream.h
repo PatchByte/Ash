@@ -24,6 +24,8 @@ namespace ash
         template<typename T>
         inline T* Read(T* Buffer)
         {
+            static_assert(std::is_fundamental<T>::value == true, "You can only use primitive types.");
+            
             auto r = ReadRawIntoPointer(Buffer, sizeof(T));
             return r.WasSuccessful() ? Buffer : nullptr;
         }
@@ -31,6 +33,8 @@ namespace ash
         template<typename T>
         inline T Read()
         {
+            static_assert(std::is_fundamental<T>::value == true, "You can only use primitive types.");
+
             T Data = {};
             auto r = Read(&Data);
             return Data;
@@ -39,6 +43,8 @@ namespace ash
         template<typename T>
         inline bool Write(T Data)
         {
+            static_assert(std::is_fundamental<T>::value == true, "You can only use primitive types.");
+
             auto r = Write(&Data);
             return r != nullptr;
         }
@@ -46,6 +52,8 @@ namespace ash
         template<typename T>
         inline T* Write(T* Buffer)
         {
+            static_assert(std::is_fundamental<T>::value == true, "You can only use primitive types.");
+
             auto r = WriteRawFromPointer(Buffer, sizeof(T));
             return r.WasSuccessful() ? Buffer : nullptr;
         }
