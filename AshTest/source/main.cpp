@@ -7,6 +7,7 @@
 #include "run/BaseRunTest.h"
 #include "run/BufferTest.h"
 #include "run/CRCTest.h"
+#include "run/PrimitiveTest.h"
 #include "run/SerializerTest.h"
 #include "run/StreamTest.h"
 #include "run/StringObjectTest.h"
@@ -22,7 +23,8 @@ static std::unordered_map<std::string, AshBaseRunTest*> smTestRegister =
     { "String Ascii Object Test", new StringAsciiObjectTest() },
     { "String Wide Object Test", new StringWideObjectTest() },
     { "Serializer Test", new SerializerRunTest() },
-    { "CRC32 Test", new CRC32RunTest() }
+    { "CRC32 Test", new CRC32RunTest() },
+    { "Primitive Test", new PrimitiveTest() }
 };
 
 int main()
