@@ -71,7 +71,9 @@
         "xlocmon": "cpp",
         "xloctime": "cpp",
         "xtree": "cpp",
-        "random": "cpp"
+        "random": "cpp",
+        "coroutine": "cpp",
+        "resumable": "cpp"
     },
     "github-actions.workflows.pinned.workflows": [
         ".github/workflows/cmake.yml"

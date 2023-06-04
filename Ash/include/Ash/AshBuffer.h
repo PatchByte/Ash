@@ -9,7 +9,7 @@
 namespace ash
 {
     using AshPointer = void*;
-    using AshSize = size_t;
+    using AshSize = unsigned long long;
     using AshBytesVector = std::vector<unsigned char>;
 
     enum class AshBufferStreamMode
