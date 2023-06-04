@@ -12,7 +12,7 @@ namespace ash::objects
     public:
         const char* GetName() 
         {
-            static std::string smName = std::string("AshVector<").append(typeid(T).raw_name()).append(">");
+            static std::string smName = std::string("AshVector<").append(typeid(T).name()).append(">");
             return smName.data(); 
         }
 
