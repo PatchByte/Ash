@@ -44,7 +44,4 @@ namespace ash::objects
         static_assert(std::is_fundamental<T>::value == true, "You can only use primitives");
     };
 
-    inline AshPrimitive<float> x;
-    inline AshPrimitive<int> y;
-
 }
