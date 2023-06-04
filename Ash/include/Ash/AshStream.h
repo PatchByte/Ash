@@ -35,7 +35,8 @@ namespace ash
         {
             static_assert(std::is_fundamental<T>::value == true, "You can only use primitive types.");
 
-            T Data = {};
+            T Data = { 0 };
+
             auto r = Read(&Data);
             return Data;
         }
