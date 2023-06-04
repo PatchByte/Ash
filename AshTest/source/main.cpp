@@ -11,6 +11,7 @@
 #include "run/SerializerTest.h"
 #include "run/StreamTest.h"
 #include "run/StringObjectTest.h"
+#include "run/VectorTest.h"
 
 #include <iostream>
 #include <unordered_map>
@@ -24,7 +25,8 @@ static std::unordered_map<std::string, AshBaseRunTest*> smTestRegister =
     { "String Wide Object Test", new StringWideObjectTest() },
     { "Serializer Test", new SerializerRunTest() },
     { "CRC32 Test", new CRC32RunTest() },
-    { "Primitive Test", new PrimitiveTest() }
+    { "Primitive Test", new PrimitiveTest() },
+    { "Vector Test", new VectorTest() }
 };
 
 int main()

@@ -3,8 +3,6 @@
 #include <iostream>
 #include <vector>
 
-#include "AshPrimitive.h"
-
 namespace ash::objects
 {
 
@@ -59,11 +57,9 @@ namespace ash::objects
                 exportSize += it->GetExportSize();
             }
 
-            return 0; 
+            return exportSize; 
         }
 
         static_assert(std::is_class<T>::value == true && std::is_base_of<AshStreamableObject, T>::value == true && std::is_pointer<T>::value == false, "Type needs to be a class and needs to base of AshStreamableObject");
     };
-
-    inline AshVector<AshPrimitive<float>> z;
 }
