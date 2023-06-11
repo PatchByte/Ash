@@ -43,7 +43,7 @@ namespace ash::objects
         if(bufferSize <= 0)
         {
             this->bufferEmpty = true;
-            return true;
+            return Stream->HasErrorOccurred() == false;
         }
 
         this->buffer = new ash::AshBuffer();
@@ -80,7 +80,7 @@ namespace ash::objects
     {
         return (
             sizeof(AshSize) +
-            this->buffer->GetSize()
+            ( (this->buffer == nullptr) ? 0 : this->buffer->GetSize())
         );
     }
 }
