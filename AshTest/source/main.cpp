@@ -3,15 +3,16 @@
 #include "compile/InnerClassTest.h"
 #include "compile/InstanceClassTest.h"
 
-#include "run/Base64Test.h"
-#include "run/BaseRunTest.h"
-#include "run/BufferTest.h"
-#include "run/CRCTest.h"
-#include "run/PrimitiveTest.h"
-#include "run/SerializerTest.h"
-#include "run/StreamTest.h"
-#include "run/StringObjectTest.h"
-#include "run/VectorTest.h"
+#include "BaseRunTest.h"
+
+#include "run/ash_section/Base64Test.h"
+#include "run/ash_section/BufferTest.h"
+#include "run/ash_section/CRCTest.h"
+#include "run/ash_section/PrimitiveTest.h"
+#include "run/ash_section/SerializerTest.h"
+#include "run/ash_section/StreamTest.h"
+#include "run/ash_section/StringObjectTest.h"
+#include "run/ash_section/VectorTest.h"
 
 #include <iostream>
 #include <unordered_map>
