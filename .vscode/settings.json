@@ -73,7 +73,17 @@
         "xtree": "cpp",
         "random": "cpp",
         "coroutine": "cpp",
-        "resumable": "cpp"
+        "resumable": "cpp",
+        "any": "cpp",
+        "array": "cpp",
+        "complex": "cpp",
+        "cstdarg": "cpp",
+        "deque": "cpp",
+        "queue": "cpp",
+        "set": "cpp",
+        "stack": "cpp",
+        "typeindex": "cpp",
+        "variant": "cpp"
     },
     "github-actions.workflows.pinned.workflows": [
         ".github/workflows/cmake.yml"
