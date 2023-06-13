@@ -31,6 +31,7 @@ namespace ash
     {
     public:
         inline AshLoggingTagFilter(AshLoggingTagFilterMode FilterMode, std::vector<AshLoggingShortTag> FilterTrigger): filterMode(FilterMode), filterTrigger(FilterTrigger) {}
+        inline AshLoggingTagFilter(): filterMode(AshLoggingTagFilterMode::INVALID), filterTrigger() {}
 
         bool DoFilter(AshLoggingShortTag Short);
     private:
