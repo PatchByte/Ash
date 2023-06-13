@@ -1,41 +1,45 @@
 #pragma once
 #include <iostream>
 #include <vector>
+#include <map>
 
 namespace ash
 {
 
-    using AshLoggingShortTag = unsigned int;
-    using AshLoggingShortTagPrefix = std::string_view;
+    using AshLoggerShortTag = unsigned int;
+    using AshLoggerShortTagPrefix = std::string_view;
     
-    enum AshLoggingTagFilterMode : char
+    enum AshLoggerTagFilterMode : char
     {
         INVALID = 0,
         IGNORE_WHEN_LOGGED = 1,
         ONLY_LOG_WHEN = 2
     };
 
-    class AshLoggingTag
+    class AshLoggerTag
     {
     public:
-        inline AshLoggingTag(AshLoggingShortTag ShortTag, AshLoggingShortTagPrefix Prefix): shortTag(ShortTag), prefix(Prefix) {}
+        inline AshLoggerTag(AshLoggerShortTag ShortTag, AshLoggerShortTagPrefix Prefix): shortTag(ShortTag), prefix(Prefix) {}
 
-        inline AshLoggingShortTag GetShortTag() { return shortTag; }
-        inline AshLoggingShortTagPrefix GetPrefix() { return prefix; }
+        inline AshLoggerShortTag GetShortTag() { return shortTag; }
+        inline AshLoggerShortTagPrefix GetPrefix() { return prefix; }
     private:
-        AshLoggingShortTag shortTag; 
-        AshLoggingShortTagPrefix prefix;
+        AshLoggerShortTag shortTag; 
+        AshLoggerShortTagPrefix prefix;
     };
 
-    class AshLoggingTagFilter
+    using AshLoggerTagInitializer = std::vector<AshLoggerTag>;
+    using AshLoggerTagMap = std::map<AshLoggerShortTag, AshLoggerTag>;
+
+    class AshLoggerTagFilter
     {
     public:
-        inline AshLoggingTagFilter(AshLoggingTagFilterMode FilterMode, std::vector<AshLoggingShortTag> FilterTrigger): filterMode(FilterMode), filterTrigger(FilterTrigger) {}
-        inline AshLoggingTagFilter(): filterMode(AshLoggingTagFilterMode::INVALID), filterTrigger() {}
+        inline AshLoggerTagFilter(AshLoggerTagFilterMode FilterMode, std::vector<AshLoggerShortTag> FilterTrigger): filterMode(FilterMode), filterTrigger(FilterTrigger) {}
+        inline AshLoggerTagFilter(): filterMode(AshLoggerTagFilterMode::INVALID), filterTrigger() {}
 
-        bool DoFilter(AshLoggingShortTag Short);
+        bool DoFilter(AshLoggerShortTag Short);
     private:
-        AshLoggingTagFilterMode filterMode;
-        std::vector<AshLoggingShortTag> filterTrigger;
+        AshLoggerTagFilterMode filterMode;
+        std::vector<AshLoggerShortTag> filterTrigger;
     };
 }

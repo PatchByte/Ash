@@ -16,7 +16,7 @@ namespace ash
         virtual ~AshLoggerPassage() = default;
         virtual void SetParent(AshLogger* Parent, std::string ParentRegistrationName) {}
         virtual void DoPassthrough(std::string Format, fmt::format_args Args) {}
-        virtual void ApplyFilterForPassage(AshLoggingTagFilter LoggingTagFilter) {}
+        virtual void ApplyFilterForPassage(AshLoggerTagFilter LoggerTagFilter) {}
     };
 
     class AshLoggerDefaultPassage : public AshLoggerPassage
@@ -25,7 +25,7 @@ namespace ash
         AshLoggerDefaultPassage():
             parent(nullptr),
             parentRegistrationName(),
-            loggingTagFilter()
+            LoggerTagFilter()
         {}
 
         void SetParent(AshLogger* Parent, std::string ParentRegistrationName)
@@ -34,18 +34,18 @@ namespace ash
             parentRegistrationName = ParentRegistrationName;
         }
 
-        void ApplyFilterForPassage(AshLoggingTagFilter LoggingTagFilter)
+        void ApplyFilterForPassage(AshLoggerTagFilter LoggerTagFilter)
         {
-            loggingTagFilter = LoggingTagFilter;
+            LoggerTagFilter = LoggerTagFilter;
         }
 
         virtual AshLogger* GetParent() { return parent; }
         virtual std::string GetParentRegistrationName() {return parentRegistrationName; }
-        virtual AshLoggingTagFilter GetLoggingTagFilter() { return loggingTagFilter; }
+        virtual AshLoggerTagFilter GetLoggerTagFilter() { return LoggerTagFilter; }
     private:
         AshLogger* parent; 
         std::string parentRegistrationName;
-        AshLoggingTagFilter loggingTagFilter;
+        AshLoggerTagFilter LoggerTagFilter;
     };
 
     class AshLoggerFunctionPassage : public AshLoggerDefaultPassage
