@@ -30,6 +30,37 @@ namespace ash
 
     using AshLoggerTagInitializer = std::vector<AshLoggerTag>;
     using AshLoggerTagMap = std::map<AshLoggerShortTag, AshLoggerTag>;
+    
+    class AshLoggerTagRegistry
+    {
+    public:
+        inline AshLoggerTagRegistry() = default;
+        inline ~AshLoggerTagRegistry() = default;
+        
+        inline bool AddTag(AshLoggerTag Tag)
+        {
+            if(HasTag(Tag.GetShortTag()) == false)
+            {
+                return false;
+            }
+
+            tagMap.emplace(Tag.GetShortTag(), Tag);
+            return true;
+        }
+        bool HasTag(AshLoggerShortTag ShortTag) { return tagMap.count(ShortTag) > 0; }
+        AshLoggerTag GetTag(AshLoggerShortTag ShortTag) 
+        {
+            if(HasTag(ShortTag) == false)
+            {
+                return AshLoggerTag(-1, "InvalidTag");
+            }
+
+            return tagMap.at(ShortTag);
+        }
+        inline AshLoggerTagMap GetTagMap() { return tagMap; }
+    private:
+        AshLoggerTagMap tagMap;
+    };
 
     class AshLoggerTagFilter
     {
