@@ -13,6 +13,7 @@
 #include "run/ash_section/StreamTest.h"
 #include "run/ash_section/StringObjectTest.h"
 #include "run/ash_section/VectorTest.h"
+#include "run/ash_logger_section/AshLoggerTagFilterTest.h"
 
 #include <iostream>
 #include <unordered_map>
@@ -27,7 +28,9 @@ static std::unordered_map<std::string, AshBaseRunTest*> smTestRegister =
     { "Serializer Test", new SerializerRunTest() },
     { "CRC32 Test", new CRC32RunTest() },
     { "Primitive Test", new PrimitiveTest() },
-    { "Vector Test", new VectorTest() }
+    { "Vector Test", new VectorTest() },
+
+    { "Logger Tag Filter Test", new AshLoggerTagFilterTest() }
 };
 
 int main()

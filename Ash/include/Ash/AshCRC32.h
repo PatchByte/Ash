@@ -32,6 +32,12 @@ namespace ash
         inline bool InitAndClear() { bool r = Init(); r &= Clear(); return r; }
         bool Update(ash::AshBuffer* Buffer);
         bool Update(void* BufferPointer, AshSize BufferSize);
+        
+        template<typename T>
+        bool UpdateWithTemplateValue(T Value)
+        {
+            return this->Update(&Value, sizeof(Value));
+        }
 
         inline CRC32 GetValue() { return crcValue; }
     private:
