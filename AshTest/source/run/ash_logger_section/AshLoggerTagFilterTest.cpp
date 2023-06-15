@@ -1,4 +1,5 @@
 #include "AshLoggerTagFilterTest.h"
+#if ASH_ENABLE_LOGGER
 #include <iostream>
 
 #include <Ash/AshCRC32.h>
@@ -45,3 +46,4 @@ ash::AshResult AshLoggerTagFilterTest::Do()
 
     return ash::AshResult(true);
 }
+#endif

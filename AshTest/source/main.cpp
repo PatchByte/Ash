@@ -29,8 +29,9 @@ static std::unordered_map<std::string, AshBaseRunTest*> smTestRegister =
     { "CRC32 Test", new CRC32RunTest() },
     { "Primitive Test", new PrimitiveTest() },
     { "Vector Test", new VectorTest() },
-
+#if ASH_ENABLE_LOGGER
     { "Logger Tag Filter Test", new AshLoggerTagFilterTest() }
+#endif
 };
 
 int main()
