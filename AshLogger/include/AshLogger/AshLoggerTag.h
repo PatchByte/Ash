@@ -61,7 +61,8 @@ namespace ash
     private:
         AshLoggerTagMap tagMap;
     };
-
+    
+    // @todo Change LoggerTag Filter to virtual.
     class AshLoggerTagFilter
     {
     public:

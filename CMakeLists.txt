@@ -6,6 +6,7 @@ option(ASH_ENABLE_TESTS "Enable ash tests." OFF)
 option(ASH_ENABLE_OBJECTS "Enable ash objects." ON)
 option(ASH_ENABLE_CRYPTO "Enable ash crypto, does require OpenSSL." OFF)
 option(ASH_ENABLE_LOGGER "Enable ash logger, does require fmt." OFF)
+option(ASH_ENABLE_USAGE_OF_EXTERNAL_VENDORS "Enable usage of external Vendors." OFF)
 
 if(ASH_ENABLE_DEVELOPMENT_ENVIRONMENT)
     set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
@@ -13,7 +14,10 @@ if(ASH_ENABLE_DEVELOPMENT_ENVIRONMENT)
     set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 endif(ASH_ENABLE_DEVELOPMENT_ENVIRONMENT)
 
-add_subdirectory("AshVendors")
+if(NOT ASH_ENABLE_USAGE_OF_EXTERNAL_VENDORS)
+    add_subdirectory("AshVendors")
+endif(NOT ASH_ENABLE_USAGE_OF_EXTERNAL_VENDORS)
+
 add_subdirectory("Ash")
 
 if(ASH_ENABLE_OBJECTS)
