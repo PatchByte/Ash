@@ -15,7 +15,7 @@ namespace ash
     public:
         virtual ~AshLoggerPassage() = default;
         virtual void SetParent(AshLogger* Parent, std::string ParentRegistrationName) {}
-        virtual void DoPassthrough(AshLoggerTag Tag, std::string Format, fmt::format_args Args) {}
+        virtual void DoPassthrough(AshLoggerTag Tag, std::string Format, fmt::format_args Args, std::string FormattedString) {}
         virtual void ApplyFilterForPassage(AshLoggerTagFilter LoggerTagFilter) {}
     };
 
@@ -51,14 +51,14 @@ namespace ash
     class AshLoggerFunctionPassage : public AshLoggerDefaultPassage
     {
     public:
-        using Delegate = std::function<void(AshLoggerDefaultPassage* This, AshLoggerTag Tag, std::string Format, fmt::format_args Args)>;
+        using Delegate = std::function<void(AshLoggerDefaultPassage* This, AshLoggerTag Tag, std::string Format, fmt::format_args Args, std::string FormattedString)>;
 
         AshLoggerFunctionPassage(Delegate DelegateFunction): delegateFunction(DelegateFunction) {}
         ~AshLoggerFunctionPassage() = default;
 
-        void DoPassthrough(AshLoggerTag Tag, std::string Format, fmt::format_args Args) 
+        void DoPassthrough(AshLoggerTag Tag, std::string Format, fmt::format_args Args, std::string FormattedString) 
         {
-            delegateFunction(this, Tag, Format, Args);
+            delegateFunction(this, Tag, Format, Args, FormattedString);
         }
     private:
         Delegate delegateFunction;

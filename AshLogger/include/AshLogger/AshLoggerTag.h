@@ -39,7 +39,7 @@ namespace ash
         
         inline bool AddTag(AshLoggerTag Tag)
         {
-            if(HasTag(Tag.GetShortTag()) == false)
+            if(HasTag(Tag.GetShortTag()) == true)
             {
                 return false;
             }

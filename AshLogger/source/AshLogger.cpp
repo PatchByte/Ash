@@ -59,6 +59,7 @@ namespace ash
 
     void AshLogger::AddLoggerPassage(AshLoggerPassage* LoggerPassage)
     {
+        LoggerPassage->SetParent(this, this->classInternalAshLogger->loggerName);
         this->classInternalAshLogger->loggerPassages.push_back(LoggerPassage);
     }
 
@@ -75,7 +76,7 @@ namespace ash
 
         for(auto currentPassage : classInternalAshLogger->loggerPassages)
         {
-            currentPassage->DoPassthrough(resolvedLoggerTag, LoggerFormat, LoggerFormatArgs);
+            currentPassage->DoPassthrough(resolvedLoggerTag, LoggerFormat, LoggerFormatArgs, formattedString);
         }
 
         return true;
