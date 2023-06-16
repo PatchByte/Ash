@@ -23,6 +23,8 @@ namespace ash
         ~AshLogger();
 
         virtual void SetPrefixFunction(AshLoggerPrefixFunctionDelegate PrefixFunction);
+        
+        virtual std::string GetLoggerName();
         virtual AshLoggerPrefixFunctionDelegate GetPrefixFunction();
 
         virtual void AddLoggerPassage(AshLoggerPassage* LoggerPassage);
