@@ -25,7 +25,7 @@ namespace ash
         AshLoggerDefaultPassage():
             parent(nullptr),
             parentRegistrationName(),
-            LoggerTagFilter()
+            loggerTagFilter()
         {}
 
         void SetParent(AshLogger* Parent, std::string ParentRegistrationName)
@@ -36,16 +36,16 @@ namespace ash
 
         void ApplyFilterForPassage(AshLoggerTagFilter LoggerTagFilter)
         {
-            LoggerTagFilter = LoggerTagFilter;
+            loggerTagFilter = LoggerTagFilter;
         }
 
         virtual AshLogger* GetParent() { return parent; }
         virtual std::string GetParentRegistrationName() {return parentRegistrationName; }
-        virtual AshLoggerTagFilter GetLoggerTagFilter() { return LoggerTagFilter; }
+        virtual AshLoggerTagFilter GetLoggerTagFilter() { return loggerTagFilter; }
     private:
         AshLogger* parent; 
         std::string parentRegistrationName;
-        AshLoggerTagFilter LoggerTagFilter;
+        AshLoggerTagFilter loggerTagFilter;
     };
 
     class AshLoggerFunctionPassage : public AshLoggerDefaultPassage
