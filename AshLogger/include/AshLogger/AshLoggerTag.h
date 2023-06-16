@@ -7,7 +7,7 @@ namespace ash
 {
 
     using AshLoggerShortTag = unsigned int;
-    using AshLoggerShortTagPrefix = std::string_view;
+    using AshLoggerShortTagPrefix = std::string;
     
     enum AshLoggerTagFilterMode : char
     {
