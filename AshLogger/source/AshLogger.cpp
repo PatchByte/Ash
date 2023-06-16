@@ -47,6 +47,11 @@ namespace ash
         classInternalAshLogger->loggerPrefixFunction = PrefixFunction;
     }
 
+    std::string AshLogger::GetLoggerName()
+    {
+        return classInternalAshLogger->loggerName;
+    }
+
     AshLoggerPrefixFunctionDelegate AshLogger::GetPrefixFunction()
     {
         return classInternalAshLogger->loggerPrefixFunction;
