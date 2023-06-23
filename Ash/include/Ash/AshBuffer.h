@@ -25,6 +25,7 @@ namespace ash
         AshBuffer();
         // Import Constructor
         AshBuffer(AshPointer Pointer, AshSize Size);
+        AshBuffer(AshBuffer& Source);
         virtual ~AshBuffer();
 
         virtual bool AllocateSize(AshSize Size);
