@@ -47,6 +47,14 @@ namespace ash
         this->ImportPointer(Pointer, Size);
     }
 
+    AshBuffer::AshBuffer(AshBuffer& Source)
+    {
+        ASH_CLASS_IMPLEMENT_INTERNAL_OBJECT_ALLOCATION(AshBuffer);
+        this->ReleaseMemory();
+        this->AllocateSize(Source.GetSize());
+        memcpy(this->GetPointer(), Source.GetPointer(), Source.GetSize());
+    }
+
     AshBuffer::~AshBuffer()
     {
         // Actual release
