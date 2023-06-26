@@ -63,6 +63,9 @@ namespace ash
         // File Utils
         virtual AshResult ReadFromFile(std::filesystem::path Path);
         virtual AshResult WriteToFile(std::filesystem::path Path);
+
+        // Assignment initialization
+        AshBuffer& operator= (AshBuffer Source);
     private:
         ASH_CLASS_ADD_INTERNAL_OBJECT(AshBuffer);
     };
