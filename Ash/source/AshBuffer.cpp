@@ -242,9 +242,9 @@ namespace ash
 
     AshBuffer& AshBuffer::operator= (AshBuffer Source)
     {
+        this->ReleaseMemory();
         ASH_CLASS_IMPLEMENT_INTERNAL_OBJECT_DEALLOCATION(AshBuffer);
         ASH_CLASS_IMPLEMENT_INTERNAL_OBJECT_ALLOCATION(AshBuffer);
-        this->ReleaseMemory();
         this->AllocateSize(Source.GetSize());
         memcpy(this->GetPointer(), Source.GetPointer(), Source.GetSize());
         return *this;
