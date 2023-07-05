@@ -33,10 +33,14 @@ namespace ash
         template<typename T>
         inline bool AllocateType() { return this->AllocateSize(sizeof(T)); }
 
+        // This just sets the pointer and does not deallocate
+
         virtual bool ImportPointer(AshPointer Pointer, AshSize Size);
 
         // This will actually allocate memory that will be later on released.
-        virtual bool ImportBytesVector(AshBytesVector Vector);
+        
+        virtual bool CopyPointer(AshPointer Pointer, AshSize Size);
+        virtual bool CopyBytesVector(AshBytesVector Vector);
 
         // ReleaseMemory is also like a sort of "Reset" function
         virtual bool ReleaseMemory();

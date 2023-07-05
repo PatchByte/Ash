@@ -105,7 +105,7 @@ namespace ash
         }
 
         AshBuffer* returnBuffer = new AshBuffer();
-        returnBuffer->ImportBytesVector(ret);
+        returnBuffer->CopyBytesVector(ret);
         return returnBuffer;
     }
 
