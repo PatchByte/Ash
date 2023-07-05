@@ -120,7 +120,19 @@ namespace ash
         return false;
     }
 
-    bool AshBuffer::ImportBytesVector(AshBytesVector Vector)
+    bool AshBuffer::CopyPointer(AshPointer Pointer, AshSize Size)
+    {
+        this->ReleaseMemory();
+        if(this->AllocateSize(Size) == false)
+        {
+            return false;
+        }
+
+        memcpy(this->GetPointer(), Pointer, Size);
+        return true;
+    }
+
+    bool AshBuffer::CopyBytesVector(AshBytesVector Vector)
     {
         this->ReleaseMemory();
         if(this->AllocateSize(Vector.size()) == false)
