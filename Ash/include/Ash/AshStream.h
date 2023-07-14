@@ -66,6 +66,7 @@ namespace ash
         virtual bool IsWriteOnly();
         virtual bool IsEndOfFile();
         virtual bool HasErrorOccurred();
+        virtual bool IsOkay() { return HasErrorOccurred() == false; }
 
         virtual AshStreamMode GetStreamMode();
     private:
