@@ -10,7 +10,7 @@ ash::AshResult StringAsciiObjectTest::Do()
 
     {
         // Write
-        ash::AshStream* bufferStream = new ash::AshStream(buffer, ash::AshStreamMode::WRITE);
+        ash::AshStream* bufferStream = new ash::AshStreamStaticBuffer(buffer, ash::AshStreamMode::WRITE);
         ash::objects::AshAsciiString testString = smStringAsciiObjectTestExpectedString;
 
         buffer->AllocateSize(testString.GetExportSize());
@@ -24,7 +24,7 @@ ash::AshResult StringAsciiObjectTest::Do()
     }
     {
         // Read
-        ash::AshStream* bufferStream = new ash::AshStream(buffer, ash::AshStreamMode::READ);
+        ash::AshStream* bufferStream = new ash::AshStreamStaticBuffer(buffer, ash::AshStreamMode::READ);
         ash::objects::AshAsciiString testString = "";
 
         if(testString.Import(bufferStream) == false)
@@ -50,7 +50,7 @@ ash::AshResult StringWideObjectTest::Do()
 
     {
         // Write
-        ash::AshStream* bufferStream = new ash::AshStream(buffer, ash::AshStreamMode::WRITE);
+        ash::AshStream* bufferStream = new ash::AshStreamStaticBuffer(buffer, ash::AshStreamMode::WRITE);
         ash::objects::AshWideString testString = smStringWideObjectTestExpectedString;
 
         buffer->AllocateSize(testString.GetExportSize());
@@ -64,7 +64,7 @@ ash::AshResult StringWideObjectTest::Do()
     }
     {
         // Read
-        ash::AshStream* bufferStream = new ash::AshStream(buffer, ash::AshStreamMode::READ);
+        ash::AshStream* bufferStream = new ash::AshStreamStaticBuffer(buffer, ash::AshStreamMode::READ);
         ash::objects::AshWideString testString = L"";
 
         if(testString.Import(bufferStream) == false)

@@ -23,7 +23,7 @@ ash::AshResult VectorTest::Do()
 
     // Write
     {
-        ash::AshStream* bufferStream = new ash::AshStream(buffer, ash::AshStreamMode::WRITE);
+        ash::AshStream* bufferStream = new ash::AshStreamStaticBuffer(buffer, ash::AshStreamMode::WRITE);
         ash::objects::AshVector<ash::objects::AshPrimitive<int>> testVector = ash::objects::AshVector<ash::objects::AshPrimitive<int>>();
 
         int i = 0;
@@ -50,7 +50,7 @@ ash::AshResult VectorTest::Do()
 
     // Read
     {
-        ash::AshStream* bufferStream = new ash::AshStream(buffer, ash::AshStreamMode::READ);
+        ash::AshStream* bufferStream = new ash::AshStreamStaticBuffer(buffer, ash::AshStreamMode::READ);
         ash::objects::AshVector<ash::objects::AshPrimitive<int>> testVector = ash::objects::AshVector<ash::objects::AshPrimitive<int>>();
         ash::AshCRC32 calculatedCRC = ash::AshCRC32();
 

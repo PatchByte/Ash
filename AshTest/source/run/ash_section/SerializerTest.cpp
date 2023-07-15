@@ -15,7 +15,7 @@ ash::AshResult SerializerRunTest::Do()
 
     {
         ash::AshBuffer* testBuffer = new ash::AshBuffer();
-        ash::AshStream* testBufferStream = new ash::AshStream(testBuffer, ash::AshStreamMode::WRITE);
+        ash::AshStream* testBufferStream = new ash::AshStreamStaticBuffer(testBuffer, ash::AshStreamMode::WRITE);
 
         if(testBuffer->AllocateSize(8) == false)
         {
@@ -33,7 +33,7 @@ ash::AshResult SerializerRunTest::Do()
 
     {
         ash::AshBuffer* testBuffer = ash::AshSerializer::Decode(SerializedText);
-        ash::AshStream* testBufferStream = new ash::AshStream(testBuffer, ash::AshStreamMode::READ);
+        ash::AshStream* testBufferStream = new ash::AshStreamStaticBuffer(testBuffer, ash::AshStreamMode::READ);
 
         int testInteger1 = testBufferStream->Read<int>();
         int testInteger2 = testBufferStream->Read<int>();

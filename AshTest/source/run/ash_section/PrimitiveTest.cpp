@@ -10,7 +10,7 @@ ash::AshResult PrimitiveTest::Do()
 
     // Write
     {
-        ash::AshStream* bufferStream = new ash::AshStream(buffer, ash::AshStreamMode::WRITE);
+        ash::AshStream* bufferStream = new ash::AshStreamStaticBuffer(buffer, ash::AshStreamMode::WRITE);
         ash::objects::AshPrimitive<double> doublePrimitive = ash::objects::AshPrimitive<double>(smDoubleValueExpected);
 
         buffer->AllocateSize(doublePrimitive.GetExportSize());
@@ -25,7 +25,7 @@ ash::AshResult PrimitiveTest::Do()
 
     // Read
     {
-        ash::AshStream* bufferStream = new ash::AshStream(buffer, ash::AshStreamMode::READ);
+        ash::AshStream* bufferStream = new ash::AshStreamStaticBuffer(buffer, ash::AshStreamMode::READ);
         ash::objects::AshPrimitive<double> doublePrimitive = ash::objects::AshPrimitive<double>();
 
         if(doublePrimitive.Import(bufferStream) == false)

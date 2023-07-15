@@ -15,11 +15,7 @@ namespace ash
     class AshStream
     {
     public:
-        AshStream(AshBuffer* Buffer, AshStreamMode BufferMode);
-        virtual ~AshStream();
-
-        // If you set this the AshBuffer* will be deallocate after use.
-        virtual bool SetSingleUseBuffer();
+        virtual ~AshStream() = default;
 
         template<typename T>
         inline T* Read(T* Buffer)
@@ -59,18 +55,36 @@ namespace ash
             return r.WasSuccessful() ? Buffer : nullptr;
         }
 
-        virtual AshResult ReadRawIntoPointer(void* Buffer, AshSize BufferSize);
-        virtual AshResult WriteRawFromPointer(void* Buffer, AshSize BufferSize);
+        virtual AshResult ReadRawIntoPointer(void* Buffer, AshSize BufferSize) { return ash::AshResult(false, "Non implemented function."); }
+        virtual AshResult WriteRawFromPointer(void* Buffer, AshSize BufferSize) { return ash::AshResult(false, "Non implemented function."); }
 
-        virtual bool IsReadOnly();
-        virtual bool IsWriteOnly();
-        virtual bool IsEndOfFile();
-        virtual bool HasErrorOccurred();
+        virtual bool IsReadOnly() { return this->GetStreamMode() == AshStreamMode::READ; }
+        virtual bool IsWriteOnly() { return this->GetStreamMode() == AshStreamMode::WRITE; }
+
+        virtual bool IsEndOfStream() { return true; }
+        virtual bool HasErrorOccurred() { return true; }
         virtual bool IsOkay() { return HasErrorOccurred() == false; }
 
-        virtual AshStreamMode GetStreamMode();
+        virtual AshStreamMode GetStreamMode() { return AshStreamMode::INVALID; }
+    };
+
+    class AshStreamStaticBuffer : public AshStream
+    {
+    public:
+        AshStreamStaticBuffer(ash::AshBuffer* StaticBuffer, AshStreamMode StaticBufferMode);
+        ~AshStreamStaticBuffer();
+
+        virtual AshStreamStaticBuffer* DeallocateBufferAfterUse();
+
+        AshResult ReadRawIntoPointer(void* Buffer, AshSize BufferSize);
+        AshResult WriteRawFromPointer(void* Buffer, AshSize BufferSize);
+
+        bool IsEndOfStream();
+        bool HasErrorOccurred();
+
+        AshStreamMode GetStreamMode();
     private:
-        ASH_CLASS_ADD_INTERNAL_OBJECT(AshStream);
+        ASH_CLASS_ADD_INTERNAL_OBJECT(AshStreamStaticBuffer);
     };
 
 }

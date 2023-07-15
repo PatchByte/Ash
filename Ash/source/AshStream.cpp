@@ -3,7 +3,9 @@
 namespace ash
 {
 
-    ASH_CLASS_IMPLEMENT_INTERNAL_OBJECT(AshStream)
+    // AshStreamStaticBuffer
+
+    ASH_CLASS_IMPLEMENT_INTERNAL_OBJECT(AshStreamStaticBuffer)
     {
     public:
         void Reset()
@@ -33,108 +35,100 @@ namespace ash
         } flags;
     };
 
-    AshStream::AshStream(AshBuffer* Buffer, AshStreamMode BufferMode)
+    AshStreamStaticBuffer::AshStreamStaticBuffer(ash::AshBuffer* StaticBuffer, AshStreamMode StaticBufferMode)
     {
-        ASH_CLASS_IMPLEMENT_INTERNAL_OBJECT_ALLOCATION(AshStream);
-        classInternalAshStream->Reset();
-        classInternalAshStream->buffer = Buffer;
-        classInternalAshStream->bufferMode = BufferMode;
+        ASH_CLASS_IMPLEMENT_INTERNAL_OBJECT_ALLOCATION(AshStreamStaticBuffer);
+        classInternalAshStreamStaticBuffer->Reset();
+        classInternalAshStreamStaticBuffer->buffer = StaticBuffer;
+        classInternalAshStreamStaticBuffer->bufferMode = StaticBufferMode;
+        classInternalAshStreamStaticBuffer->bufferCursor = 0;
     }
 
-    AshStream::~AshStream()
+    AshStreamStaticBuffer::~AshStreamStaticBuffer()
     {
-        if(classInternalAshStream->flags.bits.isSingleUseBuffer)
+        if(classInternalAshStreamStaticBuffer->flags.bits.isSingleUseBuffer)
         {
-            delete classInternalAshStream->buffer;
+            delete classInternalAshStreamStaticBuffer->buffer;
+            classInternalAshStreamStaticBuffer->buffer = nullptr;
         }
-        ASH_CLASS_IMPLEMENT_INTERNAL_OBJECT_DEALLOCATION(AshStream);
+        ASH_CLASS_IMPLEMENT_INTERNAL_OBJECT_DEALLOCATION(AshStreamStaticBuffer);
     }
 
-    bool AshStream::SetSingleUseBuffer()
+    AshStreamStaticBuffer* AshStreamStaticBuffer::DeallocateBufferAfterUse()
     {
-        classInternalAshStream->flags.bits.isSingleUseBuffer = true;
-        return true;
+        classInternalAshStreamStaticBuffer->flags.bits.isSingleUseBuffer = true;
+        return this;
     }
 
-    AshResult AshStream::ReadRawIntoPointer(void* Buffer, AshSize BufferSize)
+    AshResult AshStreamStaticBuffer::ReadRawIntoPointer(void* Buffer, AshSize BufferSize)
     {
         if(IsReadOnly() == false)
         {
             return AshResult(false, "Stream is write only.");
         }
 
-        if(IsEndOfFile())
+        if(IsEndOfStream())
         {
-            classInternalAshStream->SetErrorHasOccurred();
+            classInternalAshStreamStaticBuffer->SetErrorHasOccurred();
             return AshResult(false, "Stream is eof.");
         }
 
-        if((classInternalAshStream->bufferCursor + BufferSize) > classInternalAshStream->buffer->GetSize())
+        if((classInternalAshStreamStaticBuffer->bufferCursor + BufferSize) > classInternalAshStreamStaticBuffer->buffer->GetSize())
         {
-            classInternalAshStream->SetErrorHasOccurred();
+            classInternalAshStreamStaticBuffer->SetErrorHasOccurred();
             return AshResult(false, "Size is overlapping the eof.");
         }
 
         for(AshSize i = 0; i < BufferSize; i++)
         {
-            static_cast<unsigned char*>(Buffer)[i] = static_cast<unsigned char*>(classInternalAshStream->buffer->GetBytes())[classInternalAshStream->bufferCursor];
-            ++classInternalAshStream->bufferCursor;
+            static_cast<unsigned char*>(Buffer)[i] = static_cast<unsigned char*>(classInternalAshStreamStaticBuffer->buffer->GetBytes())[classInternalAshStreamStaticBuffer->bufferCursor];
+            ++classInternalAshStreamStaticBuffer->bufferCursor;
         }
 
         return AshResult(true);
     }
 
-    AshResult AshStream::WriteRawFromPointer(void* Buffer, AshSize BufferSize)
+    AshResult AshStreamStaticBuffer::WriteRawFromPointer(void* Buffer, AshSize BufferSize)
     {
         if(IsWriteOnly() == false)
         {
             return AshResult(false, "Stream is read only.");
         }
 
-        if(IsEndOfFile())
+        if(IsEndOfStream())
         {
-            classInternalAshStream->SetErrorHasOccurred();
+            classInternalAshStreamStaticBuffer->SetErrorHasOccurred();
             return AshResult(false, "Stream is eof.");
         }
 
-        if((classInternalAshStream->bufferCursor + BufferSize) > classInternalAshStream->buffer->GetSize())
+        if((classInternalAshStreamStaticBuffer->bufferCursor + BufferSize) > classInternalAshStreamStaticBuffer->buffer->GetSize())
         {
-            classInternalAshStream->SetErrorHasOccurred();
+            classInternalAshStreamStaticBuffer->SetErrorHasOccurred();
             return AshResult(false, "Size is overlapping the eof.");
         }
 
         for(AshSize i = 0; i < BufferSize; i++)
         {
-            static_cast<unsigned char*>(classInternalAshStream->buffer->GetBytes())[classInternalAshStream->bufferCursor] = static_cast<unsigned char*>(Buffer)[i];
-            ++classInternalAshStream->bufferCursor;
+            static_cast<unsigned char*>(classInternalAshStreamStaticBuffer->buffer->GetBytes())[classInternalAshStreamStaticBuffer->bufferCursor] = static_cast<unsigned char*>(Buffer)[i];
+            ++classInternalAshStreamStaticBuffer->bufferCursor;
         }
 
         return AshResult(true);
     }
 
-    bool AshStream::IsReadOnly()
+    bool AshStreamStaticBuffer::IsEndOfStream()
     {
-        return classInternalAshStream->bufferMode == AshStreamMode::READ;
+        return classInternalAshStreamStaticBuffer->bufferCursor >= classInternalAshStreamStaticBuffer->buffer->GetSize();
     }
 
-    bool AshStream::IsWriteOnly()
+    bool AshStreamStaticBuffer::HasErrorOccurred()
     {
-        return classInternalAshStream->bufferMode == AshStreamMode::WRITE;
+        return classInternalAshStreamStaticBuffer->flags.bits.hasErrorOccurred;
     }
 
-    bool AshStream::IsEndOfFile()
+    AshStreamMode AshStreamStaticBuffer::GetStreamMode()
     {
-        return classInternalAshStream->bufferCursor >= classInternalAshStream->buffer->GetSize();
-    }
-
-    bool AshStream::HasErrorOccurred()
-    {
-        return classInternalAshStream->flags.bits.hasErrorOccurred;
-    }
-
-    AshStreamMode AshStream::GetStreamMode()
-    {
-        return classInternalAshStream->bufferMode;
+        return classInternalAshStreamStaticBuffer->bufferMode;
     }
 
 }
