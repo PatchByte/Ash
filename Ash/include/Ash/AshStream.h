@@ -98,10 +98,10 @@ namespace ash
         AshResult ReadRawIntoPointer(void* Buffer, AshSize BufferSize);
         AshResult WriteRawFromPointer(void* Buffer, AshSize BufferSize);
 
-        bool IsEndOfStream();
-        bool HasErrorOccurred();
+        //bool IsEndOfStream();
+        //bool HasErrorOccurred();
 
-        AshStreamMode GetStreamMode();
+        //AshStreamMode GetStreamMode();
     private:
         ASH_CLASS_ADD_INTERNAL_OBJECT(AshStreamExpandableExportBuffer);
     };
