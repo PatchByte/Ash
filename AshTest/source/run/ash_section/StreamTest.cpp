@@ -11,15 +11,15 @@ ash::AshResult StreamRunTest::Do()
     {
         // Write test
 
-        ash::AshStream* stream = new ash::AshStream(new ash::AshBuffer(blob, sizeof(blob)), ash::AshStreamMode::WRITE);
-        stream->SetSingleUseBuffer();
+        ash::AshStreamStaticBuffer* stream = new ash::AshStreamStaticBuffer(new ash::AshBuffer(blob, sizeof(blob)), ash::AshStreamMode::WRITE);
+        stream->DeallocateBufferAfterUse();
 
         for(int i = 0; i < 64; i++)
         {
             stream->Write(&i);
         }
         
-        if(stream->IsEndOfFile() == false)
+        if(stream->IsEndOfStream() == false)
         {
             return ash::AshResult(false, "Stream is not eof.");
         }
@@ -29,8 +29,8 @@ ash::AshResult StreamRunTest::Do()
     {
         // Read Test
 
-        ash::AshStream* stream = new ash::AshStream(new ash::AshBuffer(blob, sizeof(blob)), ash::AshStreamMode::READ);
-        stream->SetSingleUseBuffer();
+        ash::AshStreamStaticBuffer* stream = new ash::AshStreamStaticBuffer(new ash::AshBuffer(blob, sizeof(blob)), ash::AshStreamMode::READ);
+        stream->DeallocateBufferAfterUse();
 
         for(int i = 0; i < 64; i++)
         {
