@@ -33,6 +33,8 @@ namespace ash
         template<typename T>
         inline bool AllocateType() { return this->AllocateSize(sizeof(T)); }
 
+        virtual bool ExpandSize(AshSize Size);
+
         // This just sets the pointer and does not deallocate
 
         virtual bool ImportPointer(AshPointer Pointer, AshSize Size);
@@ -41,6 +43,9 @@ namespace ash
         
         virtual bool CopyPointer(AshPointer Pointer, AshSize Size);
         virtual bool CopyBytesVector(AshBytesVector Vector);
+
+        // Allocates a new AshBuffer and copies the original AshBuffer
+        virtual AshBuffer* DuplicateAndCopyBuffer();
 
         // ReleaseMemory is also like a sort of "Reset" function
         virtual bool ReleaseMemory();

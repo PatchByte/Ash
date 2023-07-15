@@ -101,6 +101,34 @@ namespace ash
         return false;
     }
 
+    bool AshBuffer::ExpandSize(AshSize Size)
+    {
+        if(classInternalAshBuffer->flags.bits.isAllocated == false)
+        {
+            classInternalAshBuffer->Reset();
+            return false;
+        }
+
+        ash::AshSize expandedBufferSize = classInternalAshBuffer->bufferSize + Size;
+        void* expandedBufferPointer = operator new(expandedBufferSize);
+
+        memset(expandedBufferPointer, 0, expandedBufferSize);
+        memcpy(expandedBufferPointer, classInternalAshBuffer->bufferPointer, classInternalAshBuffer->bufferSize);
+
+        operator delete(classInternalAshBuffer->bufferPointer);
+
+        classInternalAshBuffer->bufferPointer = expandedBufferPointer;
+        classInternalAshBuffer->bufferSize = expandedBufferSize;
+
+        if(classInternalAshBuffer->bufferPointer != nullptr)
+        {
+            return true;
+        }
+
+        classInternalAshBuffer->Reset();
+        return false;
+    }
+
     bool AshBuffer::ImportPointer(AshPointer Pointer, AshSize Size)
     {
         this->ReleaseMemory();
@@ -142,6 +170,13 @@ namespace ash
 
         memcpy(this->GetPointer(), Vector.data(), Vector.size());
         return true;
+    }
+
+    AshBuffer* AshBuffer::DuplicateAndCopyBuffer()
+    {
+        AshBuffer* duplicate = new AshBuffer();
+        duplicate->CopyPointer(this->GetPointer(), this->GetSize());
+        return duplicate;
     }
 
     bool AshBuffer::SetReleasable(bool Releasable)
