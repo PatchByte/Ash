@@ -131,4 +131,44 @@ namespace ash
         return classInternalAshStreamStaticBuffer->bufferMode;
     }
 
+    // AshStreamExpandableExportBuffer
+
+    ASH_CLASS_IMPLEMENT_INTERNAL_OBJECT(AshStreamExpandableExportBuffer)
+    {
+    public:
+        ash::AshBuffer* expandableBuffer;
+    };
+
+    AshStreamExpandableExportBuffer::AshStreamExpandableExportBuffer()
+    {
+        ASH_CLASS_IMPLEMENT_INTERNAL_OBJECT_ALLOCATION(AshStreamExpandableExportBuffer);
+        classInternalAshStreamExpandableExportBuffer->expandableBuffer = new ash::AshBuffer();
+    }
+
+    AshStreamExpandableExportBuffer::~AshStreamExpandableExportBuffer()
+    {
+        if(classInternalAshStreamExpandableExportBuffer->expandableBuffer)
+        {
+            delete classInternalAshStreamExpandableExportBuffer->expandableBuffer;
+            classInternalAshStreamExpandableExportBuffer->expandableBuffer = nullptr;
+        }
+
+        ASH_CLASS_IMPLEMENT_INTERNAL_OBJECT_DEALLOCATION(AshStreamExpandableExportBuffer);
+    }
+
+    ash::AshBuffer* AshStreamExpandableExportBuffer::GetBuffer()
+    {
+        return classInternalAshStreamExpandableExportBuffer->expandableBuffer;
+    }
+    
+    AshResult AshStreamExpandableExportBuffer::ReadRawIntoPointer(void* Buffer, AshSize BufferSize)
+    {
+        return ash::AshResult(false, "ReadRawIntoPointer is not allowed here.");
+    }
+
+    AshResult AshStreamExpandableExportBuffer::WriteRawFromPointer(void* Buffer, AshSize BufferSize)
+    {
+        return ash::AshResult(false, "WriteRawFromPointer is not implemented yet because I am riding my bike in the woods.");
+    }
+
 }

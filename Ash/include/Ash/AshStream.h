@@ -87,4 +87,23 @@ namespace ash
         ASH_CLASS_ADD_INTERNAL_OBJECT(AshStreamStaticBuffer);
     };
 
+    class AshStreamExpandableExportBuffer : public AshStream
+    {
+    public:
+        AshStreamExpandableExportBuffer();
+        ~AshStreamExpandableExportBuffer();
+
+        virtual ash::AshBuffer* GetBuffer();
+
+        AshResult ReadRawIntoPointer(void* Buffer, AshSize BufferSize);
+        AshResult WriteRawFromPointer(void* Buffer, AshSize BufferSize);
+
+        bool IsEndOfStream();
+        bool HasErrorOccurred();
+
+        AshStreamMode GetStreamMode();
+    private:
+        ASH_CLASS_ADD_INTERNAL_OBJECT(AshStreamExpandableExportBuffer);
+    };
+
 }
