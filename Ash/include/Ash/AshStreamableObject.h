@@ -17,9 +17,9 @@ namespace ash
         virtual ~AshStreamableObject() = default;
 
         #if ASH_OBJECTS_ERASE_NAMES
-        virtual const char* GetName() { return "AshStreamableObject(Non implemented)"; }
-        #else
         const char* GetName() { return ""; }
+        #else
+        virtual const char* GetName() { return "AshStreamableObject(Non implemented)"; }
         #endif
 
         virtual bool Import(AshStream* Stream) { return false; }
