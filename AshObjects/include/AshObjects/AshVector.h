@@ -12,8 +12,12 @@ namespace ash::objects
     public:
         const char* GetName() 
         {
+            #if ASH_OBJECTS_ERASE_NAMES
+            return "";
+            #else
             static std::string smName = std::string("AshVector<").append(typeid(T).name()).append(">");
             return smName.data(); 
+            #endif
         }
 
         bool Import(AshStream* Stream) 

@@ -15,3 +15,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/in
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_20)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE Ash::Ash)
+
+if(ASH_OBJECTS_ERASE_NAMES)
+    target_compile_definitions(${PROJECT_NAME} PUBLIC ASH_OBJECTS_ERASE_NAMES=1)
+endif(ASH_OBJECTS_ERASE_NAMES)
