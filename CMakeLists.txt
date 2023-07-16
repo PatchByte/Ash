@@ -7,6 +7,8 @@ option(ASH_ENABLE_OBJECTS "Enable ash objects." ON)
 option(ASH_ENABLE_LOGGER "Enable ash logger, does require fmt." OFF)
 option(ASH_ENABLE_USAGE_OF_EXTERNAL_VENDORS "Enable usage of external Vendors." OFF)
 
+option(ASH_OBJECTS_ERASE_NAMES "Choose to erase the names of the AshObjects." OFF)
+
 if(ASH_ENABLE_DEVELOPMENT_ENVIRONMENT)
     set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
     set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)

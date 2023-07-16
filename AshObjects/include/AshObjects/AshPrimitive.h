@@ -19,8 +19,12 @@ namespace ash::objects
 
         const char* GetName() 
         { 
+            #if ASH_OBJECTS_ERASE_NAMES
+            return "";
+            #else
             static std::string name = std::string("AshPrimitive").append(typeid(T).name());
             return name.data(); 
+            #endif
         }
 
         bool Import(AshStream* Stream) 
