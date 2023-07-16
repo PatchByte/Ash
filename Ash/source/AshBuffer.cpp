@@ -72,6 +72,8 @@ namespace ash
         classInternalAshBuffer->bufferSize = Size;
         classInternalAshBuffer->bufferPointer = operator new(Size);
 
+        memset(classInternalAshBuffer->bufferPointer, 0, classInternalAshBuffer->bufferSize);
+
         if(classInternalAshBuffer->bufferPointer != nullptr)
         {
             return true;
@@ -92,6 +94,8 @@ namespace ash
         classInternalAshBuffer->bufferSize = ElementSize * ElementCount;
         classInternalAshBuffer->bufferPointer = operator new(ElementSize * ElementCount);
 
+        memset(classInternalAshBuffer->bufferPointer, 0, classInternalAshBuffer->bufferSize);
+
         if(classInternalAshBuffer->bufferPointer != nullptr)
         {
             return true;
@@ -103,11 +107,6 @@ namespace ash
 
     bool AshBuffer::ExpandSize(AshSize Size)
     {
-        if(classInternalAshBuffer->flags.bits.isAllocated == false)
-        {
-            classInternalAshBuffer->Reset();
-            return false;
-        }
 
         ash::AshSize expandedBufferSize = classInternalAshBuffer->bufferSize + Size;
         void* expandedBufferPointer = operator new(expandedBufferSize);
@@ -189,6 +188,8 @@ namespace ash
     {
         if(classInternalAshBuffer->bufferPointer != nullptr && classInternalAshBuffer->flags.bits.isReleasable == true)
         {
+            // Safety precautions, hehe looking at you @NSA
+            memset(classInternalAshBuffer->bufferPointer, 0, classInternalAshBuffer->bufferSize);
             operator delete(classInternalAshBuffer->bufferPointer);
         }
 

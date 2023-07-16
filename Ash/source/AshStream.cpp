@@ -136,7 +136,31 @@ namespace ash
     ASH_CLASS_IMPLEMENT_INTERNAL_OBJECT(AshStreamExpandableExportBuffer)
     {
     public:
+        ClassAshStreamExpandableExportBufferInternalObject():
+            expandableBuffer(nullptr),
+            expandableBufferCursor(0),
+            hasErrorOccurred(false)
+        {}
+
+        void Reset()
+        {
+            if(expandableBuffer != nullptr)
+            {
+                delete expandableBuffer;
+            }
+
+            expandableBufferCursor = 0;
+            hasErrorOccurred = false;
+        }
+
+        void SetErrorHasOccurred()
+        {
+            hasErrorOccurred = true;
+        }
+
         ash::AshBuffer* expandableBuffer;
+        ash::AshSize expandableBufferCursor;
+        bool hasErrorOccurred;
     };
 
     AshStreamExpandableExportBuffer::AshStreamExpandableExportBuffer()
@@ -147,28 +171,33 @@ namespace ash
 
     AshStreamExpandableExportBuffer::~AshStreamExpandableExportBuffer()
     {
-        if(classInternalAshStreamExpandableExportBuffer->expandableBuffer)
-        {
-            delete classInternalAshStreamExpandableExportBuffer->expandableBuffer;
-            classInternalAshStreamExpandableExportBuffer->expandableBuffer = nullptr;
-        }
-
+        classInternalAshStreamExpandableExportBuffer->Reset();
         ASH_CLASS_IMPLEMENT_INTERNAL_OBJECT_DEALLOCATION(AshStreamExpandableExportBuffer);
     }
 
-    ash::AshBuffer* AshStreamExpandableExportBuffer::GetBuffer()
+    ash::AshBuffer* AshStreamExpandableExportBuffer::MakeCopyOfBuffer()
     {
-        return classInternalAshStreamExpandableExportBuffer->expandableBuffer;
+        return classInternalAshStreamExpandableExportBuffer->expandableBuffer->DuplicateAndCopyBuffer();
     }
     
     AshResult AshStreamExpandableExportBuffer::ReadRawIntoPointer(void* Buffer, AshSize BufferSize)
     {
-        return ash::AshResult(false, "ReadRawIntoPointer is not allowed here.");
+        return ash::AshResult(false, "ReadRawIntoPointer is not implemented because AshStreamExpandableExportBuffer is write only . :-)");
     }
 
     AshResult AshStreamExpandableExportBuffer::WriteRawFromPointer(void* Buffer, AshSize BufferSize)
     {
-        return ash::AshResult(false, "WriteRawFromPointer is not implemented yet because I am riding my bike in the woods.");
+        classInternalAshStreamExpandableExportBuffer->expandableBuffer->ExpandSize(BufferSize);
+        
+        for(AshSize i = 0; i < BufferSize; i++)
+        {
+            static_cast<unsigned char*>(classInternalAshStreamExpandableExportBuffer->expandableBuffer->GetBytes())[classInternalAshStreamExpandableExportBuffer->expandableBufferCursor] = static_cast<unsigned char*>(Buffer)[i];
+            ++classInternalAshStreamExpandableExportBuffer->expandableBufferCursor;
+        }
+
+        return ash::AshResult(true);
     }
+
+    bool AshStreamExpandableExportBuffer::HasErrorOccurred() { return this->classInternalAshStreamExpandableExportBuffer->hasErrorOccurred; }
 
 }
