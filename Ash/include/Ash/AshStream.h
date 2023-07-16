@@ -93,15 +93,15 @@ namespace ash
         AshStreamExpandableExportBuffer();
         ~AshStreamExpandableExportBuffer();
 
-        virtual ash::AshBuffer* GetBuffer();
+        virtual ash::AshBuffer* MakeCopyOfBuffer();
 
         AshResult ReadRawIntoPointer(void* Buffer, AshSize BufferSize);
         AshResult WriteRawFromPointer(void* Buffer, AshSize BufferSize);
 
-        //bool IsEndOfStream();
-        //bool HasErrorOccurred();
+        bool IsEndOfStream() { return false; }
+        bool HasErrorOccurred();
 
-        //AshStreamMode GetStreamMode();
+        AshStreamMode GetStreamMode() { return AshStreamMode::WRITE; }
     private:
         ASH_CLASS_ADD_INTERNAL_OBJECT(AshStreamExpandableExportBuffer);
     };

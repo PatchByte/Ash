@@ -10,6 +10,7 @@
 #include "run/ash_section/CRCTest.h"
 #include "run/ash_section/PrimitiveTest.h"
 #include "run/ash_section/SerializerTest.h"
+#include "run/ash_section/StreamExpandableTest.h"
 #include "run/ash_section/StreamTest.h"
 #include "run/ash_section/StringObjectTest.h"
 #include "run/ash_section/VectorTest.h"
@@ -24,6 +25,7 @@ static std::unordered_map<std::string, AshBaseRunTest*> smTestRegister =
 {
     { "Buffer Test", new BufferRunTest() },
     { "Stream Test", new StreamRunTest() },
+    { "Stream expandable Test", new StreamExpandableTest() },
     { "Base64 Test", new Base64RunTest() },
     { "String Ascii Object Test", new StringAsciiObjectTest() },
     { "String Wide Object Test", new StringWideObjectTest() },
