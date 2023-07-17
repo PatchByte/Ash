@@ -14,6 +14,7 @@ namespace ash
         virtual  ~AshResult() = default;
 
         virtual bool WasSuccessful() { return success; }
+        virtual bool HasError() { return success == false; }
         virtual std::string GetMessage() { return message; }
     private:
         bool success;
