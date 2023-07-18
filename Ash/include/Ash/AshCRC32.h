@@ -32,6 +32,7 @@ namespace ash
         inline bool InitAndClear() { bool r = Init(); r &= Clear(); return r; }
         bool Update(ash::AshBuffer* Buffer);
         bool Update(void* BufferPointer, AshSize BufferSize);
+        bool Update(const void* BufferPointer, AshSize BufferSize) { return this->Update((void*)BufferPointer, BufferSize); }
         
         template<typename T>
         bool UpdateWithTemplateValue(T Value)
