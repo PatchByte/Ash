@@ -43,6 +43,8 @@ namespace ash
         
         virtual bool CopyPointer(AshPointer Pointer, AshSize Size);
         virtual bool CopyBytesVector(AshBytesVector Vector);
+        virtual bool CopyAshBufferFromPointer(ash::AshBuffer* Buffer);
+        virtual bool CopyAshBuffer(ash::AshBuffer& Buffer) { return this->CopyAshBufferFromPointer(&Buffer); }
 
         // Allocates a new AshBuffer and copies the original AshBuffer
         virtual AshBuffer* DuplicateAndCopyBuffer();
@@ -72,6 +74,13 @@ namespace ash
         // File Utils
         virtual AshResult ReadFromFile(std::filesystem::path Path);
         virtual AshResult WriteToFile(std::filesystem::path Path);
+
+        // Memory operations
+
+        // memsets the buffer with the specified value.
+        virtual bool ClearBytesWithValue(unsigned char Value);
+        // Calls ClearBytesWithValue with the value of 0
+        virtual bool ClearBytes() { return ClearBytesWithValue(0); }
 
         // Assignment initialization
         AshBuffer& operator= (AshBuffer Source);

@@ -17,7 +17,7 @@ static std::vector<ash::AshLoggerShortTag> smAshLoggerTestTags = {
     LOG_TAG_TEST_FOUR
 };
 
-static constexpr ash::CRC32 smAshLoggerFilterTestExpectedCRC = 0x17ab50ab;
+static constexpr ash::AshCRC32Value smAshLoggerFilterTestExpectedCRC = 0x17ab50ab;
 
 ash::AshResult AshLoggerTagFilterTest::Do()
 {

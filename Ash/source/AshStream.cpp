@@ -147,6 +147,7 @@ namespace ash
             if(expandableBuffer != nullptr)
             {
                 delete expandableBuffer;
+                expandableBuffer = nullptr;
             }
 
             expandableBufferCursor = 0;
@@ -182,7 +183,7 @@ namespace ash
     
     AshResult AshStreamExpandableExportBuffer::ReadRawIntoPointer(void* Buffer, AshSize BufferSize)
     {
-        return ash::AshResult(false, "ReadRawIntoPointer is not implemented because AshStreamExpandableExportBuffer is write only . :-)");
+        return ash::AshResult(false, "ReadRawIntoPointer is not implemented because AshStreamExpandableExportBuffer is write only . ;-)");
     }
 
     AshResult AshStreamExpandableExportBuffer::WriteRawFromPointer(void* Buffer, AshSize BufferSize)

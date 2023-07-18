@@ -7,7 +7,7 @@
 #define ASH_TAG_WARNING 0x2
 #define ASH_TAG_ERROR 0x3
 
-static constexpr ash::CRC32 smAshLoggerTestExpectedCRC = 0x29790cb;
+static constexpr ash::AshCRC32Value smAshLoggerTestExpectedCRC = 0x29790cb;
 
 ash::AshResult AshLoggerTest::Do()
 {
