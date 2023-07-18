@@ -7,16 +7,16 @@
 
 namespace ash
 {
-    static constexpr size_t smCrc32TableSize = 256;
+    static constexpr size_t smAshCRC32TableSize = 256;
 
     // AshCRC32Utils
 
-    CRC32Table AshCRC32Utils::GenerateTable()
+    AshCRC32Table AshCRC32Utils::GenerateTable()
     {
-        CRC32Table table = {};
+        AshCRC32Table table = {};
 
         uint32_t polynomial = 0xEDB88320;
-		for (uint32_t i = 0; i < smCrc32TableSize; i++) 
+		for (uint32_t i = 0; i < smAshCRC32TableSize; i++) 
 		{
 			uint32_t c = i;
 			for (size_t j = 0; j < 8; j++) 
@@ -35,7 +35,7 @@ namespace ash
         return table;
     }
 
-    CRC32 AshCRC32Utils::UpdateWithCustomTable(CRC32Table Table, CRC32 InitialValue, AshBuffer* Buffer)
+    AshCRC32Value AshCRC32Utils::UpdateWithCustomTable(AshCRC32Table Table, AshCRC32Value InitialValue, AshBuffer* Buffer)
     {
         uint32_t c = InitialValue ^ 0xFFFFFFFF;
 		uint8_t* u = Buffer->GetBytes();
@@ -46,9 +46,9 @@ namespace ash
 		return c ^ 0xFFFFFFFF;
     }
 
-    CRC32 AshCRC32Utils::Calculate(CRC32 InitialValue, AshBuffer* Buffer)
+    AshCRC32Value AshCRC32Utils::Calculate(AshCRC32Value InitialValue, AshBuffer* Buffer)
     {
-        CRC32Table table = AshCRC32Utils::GenerateTable();
+        AshCRC32Table table = AshCRC32Utils::GenerateTable();
         return AshCRC32Utils::UpdateWithCustomTable(table, InitialValue, Buffer);
     }
 
@@ -60,7 +60,7 @@ namespace ash
         this->Init();
     }
 
-    AshCRC32::AshCRC32(CRC32 Value):
+    AshCRC32::AshCRC32(AshCRC32Value Value):
         crcValue(Value)
     {
         this->Init();

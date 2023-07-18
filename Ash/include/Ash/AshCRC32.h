@@ -10,22 +10,22 @@
 namespace ash
 {
 
-    using CRC32 = unsigned int;
-    using CRC32Table = std::vector<CRC32>;
+    using AshCRC32Value = unsigned int;
+    using AshCRC32Table = std::vector<AshCRC32Value>;
 
     class AshCRC32Utils
     {
     public:
-        static CRC32Table GenerateTable();
-        static CRC32 UpdateWithCustomTable(CRC32Table Table, CRC32 InitialValue, AshBuffer* Buffer);
-        static CRC32 Calculate(CRC32 InitialValue, AshBuffer* Buffer);
+        static AshCRC32Table GenerateTable();
+        static AshCRC32Value UpdateWithCustomTable(AshCRC32Table Table, AshCRC32Value InitialValue, AshBuffer* Buffer);
+        static AshCRC32Value Calculate(AshCRC32Value InitialValue, AshBuffer* Buffer);
     };
 
     class AshCRC32
     {
     public:
         AshCRC32();
-        AshCRC32(CRC32 InitialValue);
+        AshCRC32(AshCRC32Value InitialValue);
 
         bool Init();
         inline bool Clear() { crcValue = 0; return true; }
@@ -39,10 +39,10 @@ namespace ash
             return this->Update(&Value, sizeof(Value));
         }
 
-        inline CRC32 GetValue() { return crcValue; }
+        inline AshCRC32Value GetValue() { return crcValue; }
     private:
-        CRC32Table crcTable;
-        CRC32 crcValue;
+        AshCRC32Table crcTable;
+        AshCRC32Value crcValue;
     };
 
 }

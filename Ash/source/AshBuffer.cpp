@@ -171,6 +171,11 @@ namespace ash
         return true;
     }
 
+    bool AshBuffer::CopyAshBufferFromPointer(ash::AshBuffer* Buffer)
+    {
+        return this->CopyPointer(Buffer->GetPointer(), Buffer->GetSize());
+    }
+
     AshBuffer* AshBuffer::DuplicateAndCopyBuffer()
     {
         AshBuffer* duplicate = new AshBuffer();
@@ -286,6 +291,19 @@ namespace ash
         ostream.close();
 
         return AshResult(true);
+    }
+
+    // Memory operations
+
+    bool AshBuffer::ClearBytesWithValue(unsigned char Value)
+    {
+        if(classInternalAshBuffer->flags.bits.isAllocated == false)
+        {
+            return false;
+        }
+
+        memset(classInternalAshBuffer->bufferPointer, 0, classInternalAshBuffer->bufferSize);
+        return true;
     }
 
     AshBuffer& AshBuffer::operator= (AshBuffer Source)

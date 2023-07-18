@@ -3,7 +3,7 @@
 #include <iostream>
 
 static constexpr std::string_view smCRCTestString = "Hello, World!";
-static constexpr ash::CRC32 smCRCExpectedValue = 0xec4ac3d0;
+static constexpr ash::AshCRC32Value smCRCExpectedValue = 0xec4ac3d0;
 
 ash::AshResult CRC32RunTest::Do()
 {
