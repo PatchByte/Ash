@@ -131,6 +131,23 @@ namespace ash
         return classInternalAshStreamStaticBuffer->bufferMode;
     }
 
+    ash::AshSize AshStreamStaticBuffer::GetCursorPosition()
+    {
+        return classInternalAshStreamStaticBuffer->bufferCursor;
+    }
+
+    ash::AshResult AshStreamStaticBuffer::SetCursorPosition(ash::AshSize CursorPosition)
+    {
+        if( CursorPosition > ((classInternalAshStreamStaticBuffer->buffer->GetSize()) - 1) )
+        {
+            return ash::AshResult(false, "The cursor position is larger than the buffer size.");
+        }
+
+        classInternalAshStreamStaticBuffer->bufferCursor = CursorPosition;
+
+        return true;
+    }
+
     // AshStreamExpandableExportBuffer
 
     ASH_CLASS_IMPLEMENT_INTERNAL_OBJECT(AshStreamExpandableExportBuffer)
@@ -199,6 +216,13 @@ namespace ash
         return ash::AshResult(true);
     }
 
-    bool AshStreamExpandableExportBuffer::HasErrorOccurred() { return this->classInternalAshStreamExpandableExportBuffer->hasErrorOccurred; }
+    bool AshStreamExpandableExportBuffer::HasErrorOccurred() 
+    { 
+        return classInternalAshStreamExpandableExportBuffer->hasErrorOccurred; 
+    }
 
+    ash::AshSize AshStreamExpandableExportBuffer::GetCursorPosition() 
+    { 
+        return classInternalAshStreamExpandableExportBuffer->expandableBufferCursor; 
+    }
 }
