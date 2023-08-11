@@ -66,6 +66,9 @@ namespace ash
         virtual bool IsOkay() { return HasErrorOccurred() == false; }
 
         virtual AshStreamMode GetStreamMode() { return AshStreamMode::INVALID; }
+
+        virtual ash::AshSize GetCursorPosition() { return 0; }
+        virtual ash::AshResult SetCursorPosition(ash::AshSize CursorPosition) { return ash::AshResult(false, "Non implemented function."); }
     };
 
     class AshStreamStaticBuffer : public AshStream
@@ -83,6 +86,9 @@ namespace ash
         bool HasErrorOccurred();
 
         AshStreamMode GetStreamMode();
+
+        ash::AshSize GetCursorPosition();
+        ash::AshResult SetCursorPosition(ash::AshSize CursorPosition);
     private:
         ASH_CLASS_ADD_INTERNAL_OBJECT(AshStreamStaticBuffer);
     };
@@ -102,6 +108,9 @@ namespace ash
         bool HasErrorOccurred();
 
         AshStreamMode GetStreamMode() { return AshStreamMode::WRITE; }
+
+        ash::AshSize GetCursorPosition();
+        ash::AshResult SetCursorPosition(ash::AshSize CursorPosition) { return ash::AshResult(false, "Not supported in AshStreamExpandableExportBuffer."); }
     private:
         ASH_CLASS_ADD_INTERNAL_OBJECT(AshStreamExpandableExportBuffer);
     };
