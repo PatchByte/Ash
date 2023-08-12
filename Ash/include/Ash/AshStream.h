@@ -71,6 +71,7 @@ namespace ash
         virtual ash::AshResult SetCursorPosition(ash::AshSize CursorPosition) { return ash::AshResult(false, "Non implemented function."); }
         
         virtual ash::AshResult SkipSize(ash::AshSize Size) { return this->SetCursorPosition(this->GetCursorPosition() + Size); }
+        virtual bool FillSize(ash::AshSize Size, unsigned char Value = 0x00) { for(ash::AshSize currentSizeIndex = 0; currentSizeIndex < Size; currentSizeIndex++) { this->Write<unsigned char>(Value); } return this->IsOkay(); }
     };
 
     class AshStreamStaticBuffer : public AshStream
