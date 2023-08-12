@@ -16,7 +16,7 @@ ash::AshResult StreamRunTest::Do()
 
         for(int i = 0; i < 64; i++)
         {
-            stream->Write(&i);
+            stream->WriteFromPointer(&i);
         }
         
         if(stream->IsEndOfStream() == false)
