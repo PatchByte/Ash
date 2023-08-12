@@ -18,7 +18,7 @@ namespace ash
         virtual ~AshStream() = default;
 
         template<typename T>
-        inline T* Read(T* Buffer)
+        inline T* ReadToPointer(T* Buffer)
         {
             static_assert(std::is_fundamental<T>::value == true, "You can only use primitive types.");
             
@@ -33,8 +33,17 @@ namespace ash
 
             T Data = { 0 };
 
-            auto r = Read(&Data);
+            auto r = ReadToPointer(&Data);
             return Data;
+        }
+        
+        template<typename T>
+        inline T* WriteFromPointer(T* Buffer)
+        {
+            static_assert(std::is_fundamental<T>::value == true, "You can only use primitive types.");
+
+            auto r = WriteRawFromPointer(Buffer, sizeof(T));
+            return r.WasSuccessful() ? Buffer : nullptr;
         }
 
         template<typename T>
@@ -42,17 +51,8 @@ namespace ash
         {
             static_assert(std::is_fundamental<T>::value == true, "You can only use primitive types.");
 
-            auto r = Write(&Data);
+            auto r = WriteFromPointer(&Data);
             return r != nullptr;
-        }
-
-        template<typename T>
-        inline T* Write(T* Buffer)
-        {
-            static_assert(std::is_fundamental<T>::value == true, "You can only use primitive types.");
-
-            auto r = WriteRawFromPointer(Buffer, sizeof(T));
-            return r.WasSuccessful() ? Buffer : nullptr;
         }
 
         virtual AshResult ReadRawIntoPointer(void* Buffer, AshSize BufferSize) { return ash::AshResult(false, "Non implemented function."); }
