@@ -34,6 +34,7 @@ namespace ash
         inline bool AllocateType() { return this->AllocateSize(sizeof(T)); }
 
         virtual bool ExpandSize(AshSize Size);
+        virtual bool ShrinkSize(AshSize Size);
 
         // This just sets the pointer and does not deallocate
 
@@ -77,7 +78,7 @@ namespace ash
 
         // Memory operations
 
-        // memsets the buffer with the specified value.
+        // memset's the buffer with the specified value.
         virtual bool ClearBytesWithValue(unsigned char Value);
         // Calls ClearBytesWithValue with the value of 0
         virtual bool ClearBytes() { return ClearBytesWithValue(0); }
