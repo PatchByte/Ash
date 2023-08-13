@@ -128,6 +128,29 @@ namespace ash
         return false;
     }
 
+    bool AshBuffer::ShrinkSize(AshSize Size)
+    {
+        signed long long shrunkBufferSize = ((signed long long)classInternalAshBuffer->bufferSize) - ((signed long long)Size);
+        
+        if(shrunkBufferSize <= 0)
+        {
+            classInternalAshBuffer->Reset();
+            return false;
+        }
+
+        void* shrunkBufferPointer = operator new(shrunkBufferSize);
+
+        memset(shrunkBufferPointer, 0, shrunkBufferSize);
+        memcpy(shrunkBufferPointer, classInternalAshBuffer->bufferPointer, shrunkBufferSize);
+
+        operator delete(classInternalAshBuffer->bufferPointer);
+
+        classInternalAshBuffer->bufferPointer = shrunkBufferPointer;
+        classInternalAshBuffer->bufferSize = shrunkBufferSize;
+
+        return true;
+    }
+
     bool AshBuffer::ImportPointer(AshPointer Pointer, AshSize Size)
     {
         this->ReleaseMemory();
