@@ -34,4 +34,16 @@ namespace ash
         void* result;
     };
 
+    template<typename T>
+    class AshCustomResult : public AshResult
+    {
+    public:
+        AshCustomResult(bool Successful): AshResult::AshResult(Successful) {}
+        AshCustomResult(bool Successful, std::string Message, T& Result): AshResult::AshResult(Successful, Message), result(Result) {}
+
+        T GetResult() { return result; }
+    private:
+        T result;
+    };
+
 }
