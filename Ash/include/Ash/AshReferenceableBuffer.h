@@ -45,6 +45,9 @@ namespace ash
 
         AshReferenceableBuffer& operator=(AshReferenceableBuffer Source);
     private:
+        virtual bool NotifyReferenceRemoval(AshReferenceableHandleId ReferenceId);
+        ASH_CLASS_DECLARE_FRIEND(AshReferenceableHandle);
+    private:
         ASH_CLASS_ADD_INTERNAL_OBJECT(AshReferenceableBuffer);
     };
 

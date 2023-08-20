@@ -216,9 +216,9 @@ namespace ash
     {
         if(classInternalAshBuffer->bufferPointer != nullptr && classInternalAshBuffer->flags.bits.isReleasable == true)
         {
-            // Safety precautions, hehe looking at you @NSA
             memset(classInternalAshBuffer->bufferPointer, 0, classInternalAshBuffer->bufferSize);
             operator delete(classInternalAshBuffer->bufferPointer);
+            classInternalAshBuffer->bufferPointer = nullptr;
         }
 
         classInternalAshBuffer->Reset();

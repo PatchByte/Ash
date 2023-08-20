@@ -44,7 +44,7 @@ namespace ash
 
         void Reset()
         {
-            referenceId = 0;
+            referenceId = AshReferenceableHandle::INVALID_REFERENCE_ID;
             parent = nullptr;
             offset = 0;
         }
@@ -78,8 +78,8 @@ namespace ash
     }
 
     AshReferenceableBuffer::~AshReferenceableBuffer()
-    {
-        classInternalAshReferenceableBuffer->Reset();
+    {   
+        this->ReleaseMemory();
         ASH_CLASS_IMPLEMENT_INTERNAL_OBJECT_DEALLOCATION(AshReferenceableBuffer);
     }
 
@@ -121,6 +121,11 @@ namespace ash
         return referenceHandle;
     }
 
+    ash::AshSize AshReferenceableBuffer::GetReferencesCount()
+    {
+        return classInternalAshReferenceableBuffer->referencesMap.size();
+    }
+
     AshReferenceableBuffer& AshReferenceableBuffer::operator=(AshReferenceableBuffer Source)
     {
         AshBuffer::operator=(Source);
@@ -132,6 +137,18 @@ namespace ash
         return *this;
     }
 
+    bool AshReferenceableBuffer::NotifyReferenceRemoval(AshReferenceableHandleId ReferenceId)
+    {
+        if(classInternalAshReferenceableBuffer->referencesMap.count(ReferenceId) <= 0)
+        {
+            return false;
+        }
+
+        classInternalAshReferenceableBuffer->referencesMap.erase(ReferenceId);
+
+        return true;
+    }
+
     // AshReferenceableHandle
 
     AshReferenceableHandle::AshReferenceableHandle()
@@ -141,6 +158,12 @@ namespace ash
 
     AshReferenceableHandle::~AshReferenceableHandle()
     {
+        if(this->IsValid())
+        {
+            classInternalAshReferenceableHandle->parent->NotifyReferenceRemoval(classInternalAshReferenceableHandle->referenceId);
+        }
+
+        classInternalAshReferenceableHandle->Reset();
         ASH_CLASS_IMPLEMENT_INTERNAL_OBJECT_DEALLOCATION(AshReferenceableHandle);
     }
     
@@ -184,5 +207,11 @@ namespace ash
         }
 
         return true;
+    }
+
+    void AshReferenceableHandle::Invalidate()
+    {
+        // Should be good enough
+        classInternalAshReferenceableHandle->Reset();
     }
 }
