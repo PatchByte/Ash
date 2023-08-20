@@ -7,7 +7,8 @@ namespace ash
     {
     public:
         ClassAshReferenceableBufferInternalObject():
-            referencesCount(0)
+            referencesCount(0),
+            referencesMap()
         {}
 
         ~ClassAshReferenceableBufferInternalObject()
@@ -18,11 +19,12 @@ namespace ash
         void Reset()
         {
             referencesCount = 0;
+            referencesMap.clear();
         }
-
-        AshReferenceableHandleId NextId() { return referencesCount; }
     private:
         AshReferenceableHandleId referencesCount;
+        std::map<AshReferenceableHandleId, AshReferenceableHandle*> referencesMap;
+
         ASH_CLASS_DECLARE_FRIEND(AshReferenceableBuffer);
     };
 
@@ -81,18 +83,48 @@ namespace ash
         ASH_CLASS_IMPLEMENT_INTERNAL_OBJECT_DEALLOCATION(AshReferenceableBuffer);
     }
 
+    // AshBuffer functions.
+
+    bool AshReferenceableBuffer::ReleaseMemory()
+    {
+        bool result = AshBuffer::ReleaseMemory();
+
+        for(auto currentReferencesIterator : classInternalAshReferenceableBuffer->referencesMap)
+        {
+            currentReferencesIterator.second->Invalidate();
+        }
+
+        classInternalAshReferenceableBuffer->Reset();
+
+        return result;
+    }
+
+    // AshReferenceableBuffer functions.
+
     AshReferenceableHandle* AshReferenceableBuffer::ReferenceOffset(ash::AshSize Offset)
     {
         AshReferenceableHandle* referenceHandle = new AshReferenceableHandle();
+        AshReferenceableHandleId referenceHandleId = (++classInternalAshReferenceableBuffer->referencesCount);
+
         referenceHandle->classInternalAshReferenceableHandle->offset = Offset;
         referenceHandle->classInternalAshReferenceableHandle->parent = this;
-        referenceHandle->classInternalAshReferenceableHandle->referenceId = (++classInternalAshReferenceableBuffer->referencesCount);
+        referenceHandle->classInternalAshReferenceableHandle->referenceId = referenceHandleId;
+
+        if(classInternalAshReferenceableBuffer->referencesMap.count(referenceHandleId) > 0)
+        {
+            delete referenceHandle;
+            return nullptr;
+        }
+
+        classInternalAshReferenceableBuffer->referencesMap.emplace(referenceHandleId, referenceHandle);
+
         return referenceHandle;
     }
 
     AshReferenceableBuffer& AshReferenceableBuffer::operator= (AshReferenceableBuffer Source)
     {
         AshBuffer::operator=(Source);
+        // The Buffer wouldn't know where to assign the existing references.
         classInternalAshReferenceableBuffer->referencesCount = 0;
         return *this;
     }

@@ -1,22 +1,22 @@
 #include "main.h"
 
-#include "compile/InnerClassTest.h"
-#include "compile/InstanceClassTest.h"
+#include "Compile/InnerClassTest.h"
+#include "Compile/InstanceClassTest.h"
 
 #include "BaseRunTest.h"
 
-#include "run/ash_section/Base64Test.h"
-#include "run/ash_section/BufferTest.h"
-#include "run/ash_section/CRCTest.h"
-#include "run/ash_section/PrimitiveTest.h"
-#include "run/ash_section/SerializerTest.h"
-#include "run/ash_section/StreamExpandableTest.h"
-#include "run/ash_section/StreamTest.h"
-#include "run/ash_section/StringObjectTest.h"
-#include "run/ash_section/VectorTest.h"
+#include "Run/AshSection/Base64Test.h"
+#include "Run/AshSection/BufferTest.h"
+#include "Run/AshSection/CRCTest.h"
+#include "Run/AshSection/PrimitiveTest.h"
+#include "Run/AshSection/SerializerTest.h"
+#include "Run/AshSection/StreamExpandableTest.h"
+#include "Run/AshSection/StreamTest.h"
+#include "Run/AshSection/StringObjectTest.h"
+#include "Run/AshSection/VectorTest.h"
 
-#include "run/ash_logger_section/AshLoggerTagFilterTest.h"
-#include "run/ash_logger_section/AshLoggerTest.h"
+#include "Run/AshLoggerSection/AshLoggerTagFilterTest.h"
+#include "Run/AshLoggerSection/AshLoggerTest.h"
 
 #include <iostream>
 #include <unordered_map>

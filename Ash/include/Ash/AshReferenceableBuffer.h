@@ -15,7 +15,14 @@ namespace ash
         AshReferenceableBuffer(AshReferenceableBuffer& Source);
         ~AshReferenceableBuffer();
 
+        // AshBuffer functions.
+
+        bool ReleaseMemory();
+
+        // AshReferenceableBuffer functions.
+
         AshReferenceableHandle* ReferenceOffset(ash::AshSize Offset);
+
         inline AshReferenceableHandle* ReferenceAddress(ash::AshPointer Pointer)
         {
             ash::AshSize offsetCalculated = (ash::AshSize)(Pointer) - (ash::AshSize)(this->GetPointer());
@@ -33,6 +40,8 @@ namespace ash
         {
             return this->ReferenceAddress(reinterpret_cast<void*>(Pointer));
         }
+
+        ash::AshSize GetReferencesCount();
 
         AshReferenceableBuffer& operator= (AshReferenceableBuffer Source);
     private:
@@ -61,8 +70,10 @@ namespace ash
         AshReferenceableHandle& operator= (AshReferenceableHandle Source) = delete;
     private:
         AshReferenceableHandle();
-        ASH_CLASS_DECLARE_FRIEND(AshReferenceableBuffer);
+        void Invalidate();
+
         ASH_CLASS_ADD_INTERNAL_OBJECT(AshReferenceableHandle);
+        ASH_CLASS_DECLARE_FRIEND(AshReferenceableBuffer);
     };
 
 }
