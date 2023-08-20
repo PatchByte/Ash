@@ -7,6 +7,7 @@
 
 #include "Run/AshSection/Base64Test.h"
 #include "Run/AshSection/BufferTest.h"
+#include "Run/AshSection/BufferReferenceableTest.h"
 #include "Run/AshSection/CRCTest.h"
 #include "Run/AshSection/PrimitiveTest.h"
 #include "Run/AshSection/SerializerTest.h"
@@ -33,6 +34,7 @@ static std::unordered_map<std::string, AshBaseRunTest*> smTestRegister =
     { "CRC32 Test", new CRC32RunTest() },
     { "Primitive Test", new PrimitiveTest() },
     { "Vector Test", new VectorTest() },
+    { "BufferRef Test", new BufferReferenceableRunTest() },
 #if ASH_ENABLE_LOGGER
     { "Logger Tag Filter Test", new AshLoggerTagFilterTest() },
     { "Logger Test", new AshLoggerTest() }
