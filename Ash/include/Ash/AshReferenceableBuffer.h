@@ -43,7 +43,7 @@ namespace ash
 
         ash::AshSize GetReferencesCount();
 
-        AshReferenceableBuffer& operator= (AshReferenceableBuffer Source);
+        AshReferenceableBuffer& operator=(AshReferenceableBuffer Source);
     private:
         ASH_CLASS_ADD_INTERNAL_OBJECT(AshReferenceableBuffer);
     };
@@ -67,7 +67,7 @@ namespace ash
         }
         virtual bool IsValid();
 
-        AshReferenceableHandle& operator= (AshReferenceableHandle Source) = delete;
+        AshReferenceableHandle& operator=(AshReferenceableHandle Source) = delete;
     private:
         AshReferenceableHandle();
         void Invalidate();
