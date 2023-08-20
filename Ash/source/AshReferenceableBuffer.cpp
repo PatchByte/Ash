@@ -121,11 +121,14 @@ namespace ash
         return referenceHandle;
     }
 
-    AshReferenceableBuffer& AshReferenceableBuffer::operator= (AshReferenceableBuffer Source)
+    AshReferenceableBuffer& AshReferenceableBuffer::operator=(AshReferenceableBuffer Source)
     {
         AshBuffer::operator=(Source);
+        
         // The Buffer wouldn't know where to assign the existing references.
         classInternalAshReferenceableBuffer->referencesCount = 0;
+        classInternalAshReferenceableBuffer->referencesMap = {};
+
         return *this;
     }
 

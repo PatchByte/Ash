@@ -84,7 +84,7 @@ namespace ash
         virtual bool ClearBytes() { return ClearBytesWithValue(0); }
 
         // Assignment initialization
-        AshBuffer& operator= (AshBuffer Source);
+        AshBuffer& operator=(AshBuffer Source);
     private:
         ASH_CLASS_ADD_INTERNAL_OBJECT(AshBuffer);
     };

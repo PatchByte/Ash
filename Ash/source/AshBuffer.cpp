@@ -329,7 +329,7 @@ namespace ash
         return true;
     }
 
-    AshBuffer& AshBuffer::operator= (AshBuffer Source)
+    AshBuffer& AshBuffer::operator=(AshBuffer Source)
     {
         this->ReleaseMemory();
         ASH_CLASS_IMPLEMENT_INTERNAL_OBJECT_DEALLOCATION(AshBuffer);
