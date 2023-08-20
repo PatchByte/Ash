@@ -1,9 +1,9 @@
 #include "main.h"
 
+#include "BaseRunTest.h"
+
 #include "Compile/InnerClassTest.h"
 #include "Compile/InstanceClassTest.h"
-
-#include "BaseRunTest.h"
 
 #include "Run/AshSection/Base64Test.h"
 #include "Run/AshSection/BufferTest.h"
