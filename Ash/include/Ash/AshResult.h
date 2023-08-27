@@ -39,7 +39,13 @@ namespace ash
     {
     public:
         AshCustomResult(bool Successful): AshResult::AshResult(Successful) {}
-        AshCustomResult(bool Successful, std::string Message, T& Result): AshResult::AshResult(Successful, Message), result(Result) {}
+        AshCustomResult(bool Successful, std::string Message): AshResult::AshResult(Successful, Message) {}
+
+        AshCustomResult AttachResult(T Result)
+        {
+            result = Result;
+            return *this;
+        }
 
         T GetResult() { return result; }
     private:
