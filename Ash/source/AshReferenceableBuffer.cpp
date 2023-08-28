@@ -246,9 +246,10 @@ namespace ash
     bool AshReferenceableHandle::IsValid()
     {
         if(classInternalAshReferenceableHandle->parent == nullptr) { return false; }
-        if(classInternalAshReferenceableHandle->referenceId == AshReferenceableHandle::INVALID_REFERENCE_ID ||
-           classInternalAshReferenceableHandle->offset >= classInternalAshReferenceableHandle->parent->GetSize() ||
-           (classInternalAshReferenceableHandle->offset + classInternalAshReferenceableHandle->size) >= classInternalAshReferenceableHandle->parent->GetSize()
+        if(
+            classInternalAshReferenceableHandle->referenceId == AshReferenceableHandle::INVALID_REFERENCE_ID ||
+            classInternalAshReferenceableHandle->offset >= classInternalAshReferenceableHandle->parent->GetSize() ||
+            (classInternalAshReferenceableHandle->offset + classInternalAshReferenceableHandle->size) > classInternalAshReferenceableHandle->parent->GetSize()
         )
         {
             return false;
