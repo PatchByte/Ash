@@ -135,12 +135,22 @@ namespace ash
             ash::AshSize startAddress = currentReferenceableHandle->GetOffset();
             ash::AshSize endAddress = currentReferenceableHandle->GetOffset() + currentReferenceableHandle->GetSize();
 
-            if(
-                Offset > startAddress &&
-                Offset < endAddress
-            )
+            if(OnlyOffsetsDirectlyAtAddress)
             {
-                results.push_back(currentReferenceableHandle);
+                if(Offset == startAddress)
+                {
+                    results.push_back(currentReferenceableHandle);
+                }
+            }
+            else
+            {
+                if(
+                    Offset > startAddress &&
+                    Offset < endAddress
+                )
+                {
+                    results.push_back(currentReferenceableHandle);
+                }
             }
         }
 
