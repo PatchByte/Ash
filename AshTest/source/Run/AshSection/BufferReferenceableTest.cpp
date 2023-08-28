@@ -23,7 +23,7 @@ ash::AshResult BufferReferenceableRunTest::Do()
 
         if(*currentIndexHandle->GetLocationAs<unsigned char>() != (unsigned char)currentIndex)
         {
-            return ash::AshResult(false, "Expected value did not match.");
+             return ash::AshResult(false, "Expected value did not match.");
         }
 
         handles.push_back(currentIndexHandle);
@@ -35,9 +35,9 @@ ash::AshResult BufferReferenceableRunTest::Do()
 
     bool result = true;
 
-    for(auto currentHandles : handles)
+    for(auto currentHandle : handles)
     {
-        result &= (currentHandles->IsValid() == false);
+        result &= (currentHandle->IsValid() == false);
     }
 
     return ash::AshResult(result);
