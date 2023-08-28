@@ -68,6 +68,7 @@ namespace ash
         { 
             return static_cast<T*>( this->GetLocation() ); 
         }
+        virtual ash::AshSize GetSize();
         virtual bool IsValid();
 
         AshReferenceableHandle& operator=(AshReferenceableHandle Source) = delete;
