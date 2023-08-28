@@ -34,7 +34,8 @@ namespace ash
         ClassAshReferenceableHandleInternalObject():
             referenceId(AshReferenceableHandle::INVALID_REFERENCE_ID),
             parent(nullptr),
-            offset(0)
+            offset(0),
+            size(0)
         {}
 
         ~ClassAshReferenceableHandleInternalObject()
@@ -47,11 +48,13 @@ namespace ash
             referenceId = AshReferenceableHandle::INVALID_REFERENCE_ID;
             parent = nullptr;
             offset = 0;
+            size = 0;
         }
     private:
         AshReferenceableHandleId referenceId;
         AshReferenceableBuffer* parent;
         AshSize offset;
+        AshSize size;
 
         ASH_CLASS_DECLARE_FRIEND(AshReferenceableBuffer);
         ASH_CLASS_DECLARE_FRIEND(AshReferenceableHandle);
@@ -197,11 +200,23 @@ namespace ash
         return static_cast<void*>(classInternalAshReferenceableHandle->parent->GetBytes() + classInternalAshReferenceableHandle->offset);
     }
 
+    ash::AshSize AshReferenceableHandle::GetSize()
+    {
+        if(this->IsValid() == false)
+        {
+            return 0;
+        }
+
+        return classInternalAshReferenceableHandle->size;
+    }
+
     bool AshReferenceableHandle::IsValid()
     {
         if(classInternalAshReferenceableHandle->parent == nullptr) { return false; }
         if(classInternalAshReferenceableHandle->referenceId == AshReferenceableHandle::INVALID_REFERENCE_ID ||
-           classInternalAshReferenceableHandle->offset > classInternalAshReferenceableHandle->parent->GetSize())
+           classInternalAshReferenceableHandle->offset >= classInternalAshReferenceableHandle->parent->GetSize() ||
+           (classInternalAshReferenceableHandle->offset + classInternalAshReferenceableHandle->size) >= classInternalAshReferenceableHandle->parent->GetSize()
+        )
         {
             return false;
         }

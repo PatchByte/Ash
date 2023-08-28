@@ -51,5 +51,5 @@ namespace ash
     private:
         T result;
     };
-
+    
 }
