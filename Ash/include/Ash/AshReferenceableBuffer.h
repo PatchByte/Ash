@@ -21,9 +21,9 @@ namespace ash
 
         // AshReferenceableBuffer functions.
 
-        AshReferenceableHandle* ReferenceOffset(ash::AshSize Offset);
+        AshReferenceableHandle* ReferenceOffset(ash::AshSize Offset, ash::AshSize Size = 1);
 
-        inline AshReferenceableHandle* ReferenceAddress(ash::AshPointer Pointer)
+        inline AshReferenceableHandle* ReferenceAddress(ash::AshPointer Pointer, ash::AshSize Size = 1)
         {
             ash::AshSize offsetCalculated = (ash::AshSize)(Pointer) - (ash::AshSize)(this->GetPointer());
 
@@ -32,14 +32,16 @@ namespace ash
                 return nullptr;
             }
 
-            return this->ReferenceOffset(offsetCalculated);
+            return this->ReferenceOffset(offsetCalculated, Size);
         }
 
         template<typename T> 
-        inline AshReferenceableHandle* ReferenceTypeAddress(T* Pointer)
+        inline AshReferenceableHandle* ReferenceTypeAddress(T* Pointer, ash::AshSize Size = 1)
         {
-            return this->ReferenceAddress(reinterpret_cast<void*>(Pointer));
+            return this->ReferenceAddress(reinterpret_cast<void*>(Pointer), Size);
         }
+
+        std::vector<AshReferenceableHandle*> FindReferencesAtOffset(ash::AshSize Offset, bool OnlyOffsetsDirectlyAtAddress = false);
 
         ash::AshSize GetReferencesCount();
 
