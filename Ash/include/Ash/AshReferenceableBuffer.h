@@ -43,6 +43,7 @@ namespace ash
 
         std::vector<AshReferenceableHandle*> FindReferencesAtOffset(ash::AshSize Offset, bool OnlyOffsetsDirectlyAtAddress = false);
 
+        bool InvalidateAllReferences();
         ash::AshSize GetReferencesCount();
 
         AshReferenceableBuffer& operator=(AshReferenceableBuffer Source);
