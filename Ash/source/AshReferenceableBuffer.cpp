@@ -106,8 +106,10 @@ namespace ash
 
     AshReferenceableHandle* AshReferenceableBuffer::ReferenceOffset(ash::AshSize Offset, ash::AshSize Size)
     {
+        ++classInternalAshReferenceableBuffer->referencesCount;
+
         AshReferenceableHandle* referenceHandle = new AshReferenceableHandle();
-        AshReferenceableHandleId referenceHandleId = (++classInternalAshReferenceableBuffer->referencesCount);
+        AshReferenceableHandleId referenceHandleId = classInternalAshReferenceableBuffer->referencesCount;
 
         referenceHandle->classInternalAshReferenceableHandle->offset = Offset;
         referenceHandle->classInternalAshReferenceableHandle->size = Size;
@@ -145,8 +147,8 @@ namespace ash
             else
             {
                 if(
-                    Offset > startAddress &&
-                    Offset < endAddress
+                    Offset >= startAddress &&
+                    Offset <= endAddress
                 )
                 {
                     results.push_back(currentReferenceableHandle);
@@ -155,6 +157,24 @@ namespace ash
         }
 
         return results;
+    }
+
+    bool AshReferenceableBuffer::InvalidateAllReferences()
+    {
+        std::vector<AshReferenceableHandle*> references = {};
+
+        for(auto currentReferenceableHandleIterator : classInternalAshReferenceableBuffer->referencesMap)
+        {
+            references.push_back(currentReferenceableHandleIterator.second);
+        }
+        
+        for(auto currentReferenceableHandleIterator : references)
+        {
+            this->NotifyReferenceRemoval(currentReferenceableHandleIterator->GetId());
+            currentReferenceableHandleIterator->Invalidate();
+        }
+
+        return true;
     }
 
     ash::AshSize AshReferenceableBuffer::GetReferencesCount()
