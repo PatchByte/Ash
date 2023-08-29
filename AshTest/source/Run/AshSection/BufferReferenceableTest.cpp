@@ -53,6 +53,7 @@ ash::AshResult BufferReferenceableRunTest::Do()
         ash::AshReferenceableHandle* handle01_04_2 = referenceableBuffer->ReferenceOffset(0x02, 0x02);
         ash::AshReferenceableHandle* handle01_04_3 = referenceableBuffer->ReferenceOffset(0x03, 0x01);
         ash::AshReferenceableHandle* handle01_04_4 = referenceableBuffer->ReferenceOffset(0x04, 0x04);
+        ash::AshReferenceableHandle* handle01_04_4_dup = referenceableBuffer->ReferenceOffset(0x04, 0x01);
         ash::AshReferenceableHandle* handle01_04_5 = referenceableBuffer->ReferenceOffset(0x05, 0x04);
 
         auto refs = referenceableBuffer->FindReferencesAtOffset(0x03, false);
@@ -66,6 +67,12 @@ ash::AshResult BufferReferenceableRunTest::Do()
         sanityCheck &=  (std::find(refs.begin(), refs.end(), handle01_04_4) != refs.end()) &&
                         (std::find(refs.begin(), refs.end(), handle01_04_5) != refs.end());
 
+        refs = referenceableBuffer->FindReferencesAtOffset(0x04, true);
+
+        sanityCheck &=  (std::find(refs.begin(), refs.end(), handle01_04_4) != refs.end()) &&
+                        (std::find(refs.begin(), refs.end(), handle01_04_4_dup) != refs.end());
+        
+        sanityCheck &= (refs.size() == 2);
 
         if(sanityCheck == false)
         {
