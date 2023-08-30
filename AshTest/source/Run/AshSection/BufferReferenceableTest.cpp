@@ -66,6 +66,9 @@ ash::AshResult BufferReferenceableRunTest::Do()
         
         sanityCheck &=  (std::find(refs.begin(), refs.end(), handle01_04_4) != refs.end()) &&
                         (std::find(refs.begin(), refs.end(), handle01_04_5) != refs.end());
+        
+        // Sanity test to check if it received to notification of a removal.
+        delete handle01_04_1;
 
         refs = referenceableBuffer->FindReferencesAtOffset(0x04, true);
 
