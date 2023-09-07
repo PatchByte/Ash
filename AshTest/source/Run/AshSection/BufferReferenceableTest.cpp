@@ -69,6 +69,7 @@ ash::AshResult BufferReferenceableRunTest::Do()
         
         // Sanity test to check if it received to notification of a removal.
         delete handle01_04_1;
+        handle01_04_1 = nullptr;
 
         refs = referenceableBuffer->FindReferencesAtOffset(0x04, true);
 

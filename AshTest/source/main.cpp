@@ -14,6 +14,7 @@
 #include "Run/AshSection/StreamExpandableTest.h"
 #include "Run/AshSection/StreamTest.h"
 #include "Run/AshSection/StringObjectTest.h"
+#include "Run/AshSection/TemporaryFileTest.h"
 #include "Run/AshSection/VectorTest.h"
 
 #include "Run/AshLoggerSection/AshLoggerTagFilterTest.h"
@@ -35,6 +36,7 @@ static std::unordered_map<std::string, AshBaseRunTest*> smTestRegister =
     { "Primitive Test", new PrimitiveTest() },
     { "Vector Test", new VectorTest() },
     { "BufferRef Test", new BufferReferenceableRunTest() },
+    { "Temporary File Test", new TemporaryFileTest() },
 #if ASH_ENABLE_LOGGER
     { "Logger Tag Filter Test", new AshLoggerTagFilterTest() },
     { "Logger Test", new AshLoggerTest() }
