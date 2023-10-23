@@ -68,6 +68,18 @@ namespace ash
             vector.insert(vector.end(), GetBytes(), GetBytes() + GetSize());
             return vector;
         }
+
+        template<typename T> 
+        inline T* GetBufferAtOffset(ash::AshSize Offset) 
+        { 
+            if(GetSize() <= Offset) 
+            { 
+                // This should not be reached.
+                return nullptr;
+            } 
+        
+            return static_cast<T*>(GetBytes() + Offset); 
+        }
         
         virtual AshPointer GetPointer();
         virtual AshSize GetSize();
