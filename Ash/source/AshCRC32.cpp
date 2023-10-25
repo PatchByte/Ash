@@ -16,21 +16,23 @@ namespace ash
         AshCRC32Table table = {};
 
         uint32_t polynomial = 0xEDB88320;
-		for (uint32_t i = 0; i < smAshCRC32TableSize; i++) 
-		{
-			uint32_t c = i;
-			for (size_t j = 0; j < 8; j++) 
-			{
-				if (c & 1) {
-					c = polynomial ^ (c >> 1);
-				}
-				else {
-					c >>= 1;
-				}
-			}
+        for (uint32_t i = 0; i < smAshCRC32TableSize; i++) 
+        {
+            uint32_t c = i;
+
+            for (size_t j = 0; j < 8; j++) 
+            {
+                if (c & 1) {
+                    c = polynomial ^ (c >> 1);
+                }
+                else 
+                {
+                    c >>= 1;
+                }
+            }
 
             table.push_back(c);
-		}
+        }
 
         return table;
     }
