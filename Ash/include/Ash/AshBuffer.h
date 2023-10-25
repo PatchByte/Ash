@@ -78,7 +78,7 @@ namespace ash
                 return nullptr;
             } 
         
-            return static_cast<T*>(GetBytes() + Offset); 
+            return reinterpret_cast<T*>(GetBytes() + Offset); 
         }
         
         virtual AshPointer GetPointer();
