@@ -108,20 +108,27 @@ namespace ash
     bool AshBuffer::ExpandSize(AshSize Size)
     {
 
-        ash::AshSize expandedBufferSize = classInternalAshBuffer->bufferSize + Size;
-        void* expandedBufferPointer = operator new(expandedBufferSize);
-
-        memset(expandedBufferPointer, 0, expandedBufferSize);
-        memcpy(expandedBufferPointer, classInternalAshBuffer->bufferPointer, classInternalAshBuffer->bufferSize);
-
-        operator delete(classInternalAshBuffer->bufferPointer);
-
-        classInternalAshBuffer->bufferPointer = expandedBufferPointer;
-        classInternalAshBuffer->bufferSize = expandedBufferSize;
-
-        if(classInternalAshBuffer->bufferPointer != nullptr)
+        if(this->IsAllocated())
         {
-            return true;
+            ash::AshSize expandedBufferSize = classInternalAshBuffer->bufferSize + Size;
+            void* expandedBufferPointer = operator new(expandedBufferSize);
+
+            memset(expandedBufferPointer, 0, expandedBufferSize);
+            memcpy(expandedBufferPointer, classInternalAshBuffer->bufferPointer, classInternalAshBuffer->bufferSize);
+
+            operator delete(classInternalAshBuffer->bufferPointer);
+
+            classInternalAshBuffer->bufferPointer = expandedBufferPointer;
+            classInternalAshBuffer->bufferSize = expandedBufferSize;
+
+            if(classInternalAshBuffer->bufferPointer != nullptr)
+            {
+                return true;
+            }
+        }
+        else
+        {
+            return this->AllocateSize(Size);
         }
 
         classInternalAshBuffer->Reset();
