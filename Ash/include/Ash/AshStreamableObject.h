@@ -4,7 +4,10 @@
 #if ASH_OBJECTS_ERASE_NAMES
 #define ASH_STREAMABLE_OBJECT_IMPLEMENT_SIMPLE(_) const char* GetName() { return "" ; } bool Import(ash::AshStream* Stream); bool Export(ash::AshStream* Stream); ash::AshSize GetExportSize();
 #else
-#define ASH_STREAMABLE_OBJECT_IMPLEMENT_SIMPLE(name) const char* GetName() { return name ; } bool Import(ash::AshStream* Stream); bool Export(ash::AshStream* Stream); ash::AshSize GetExportSize();
+#define ASH_STREAMABLE_OBJECT_IMPLEMENT_SIMPLE(name)    const char* GetName() override { return name ; } \
+                                                        bool Import(ash::AshStream* Stream) override;    \
+                                                        bool Export(ash::AshStream* Stream) override;    \
+                                                        ash::AshSize GetExportSize() override;
 #endif
 
 

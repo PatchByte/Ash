@@ -6,10 +6,10 @@ namespace ash::objects
 {
 
     template<class T>
-    class AshPointerVector : public std::vector<T>, public AshStreamableObject
+    class AshPointerVector : public std::vector<T*>, public AshStreamableObject
     {
     public:
-        const char* GetName()
+        const char* GetName() override
         {
 #if ASH_OBJECTS_ERASE_NAMES
             return "";
@@ -29,8 +29,8 @@ namespace ash::objects
 
             for(AshSize _ = 0; _ < vectorSize; _++)
             {
-                T object = T();
-                result &= object.Import(Stream);
+                T* object = new T();
+                result &= object->Import(Stream);
                 this->push_back(object);
             }
 
@@ -45,7 +45,7 @@ namespace ash::objects
 
             for(auto it = this->begin(); it != this->end(); it++)
             {
-                result &= it->Export(Stream);
+                result &= (*it)->Export(Stream);
             }
 
             return result;
@@ -57,7 +57,7 @@ namespace ash::objects
 
             for(auto it = this->begin(); it != this->end(); it++)
             {
-                exportSize += it->GetExportSize();
+                exportSize += (*it)->GetExportSize();
             }
 
             return exportSize;

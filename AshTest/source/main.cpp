@@ -16,6 +16,7 @@
 #include "Run/AshSection/StringObjectTest.h"
 #include "Run/AshSection/TemporaryFileTest.h"
 #include "Run/AshSection/VectorTest.h"
+#include "Run/AshSection/PointerVectorTest.h"
 
 #include "Run/AshLoggerSection/AshLoggerTagFilterTest.h"
 #include "Run/AshLoggerSection/AshLoggerTest.h"
@@ -35,6 +36,7 @@ static std::unordered_map<std::string, AshBaseRunTest*> smTestRegister =
     { "CRC32 Test", new CRC32RunTest() },
     { "Primitive Test", new PrimitiveTest() },
     { "Vector Test", new VectorTest() },
+    { "Pointer Vector Test", new PointerVectorTest() },
     { "BufferRef Test", new BufferReferenceableRunTest() },
     { "Temporary File Test", new TemporaryFileTest() },
 #if ASH_ENABLE_LOGGER

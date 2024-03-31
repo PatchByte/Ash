@@ -17,7 +17,7 @@ namespace ash::objects
             dataValue()
         {}
 
-        const char* GetName() 
+        const char* GetName() override
         { 
             #if ASH_OBJECTS_ERASE_NAMES
             return "";
@@ -27,21 +27,27 @@ namespace ash::objects
             #endif
         }
 
-        bool Import(AshStream* Stream) 
+        bool Import(AshStream* Stream) override
         {
             dataValue = Stream->Read<T>();
             return Stream->HasErrorOccurred() == false;
         }
         
-        bool Export(AshStream* Stream) 
+        bool Export(AshStream* Stream) override
         { 
             Stream->Write<T>(dataValue);
             return Stream->HasErrorOccurred() == false; 
         }
 
-        AshSize GetExportSize() { return sizeof(dataValue); }
+        AshSize GetExportSize() override
+        {
+            return sizeof(dataValue);
+        }
 
-        T GetDataValue() { return dataValue; }
+        T GetDataValue()
+        {
+            return dataValue;
+        }
     private:
         T dataValue;
 

@@ -10,7 +10,7 @@ namespace ash::objects
     class AshVector : public std::vector<T>, public AshStreamableObject
     {
     public:
-        const char* GetName() 
+        const char* GetName() override
         {
             #if ASH_OBJECTS_ERASE_NAMES
             return "";
@@ -20,7 +20,7 @@ namespace ash::objects
             #endif
         }
 
-        bool Import(AshStream* Stream) 
+        bool Import(AshStream* Stream) override
         {
             this->clear();
 
@@ -38,7 +38,7 @@ namespace ash::objects
             return result; 
         }
 
-        bool Export(AshStream* Stream) 
+        bool Export(AshStream* Stream) override
         {
             bool result = (Stream->HasErrorOccurred() == false);
 
@@ -52,7 +52,7 @@ namespace ash::objects
             return result;
         }
         
-        AshSize GetExportSize() 
+        AshSize GetExportSize() override
         {
             size_t exportSize = sizeof(AshSize);
 

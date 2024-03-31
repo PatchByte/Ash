@@ -1,6 +1,7 @@
 #pragma once
 #include <Ash/AshStreamableObject.h>
 #include <functional>
+#include <utility>
 
 namespace ash::objects
 {
@@ -36,8 +37,8 @@ namespace ash::objects
         AshFunctionBufferPlug();
         ~AshFunctionBufferPlug();
 
-        inline bool SetExportFunction(ExportFunctionDelegate ExportFunction) { exportFunction = ExportFunction; return true; }
-        inline bool SetImportFunction(ImportFunctionDelegate ImportFunction) { importFunction = ImportFunction; return true; }
+        inline bool SetExportFunction(ExportFunctionDelegate ExportFunction) { exportFunction = std::move(ExportFunction); return true; }
+        inline bool SetImportFunction(ImportFunctionDelegate ImportFunction) { importFunction = std::move(ImportFunction); return true; }
 
         ASH_STREAMABLE_OBJECT_IMPLEMENT_SIMPLE("AshFunctionBufferPlug");
     private:

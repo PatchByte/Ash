@@ -1,6 +1,7 @@
 #pragma once
 #include <Ash/AshStreamableObject.h>
 #include <iostream>
+#include <utility>
 
 namespace ash::objects
 {
@@ -15,19 +16,22 @@ namespace ash::objects
         AshAsciiString(std::string_view Text);
         AshAsciiString(const char* Text);
         
-        inline void operator=(std::string Text)
+        inline AshAsciiString& operator=(std::string Text)
         {
-            text = Text;
+            text = std::move(Text);
+            return *this;
         }
 
-        inline void operator=(std::string_view Text)
+        inline AshAsciiString& operator=(std::string_view Text)
         {
             text = Text;
+            return *this;
         }
 
-        inline void operator=(const char* Text)
+        inline AshAsciiString& operator=(const char* Text)
         {
             text = Text;
+            return *this;
         }
 
         inline AshStringLength GetTextLimitLength()
@@ -54,19 +58,22 @@ namespace ash::objects
         AshWideString(std::wstring_view Text);
         AshWideString(const wchar_t* Text);
 
-        inline void operator=(std::wstring Text)
+        inline AshWideString& operator=(std::wstring Text)
         {
-            text = Text;
+            text = std::move(Text);
+            return *this;
         }
 
-        inline void operator=(std::wstring_view Text)
+        inline AshWideString& operator=(std::wstring_view Text)
         {
             text = Text;
+            return *this;
         }
 
-        inline void operator=(const wchar_t* Text)
+        inline AshWideString& operator=(const wchar_t* Text)
         {
             text = Text;
+            return *this;
         }
 
         inline AshStringLength GetTextLimitLength()
