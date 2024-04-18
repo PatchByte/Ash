@@ -3,8 +3,7 @@
 #include <Ash/AshCRC32.h>
 #include <AshObjects/AshVector.h>
 #include <AshObjects/AshPrimitive.h>
-
-#include <iostream>
+#include <Ash/AshStream.h>
 
 static std::vector<int> smTestVector = {
     1,
@@ -18,12 +17,12 @@ static std::vector<int> smTestVector = {
 
 ash::AshResult VectorTest::Do()
 {
-    ash::AshBuffer* buffer = new ash::AshBuffer();
+    ash::AshBuffer* buffer = nullptr;
     ash::AshCRC32 expectedCRC = 0;
 
     // Write
     {
-        ash::AshStream* bufferStream = new ash::AshStreamStaticBuffer(buffer, ash::AshStreamMode::WRITE);
+        ash::AshStreamExpandableExportBuffer* bufferStream = new ash::AshStreamExpandableExportBuffer();
         ash::objects::AshVector<ash::objects::AshPrimitive<int>> testVector = ash::objects::AshVector<ash::objects::AshPrimitive<int>>();
 
         int i = 0;
@@ -37,13 +36,13 @@ ash::AshResult VectorTest::Do()
 
             expectedCRC.Update(&l, sizeof(l));
         }
-
-        buffer->AllocateSize(testVector.GetExportSize());
         
         if(testVector.Export(bufferStream) == false)
         {
             return ash::AshResult(false, "The vector testVector export failed.");
         }
+
+        buffer = bufferStream->MakeCopyOfBuffer();
 
         delete bufferStream;
     }

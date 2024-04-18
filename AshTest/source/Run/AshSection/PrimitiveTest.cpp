@@ -1,4 +1,5 @@
 #include "PrimitiveTest.h"
+#include "Ash/AshStream.h"
 
 #include <AshObjects/AshPrimitive.h>
 
@@ -6,19 +7,19 @@ static constexpr double smDoubleValueExpected = 9.F;
 
 ash::AshResult PrimitiveTest::Do()
 {
-    ash::AshBuffer* buffer = new ash::AshBuffer();
+    ash::AshBuffer* buffer = nullptr;
 
     // Write
     {
-        ash::AshStream* bufferStream = new ash::AshStreamStaticBuffer(buffer, ash::AshStreamMode::WRITE);
+        ash::AshStreamExpandableExportBuffer* bufferStream = new ash::AshStreamExpandableExportBuffer();
         ash::objects::AshPrimitive<double> doublePrimitive = ash::objects::AshPrimitive<double>(smDoubleValueExpected);
-
-        buffer->AllocateSize(doublePrimitive.GetExportSize());
 
         if(doublePrimitive.Export(bufferStream) == false)
         {
             return ash::AshResult(false, "AshPrimitive (double) failed to export.");
         }
+
+        buffer = bufferStream->MakeCopyOfBuffer();
 
         delete bufferStream;
     }

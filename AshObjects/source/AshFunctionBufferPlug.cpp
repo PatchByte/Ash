@@ -52,18 +52,4 @@ namespace ash::objects
 
         return Stream->HasErrorOccurred() == false;
     }
-
-    AshSize AshFunctionBufferPlug::GetExportSize()
-    {
-        if(cachedBuffer != nullptr)
-        {
-            delete cachedBuffer;
-            cachedBuffer = nullptr;
-        }
-
-        cachedBuffer = exportFunction();
-
-        return (cachedBuffer != nullptr) ? cachedBuffer->GetSize() : 0;
-    }
-
 }

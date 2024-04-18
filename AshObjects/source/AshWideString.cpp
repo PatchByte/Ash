@@ -76,14 +76,4 @@ namespace ash::objects
 
         return Stream->HasErrorOccurred() == false;
     }
-
-    AshSize AshWideString::GetExportSize()
-    {
-        return (
-            sizeof(unsigned short) +
-            sizeof(AshStringLength) +
-            sizeof(wchar_t) * text.length()
-        );
-    }
-
 }

@@ -1,4 +1,5 @@
 #include "StringObjectTest.h"
+#include "Ash/AshStream.h"
 #include <AshObjects/AshString.h>
 
 static constexpr std::string_view smStringAsciiObjectTestExpectedString = "Hello, world!";
@@ -6,19 +7,19 @@ static constexpr std::wstring_view smStringWideObjectTestExpectedString = L"Hell
 
 ash::AshResult StringAsciiObjectTest::Do()
 {
-    ash::AshBuffer* buffer = new ash::AshBuffer();
+    ash::AshBuffer* buffer = nullptr;
 
     {
         // Write
-        ash::AshStream* bufferStream = new ash::AshStreamStaticBuffer(buffer, ash::AshStreamMode::WRITE);
+        ash::AshStreamExpandableExportBuffer* bufferStream = new ash::AshStreamExpandableExportBuffer();
         ash::objects::AshAsciiString testString = smStringAsciiObjectTestExpectedString;
-
-        buffer->AllocateSize(testString.GetExportSize());
 
         if(testString.Export(bufferStream) == false)
         {
             return ash::AshResult(false, "Export failed.");
         }
+
+        buffer = bufferStream->MakeCopyOfBuffer();
 
         delete bufferStream;
     }
@@ -50,15 +51,15 @@ ash::AshResult StringWideObjectTest::Do()
 
     {
         // Write
-        ash::AshStream* bufferStream = new ash::AshStreamStaticBuffer(buffer, ash::AshStreamMode::WRITE);
+        ash::AshStreamExpandableExportBuffer* bufferStream = new ash::AshStreamExpandableExportBuffer();
         ash::objects::AshWideString testString = smStringWideObjectTestExpectedString;
-
-        buffer->AllocateSize(testString.GetExportSize());
 
         if(testString.Export(bufferStream) == false)
         {
             return ash::AshResult(false, "Export failed.");
         }
+
+        buffer = bufferStream->MakeCopyOfBuffer();
 
         delete bufferStream;
     }

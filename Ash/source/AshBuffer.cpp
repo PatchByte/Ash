@@ -220,8 +220,12 @@ namespace ash
     }
 
 
-    bool AshBuffer::
-
+    bool AshBuffer::MarkAsConsumed()
+    {
+        classInternalAshBuffer->flags.bits.isReleasable = false;
+        return true;
+    }
+    
     bool AshBuffer::ReleaseMemory()
     {
         if(classInternalAshBuffer->bufferPointer != nullptr && classInternalAshBuffer->flags.bits.isReleasable == true)

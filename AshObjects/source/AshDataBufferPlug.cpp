@@ -76,11 +76,4 @@ namespace ash::objects
         return Stream->HasErrorOccurred() == false;
     }
 
-    AshSize AshDataBufferPlug::GetExportSize()
-    {
-        return (
-            sizeof(AshSize) +
-            ( (this->buffer == nullptr) ? 0 : this->buffer->GetSize())
-        );
-    }
 }

@@ -10,16 +10,6 @@ namespace ash::objects
     class AshVector : public std::vector<T>, public AshStreamableObject
     {
     public:
-        const char* GetName() override
-        {
-            #if ASH_OBJECTS_ERASE_NAMES
-            return "";
-            #else
-            static std::string smName = std::string("AshVector<").append(typeid(T).name()).append(">");
-            return smName.data(); 
-            #endif
-        }
-
         bool Import(AshStream* Stream) override
         {
             this->clear();
@@ -52,18 +42,6 @@ namespace ash::objects
             return result;
         }
         
-        AshSize GetExportSize() override
-        {
-            size_t exportSize = sizeof(AshSize);
-
-            for(auto it = this->begin(); it != this->end(); it++)
-            {
-                exportSize += it->GetExportSize();
-            }
-
-            return exportSize; 
-        }
-
         static_assert(std::is_class<T>::value == true && std::is_base_of<AshStreamableObject, T>::value == true && std::is_pointer<T>::value == false, "Type needs to be a class and needs to base of AshStreamableObject");
     };
 }

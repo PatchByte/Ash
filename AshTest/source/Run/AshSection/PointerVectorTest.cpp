@@ -1,4 +1,5 @@
 #include "PointerVectorTest.h"
+#include "Ash/AshStream.h"
 
 #include <Ash/AshCRC32.h>
 #include <AshObjects/AshPointerVector.h>
@@ -19,12 +20,12 @@ static std::vector<ash::objects::AshAsciiString*> smTestVector = {
 
 ash::AshResult PointerVectorTest::Do()
 {
-    ash::AshBuffer* buffer = new ash::AshBuffer();
+    ash::AshBuffer* buffer = nullptr;
     ash::AshCRC32 expectedCRC = 0;
 
     // Write
     {
-        ash::AshStream* bufferStream = new ash::AshStreamStaticBuffer(buffer, ash::AshStreamMode::WRITE);
+        ash::AshStreamExpandableExportBuffer* bufferStream = new ash::AshStreamExpandableExportBuffer();
         ash::objects::AshPointerVector<ash::objects::AshAsciiString> testVector = ash::objects::AshPointerVector<ash::objects::AshAsciiString>();
 
         int i = 0;
@@ -40,12 +41,12 @@ ash::AshResult PointerVectorTest::Do()
             expectedCRC.Update(cs.data(), cs.length());
         }
 
-        buffer->AllocateSize(testVector.GetExportSize());
-
         if(testVector.Export(bufferStream) == false)
         {
             return ash::AshResult(false, "The vector testVector export failed.");
         }
+
+        buffer = bufferStream->MakeCopyOfBuffer();
 
         delete bufferStream;
     }
