@@ -7,7 +7,7 @@
 #define ASH_TAG_WARNING 0x2
 #define ASH_TAG_ERROR 0x3
 
-static constexpr ash::AshCRC32Value smAshLoggerTestExpectedCRC = 0x29790cb;
+static constexpr ash::AshCRC32Value smAshLoggerTestExpectedCRC = 0xe2369e8c;
 
 ash::AshResult AshLoggerTest::Do()
 {
@@ -45,6 +45,7 @@ ash::AshResult AshLoggerTest::Do()
     logger->Log(ASH_TAG_INFO, "Hello {}", "World!");
     logger->Log(ASH_TAG_WARNING, "!Hello{}", "World!");
     logger->Log(ASH_TAG_ERROR, "{}", "World! Hello");
+    logger->Log("Unknown Tag", "Bonjor Je m'appelle {}", "Ash");
 
     testPassage->ApplyFilterForPassage(ash::AshLoggerTagFilter(ash::AshLoggerTagFilterMode::IGNORE_WHEN_LOGGED, {
         ASH_TAG_INFO,
@@ -54,6 +55,7 @@ ash::AshResult AshLoggerTest::Do()
     logger->Log(ASH_TAG_INFO, "Hello {}", "World!");
     logger->Log(ASH_TAG_WARNING, "!Hello{}", "World!");
     logger->Log(ASH_TAG_ERROR, "{}", "World! Hello");
+    logger->Log("Unknown Tag", "Bonjor Je m'appelle {}", "Ash");
 
     if(testCRC.GetValue() != smAshLoggerTestExpectedCRC)
     {

@@ -1,7 +1,9 @@
 #pragma once
+#include <functional>
 #include <iostream>
 #include <vector>
 #include <map>
+#include <string>
 
 namespace ash
 {
@@ -20,9 +22,19 @@ namespace ash
     {
     public:
         inline AshLoggerTag(AshLoggerShortTag ShortTag, AshLoggerShortTagPrefix Prefix): shortTag(ShortTag), prefix(Prefix) {}
+        inline AshLoggerTag(AshLoggerShortTagPrefix Prefix): prefix(Prefix) 
+        {
+            shortTag = sfCreateShortTagByName(Prefix);
+        }
 
         inline AshLoggerShortTag GetShortTag() { return shortTag; }
         inline AshLoggerShortTagPrefix GetPrefix() { return prefix; }
+
+        static inline AshLoggerShortTag sfCreateShortTagByName(std::string Name)
+        {
+            auto nameHash = static_cast<AshLoggerShortTag>(std::hash<std::string>()(Name));
+            return (nameHash & 0xFFFFFFFF) ^ (nameHash >> 31);
+        }
     private:
         AshLoggerShortTag shortTag; 
         AshLoggerShortTagPrefix prefix;

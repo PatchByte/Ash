@@ -1,4 +1,6 @@
 #include "AshLogger/AshLogger.h"
+#include "AshLogger/AshLoggerTag.h"
+#include "fmt/base.h"
 
 namespace ash
 {
@@ -80,6 +82,18 @@ namespace ash
         }
 
         return true;
+    }
+
+    bool AshLogger::LogWithFormatArgumentsStringTag(std::string LoggerTag, std::string LoggerFormat, fmt::format_args LoggerFormatArgs)
+    {
+        AshLoggerShortTag shortTag = AshLoggerTag::sfCreateShortTagByName(LoggerTag);
+
+        if(classInternalAshLogger->loggerTagRegistry.HasTag(shortTag) == false)
+        {
+            classInternalAshLogger->loggerTagRegistry.AddTag(AshLoggerTag(LoggerTag));
+        }
+    
+        return this->LogWithFormatArguments(shortTag, LoggerFormat, LoggerFormatArgs);
     }
 
 }

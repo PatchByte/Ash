@@ -7,6 +7,7 @@
 
 #include "AshLoggerTag.h"
 #include "AshLoggerPassage.h"
+#include "fmt/base.h"
 
 namespace ash
 {
@@ -33,8 +34,14 @@ namespace ash
         {
             return this->LogWithFormatArguments(LoggerTag, LoggerFormat, fmt::make_format_args(LoggerFormatArgs...));
         }
+
+        inline bool Log(std::string Tag, std::string LoggerFormat, const auto&... LoggerFormatArgs)
+        {
+            return this->LogWithFormatArgumentsStringTag(Tag, LoggerFormat, fmt::make_format_args(LoggerFormatArgs...));
+        }
         
         virtual bool LogWithFormatArguments(AshLoggerShortTag LoggerTag, std::string LoggerFormat, fmt::format_args LoggerFormatArgs);
+        virtual bool LogWithFormatArgumentsStringTag(std::string LoggerTag, std::string LoggerFormat, fmt::format_args LoggerFormatArgs);
     private:
         ASH_CLASS_ADD_INTERNAL_OBJECT(AshLogger);
     };
