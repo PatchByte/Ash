@@ -1,6 +1,5 @@
 #include "Ash/AshStepTimer.h"
 #include <chrono>
-#include <pthread.h>
 
 namespace ash
 {
