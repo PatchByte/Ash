@@ -57,26 +57,26 @@ namespace ash
     // AshCRC32
 
     AshCRC32::AshCRC32():
-        crcValue(0)
+        m_CrcValue(0)
     {
         this->Init();
     }
 
     AshCRC32::AshCRC32(AshCRC32Value Value):
-        crcValue(Value)
+        m_CrcValue(Value)
     {
         this->Init();
     }
 
     bool AshCRC32::Init()
     {
-        this->crcTable = AshCRC32Utils::GenerateTable();
+        this->m_CrcTable = AshCRC32Utils::GenerateTable();
         return true;
     }
     
     bool AshCRC32::Update(ash::AshBuffer* Buffer)
     {
-        this->crcValue = AshCRC32Utils::UpdateWithCustomTable(this->crcTable, this->crcValue, Buffer);
+        this->m_CrcValue = AshCRC32Utils::UpdateWithCustomTable(this->m_CrcTable, this->m_CrcValue, Buffer);
         return true;
     }
 

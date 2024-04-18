@@ -54,7 +54,7 @@ namespace ash
         virtual bool ReleaseMemory();
 
         virtual bool SetReleasable(bool Releasable);
-
+	virtual bool MarkAsConsumed();
         virtual bool IsAllocated();
         virtual bool IsImported();
         virtual bool IsArray();

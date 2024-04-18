@@ -28,11 +28,12 @@ namespace ash
         AshCRC32(AshCRC32Value InitialValue);
 
         bool Init();
-        inline bool Clear() { crcValue = 0; return true; }
+        inline bool Clear() { m_CrcValue = 0; return true; }
         inline bool InitAndClear() { bool r = Init(); r &= Clear(); return r; }
         bool Update(ash::AshBuffer* Buffer);
+        bool Update(ash::AshBuffer& Buffer) { return this->Update(static_cast<ash::AshBuffer*>(&Buffer)); }
         bool Update(void* BufferPointer, AshSize BufferSize);
-        bool Update(const void* BufferPointer, AshSize BufferSize) { return this->Update((void*)BufferPointer, BufferSize); }
+        bool Update(const void* BufferPointer, AshSize BufferSize) { return this->Update(const_cast<void*>(BufferPointer), BufferSize); }
         
         template<typename T>
         bool UpdateWithTemplateValue(T Value)
@@ -40,10 +41,10 @@ namespace ash
             return this->Update(&Value, sizeof(Value));
         }
 
-        inline AshCRC32Value GetValue() { return crcValue; }
+        inline AshCRC32Value GetValue() { return m_CrcValue; }
     private:
-        AshCRC32Table crcTable;
-        AshCRC32Value crcValue;
+        AshCRC32Table m_CrcTable;
+        AshCRC32Value m_CrcValue;
     };
 
 }

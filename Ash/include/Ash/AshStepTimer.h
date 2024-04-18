@@ -13,7 +13,7 @@ namespace ash
         std::chrono::milliseconds Start();
         std::chrono::milliseconds Time();
     private:
-        std::chrono::milliseconds startTime;
+        std::chrono::milliseconds m_StartTime;
     };
 
 }

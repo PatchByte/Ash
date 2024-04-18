@@ -21,8 +21,8 @@ namespace ash
 
         AshTemporaryFilePathOrganizer& operator=(AshTemporaryFilePathOrganizer) = delete;
     private:
-        std::string name;
-        unsigned long long seed;
+        std::string m_Name;
+        unsigned long long m_Seed;
     };
 
 }

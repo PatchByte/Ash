@@ -219,6 +219,9 @@ namespace ash
         return true;
     }
 
+
+    bool AshBuffer::
+
     bool AshBuffer::ReleaseMemory()
     {
         if(classInternalAshBuffer->bufferPointer != nullptr && classInternalAshBuffer->flags.bits.isReleasable == true)

@@ -12,6 +12,7 @@ namespace ash
     public:
         static std::string Encode(AshBuffer* Buffer);
         static AshBuffer* Decode(std::string Text);
+        static inline std::string Encode(AshBuffer& Buffer) { return AshBase64::Encode(&Buffer); }
     };
 
 }

@@ -1,5 +1,6 @@
 #include "Ash/AshStepTimer.h"
 #include <chrono>
+#include <pthread.h>
 
 namespace ash
 {
@@ -11,14 +12,14 @@ namespace ash
 
     std::chrono::milliseconds AshStepTimerSimpleMilliseconds::Start()
     {
-        startTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch());
-        return startTime;
+        m_StartTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch());
+        return m_StartTime;
     }
 
     std::chrono::milliseconds AshStepTimerSimpleMilliseconds::Time()
     {
-        std::chrono::milliseconds v = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()) - startTime;
-        startTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch());
+        std::chrono::milliseconds v = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()) - m_StartTime;
+        m_StartTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch());
         return v;
     }
 
