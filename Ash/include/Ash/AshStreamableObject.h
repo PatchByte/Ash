@@ -2,7 +2,7 @@
 #include "AshStream.h"
 
 #if ASH_OBJECTS_ERASE_NAMES
-#define ASH_STREAMABLE_OBJECT_IMPLEMENT_SIMPLE(_) bool Import(ash::AshStream* Stream); \ 
+#define ASH_STREAMABLE_OBJECT_IMPLEMENT_SIMPLE(_) bool Import(ash::AshStream* Stream); \
                                                   bool Export(ash::AshStream* Stream);
 #else
 #define ASH_STREAMABLE_OBJECT_IMPLEMENT_SIMPLE(name)    const char* GetName() override { return name ; } \
