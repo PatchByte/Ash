@@ -11,7 +11,7 @@ namespace ash
     public:
         ClassAshBufferInternalObject()
         {
-            flags.value = 0;
+            this->Reset();
         }
 
         // You may ask "Why is this not in hte AshBuffer.h?", simple answer, it's dangerous, you know memory leaky stuff...
