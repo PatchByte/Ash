@@ -1,4 +1,6 @@
-#pragma once
+#ifndef _ASHBASE64_H
+#define _ASHBASE64_H
+
 #include "AshBuffer.h"
 #include <iostream>
 
@@ -16,3 +18,5 @@ namespace ash
     };
 
 }
+
+#endif // !_ASHBASE64_H
