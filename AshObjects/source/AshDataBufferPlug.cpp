@@ -19,7 +19,7 @@ namespace ash::objects
     {}
 
     AshDataBufferPlug::AshDataBufferPlug(ash::AshBuffer* Buffer):
-        buffer(nullptr),
+        buffer(Buffer),
         bufferEmpty(false),
         bufferSizeLimit(smAshDataBufferPlugBufferSizeLimit)
     {}
