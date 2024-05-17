@@ -45,7 +45,7 @@ ash::AshResult AshLoggerTest::Do()
     logger->Log(ASH_TAG_INFO, "Hello {}", "World!");
     logger->Log(ASH_TAG_WARNING, "!Hello{}", "World!");
     logger->Log(ASH_TAG_ERROR, "{}", "World! Hello");
-    logger->Log("Unknown Tag", "Bonjor Je m'appelle {}", "Ash");
+    logger->Log("Unknown Tag", "Bonjour Je m'appelle {}", "Ash");
 
     testPassage->ApplyFilterForPassage(ash::AshLoggerTagFilter(ash::AshLoggerTagFilterMode::IGNORE_WHEN_LOGGED, {
         ASH_TAG_INFO,

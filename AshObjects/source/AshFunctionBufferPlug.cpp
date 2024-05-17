@@ -3,17 +3,17 @@
 namespace ash::objects
 {
     AshFunctionBufferPlug::AshFunctionBufferPlug():
-        exportFunction([]() -> ash::AshBuffer* { return nullptr; }),
-        importFunction([] (...) {}),
-        cachedBuffer(nullptr)
+        m_ExportFunction([]() -> ash::AshBuffer* { return nullptr; }),
+        m_ImportFunction([] (...) {}),
+        m_CachedBuffer(nullptr)
     {}
 
     AshFunctionBufferPlug::~AshFunctionBufferPlug()
     {
-        if(cachedBuffer != nullptr)
+        if(m_CachedBuffer != nullptr)
         {
-            delete cachedBuffer;
-            cachedBuffer = nullptr;
+            delete m_CachedBuffer;
+            m_CachedBuffer = nullptr;
         }
     }
 
@@ -26,7 +26,7 @@ namespace ash::objects
             return false;
         }
 
-        this->importFunction(dataBufferPlug->GetBuffer());
+        this->m_ImportFunction(dataBufferPlug->GetBuffer());
 
         delete dataBufferPlug;
 
@@ -35,13 +35,13 @@ namespace ash::objects
 
     bool AshFunctionBufferPlug::Export(ash::AshStream* Stream)
     {
-        if(cachedBuffer == nullptr)
+        if(m_CachedBuffer == nullptr)
         {
             // @todo maybe change this in the future to -> return false;
             return true;
         }
 
-        AshDataBufferPlug* dataBufferPlug = new AshDataBufferPlug(cachedBuffer);
+        AshDataBufferPlug* dataBufferPlug = new AshDataBufferPlug(m_CachedBuffer);
 
         if(dataBufferPlug->Export(Stream) == false)
         {

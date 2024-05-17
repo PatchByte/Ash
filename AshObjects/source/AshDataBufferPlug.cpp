@@ -13,65 +13,74 @@ namespace ash::objects
     static constexpr ash::AshSize smAshDataBufferPlugBufferSizeLimit = 0x1fff;
 
     AshDataBufferPlug::AshDataBufferPlug():
-        buffer(nullptr),
-        bufferEmpty(false),
-        bufferSizeLimit(smAshDataBufferPlugBufferSizeLimit)
+        m_Buffer(nullptr),
+        m_BufferEmpty(false),
+        m_BufferSizeLimit(smAshDataBufferPlugBufferSizeLimit)
     {}
 
     AshDataBufferPlug::AshDataBufferPlug(ash::AshBuffer* Buffer):
-        buffer(Buffer),
-        bufferEmpty(false),
-        bufferSizeLimit(smAshDataBufferPlugBufferSizeLimit)
+        m_Buffer(Buffer),
+        m_BufferEmpty(false),
+        m_BufferSizeLimit(smAshDataBufferPlugBufferSizeLimit)
     {}
+
+    AshDataBufferPlug::~AshDataBufferPlug()
+    {
+        if(m_Buffer)
+        {
+            delete m_Buffer;
+            m_Buffer = nullptr;
+        }
+    }
 
     bool AshDataBufferPlug::Import(ash::AshStream* Stream)
     {
-        if(this->buffer != nullptr)
+        if(this->m_Buffer != nullptr)
         {
-            this->buffer->ReleaseMemory();
-            delete this->buffer;
-            this->buffer = nullptr;
+            this->m_Buffer->ReleaseMemory();
+            delete this->m_Buffer;
+            this->m_Buffer = nullptr;
         }
 
         AshSize bufferSize = Stream->Read<AshSize>();
 
-        if(bufferSize > bufferSizeLimit)
+        if(bufferSize > m_BufferSizeLimit)
         {
             return false;
         }
 
         if(bufferSize <= 0)
         {
-            this->bufferEmpty = true;
-            return Stream->HasErrorOccurred() == false;
+            this->m_BufferEmpty = true;
+            return Stream->IsOkay();
         }
 
-        this->buffer = new ash::AshBuffer();
-        this->buffer->AllocateSize(bufferSize);
+        this->m_Buffer = new ash::AshBuffer();
+        this->m_Buffer->AllocateSize(bufferSize);
         
-        Stream->ReadRawIntoPointer(this->buffer->GetPointer(), bufferSize);
+        Stream->ReadRawIntoPointer(this->m_Buffer->GetPointer(), bufferSize);
 
         return Stream->HasErrorOccurred() == false;
     }
 
     bool AshDataBufferPlug::Export(ash::AshStream* Stream)
     {
-        if(this->buffer == nullptr)
+        if(this->m_Buffer == nullptr)
         {
             // By-pass
             Stream->Write<AshSize>(0);
             return true;
         }
 
-        Stream->Write<AshSize>(this->buffer->GetSize());
+        Stream->Write<AshSize>(this->m_Buffer->GetSize());
 
-        if(this->buffer->GetSize() <= 0)
+        if(this->m_Buffer->GetSize() <= 0)
         {
-            this->bufferEmpty = true;
+            this->m_BufferEmpty = true;
             return Stream->HasErrorOccurred() == false;
         }
 
-        Stream->WriteRawFromPointer(this->buffer->GetPointer(), this->buffer->GetSize());
+        Stream->WriteRawFromPointer(this->m_Buffer->GetPointer(), this->m_Buffer->GetSize());
 
         return Stream->HasErrorOccurred() == false;
     }
