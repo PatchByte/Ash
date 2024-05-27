@@ -18,22 +18,22 @@ namespace ash::objects
     // AshWideString
 
     AshWideString::AshWideString():
-        textLimitLength(smAshStringLimitLength)
+        m_TextLimitLength(smAshStringLimitLength)
     {}
 
     AshWideString::AshWideString(std::wstring Text):
-        textLimitLength(smAshStringLimitLength),
-        text(Text)
+        m_TextLimitLength(smAshStringLimitLength),
+        m_Text(Text)
     {}
 
     AshWideString::AshWideString(std::wstring_view Text):
-        textLimitLength(smAshStringLimitLength),
-        text(Text)
+        m_TextLimitLength(smAshStringLimitLength),
+        m_Text(Text)
     {}
 
     AshWideString::AshWideString(const wchar_t* Text):
-        textLimitLength(smAshStringLimitLength),
-        text(Text)
+        m_TextLimitLength(smAshStringLimitLength),
+        m_Text(Text)
     {}
 
     bool AshWideString::Import(ash::AshStream* Stream)
@@ -41,11 +41,11 @@ namespace ash::objects
         unsigned short textSeed = Stream->Read<unsigned short>();
         AshStringLength textLength = Stream->Read<AshStringLength>();
 
-        this->text.clear();
+        this->m_Text.clear();
 
-        if(textLength > textLimitLength)
+        if(textLength > m_TextLimitLength)
         {
-            text = L"Text overflow.";
+            m_Text = L"Text overflow.";
             return false;
         }
 
@@ -53,7 +53,7 @@ namespace ash::objects
         {
             wchar_t c = Stream->Read<wchar_t>();
             c ^= textSeed;
-            this->text += (c);
+            this->m_Text += (c);
         }
 
         return Stream->HasErrorOccurred() == false;
@@ -67,9 +67,9 @@ namespace ash::objects
         unsigned short textSeed = (unsigned short)distribution(engine);
 
         Stream->Write<unsigned short>(textSeed);
-        Stream->Write<AshStringLength>((AshStringLength)(text.length()));
+        Stream->Write<AshStringLength>((AshStringLength)(m_Text.length()));
 
-        for(auto c : text)
+        for(auto c : m_Text)
         {
             Stream->Write<wchar_t>(c ^ textSeed);
         }

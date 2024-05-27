@@ -18,36 +18,41 @@ namespace ash::objects
         
         inline AshAsciiString& operator=(std::string Text)
         {
-            text = std::move(Text);
+            m_Text = std::move(Text);
             return *this;
         }
 
         inline AshAsciiString& operator=(std::string_view Text)
         {
-            text = Text;
+            m_Text = Text;
             return *this;
         }
 
         inline AshAsciiString& operator=(const char* Text)
         {
-            text = Text;
+            m_Text = Text;
             return *this;
         }
 
         inline AshStringLength GetTextLimitLength()
         {
-            return textLimitLength;
+            return m_TextLimitLength;
+        }
+
+        inline void SetTextLimitLength(AshStringLength TextLimitLength)
+        {
+            m_TextLimitLength = TextLimitLength;
         }
 
         inline std::string GetText()
         {
-            return text;
+            return m_Text;
         }
 
         ASH_STREAMABLE_OBJECT_IMPLEMENT_SIMPLE("AshAsciiString");
     private:
-        std::string text;
-        AshStringLength textLimitLength;
+        std::string m_Text;
+        AshStringLength m_TextLimitLength;
     };
 
     class AshWideString : public AshStreamableObject 
@@ -60,36 +65,41 @@ namespace ash::objects
 
         inline AshWideString& operator=(std::wstring Text)
         {
-            text = std::move(Text);
+            m_Text = std::move(Text);
             return *this;
         }
 
         inline AshWideString& operator=(std::wstring_view Text)
         {
-            text = Text;
+            m_Text = Text;
             return *this;
         }
 
         inline AshWideString& operator=(const wchar_t* Text)
         {
-            text = Text;
+            m_Text = Text;
             return *this;
         }
 
         inline AshStringLength GetTextLimitLength()
         {
-            return textLimitLength;
+            return m_TextLimitLength;
+        }
+
+        inline void SetTextLimitLength(AshStringLength TextLimitLength)
+        {
+            m_TextLimitLength = TextLimitLength;
         }
 
         inline std::wstring GetText()
         {
-            return text;
+            return m_Text;
         }
 
         ASH_STREAMABLE_OBJECT_IMPLEMENT_SIMPLE("AshWideString");
     private:
-        std::wstring text;
-        AshStringLength textLimitLength;
+        std::wstring m_Text;
+        AshStringLength m_TextLimitLength;
     };
 
 }

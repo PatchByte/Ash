@@ -18,22 +18,22 @@ namespace ash::objects
     // AshAsciiString
 
     AshAsciiString::AshAsciiString():
-        textLimitLength(smAshStringLimitLength)
+        m_TextLimitLength(smAshStringLimitLength)
     {}
 
     AshAsciiString::AshAsciiString(std::string Text):
-        textLimitLength(smAshStringLimitLength),
-        text(Text)
+        m_TextLimitLength(smAshStringLimitLength),
+        m_Text(Text)
     {}
 
     AshAsciiString::AshAsciiString(std::string_view Text):
-        textLimitLength(smAshStringLimitLength),
-        text(Text)
+        m_TextLimitLength(smAshStringLimitLength),
+        m_Text(Text)
     {}
 
     AshAsciiString::AshAsciiString(const char* Text):
-        textLimitLength(smAshStringLimitLength),
-        text(Text)
+        m_TextLimitLength(smAshStringLimitLength),
+        m_Text(Text)
     {}
 
     bool AshAsciiString::Import(ash::AshStream* Stream)
@@ -41,11 +41,11 @@ namespace ash::objects
         unsigned char textSeed = Stream->Read<unsigned char>();
         AshStringLength textLength = Stream->Read<AshStringLength>();
 
-        this->text.clear();
+        this->m_Text.clear();
 
-        if(textLength > textLimitLength)
+        if(textLength > m_TextLimitLength)
         {
-            text = "Text overflow.";
+            m_Text = "Text overflow.";
             return false;
         }
 
@@ -53,7 +53,7 @@ namespace ash::objects
         {
             char c = Stream->Read<char>();
             c ^= textSeed;
-            this->text += (c);
+            this->m_Text += (c);
         }
 
         return Stream->HasErrorOccurred() == false;
@@ -67,9 +67,9 @@ namespace ash::objects
         unsigned char textSeed = (unsigned char)distribution(engine);
 
         Stream->Write<unsigned char>(textSeed);
-        Stream->Write<AshStringLength>((AshStringLength)(text.length()));
+        Stream->Write<AshStringLength>((AshStringLength)(m_Text.length()));
 
-        for(auto c : text)
+        for(auto c : m_Text)
         {
             Stream->Write<char>(c ^ textSeed);
         }
