@@ -1,3 +1,4 @@
+#include "Ash/AshBuffer.h"
 #include "AshObjects/AshBufferPlug.h"
 
 /*
@@ -19,10 +20,12 @@ namespace ash::objects
     {}
 
     AshDataBufferPlug::AshDataBufferPlug(ash::AshBuffer* Buffer):
-        m_Buffer(Buffer),
+        m_Buffer(new ash::AshBuffer()),
         m_BufferEmpty(false),
         m_BufferSizeLimit(smAshDataBufferPlugBufferSizeLimit)
-    {}
+    {
+        m_Buffer->CopyAshBufferFromPointer(Buffer);
+    }
 
     AshDataBufferPlug::~AshDataBufferPlug()
     {
