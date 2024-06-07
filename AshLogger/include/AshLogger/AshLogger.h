@@ -5,6 +5,7 @@
 #include <iostream>
 #include <functional>
 
+#include "Ash/AshBuffer.h"
 #include "AshLoggerTag.h"
 #include "AshLoggerPassage.h"
 #include "fmt/base.h"
@@ -42,6 +43,9 @@ namespace ash
         
         virtual bool LogWithFormatArguments(AshLoggerShortTag LoggerTag, std::string LoggerFormat, fmt::format_args LoggerFormatArgs);
         virtual bool LogWithFormatArgumentsStringTag(std::string LoggerTag, std::string LoggerFormat, fmt::format_args LoggerFormatArgs);
+
+        virtual ash::AshLoggerTagRegistry GetTagRegistry();
+        virtual ash::AshSize GetLongestTagLength();
     private:
         ASH_CLASS_ADD_INTERNAL_OBJECT(AshLogger);
     };

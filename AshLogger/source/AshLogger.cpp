@@ -1,4 +1,5 @@
 #include "AshLogger/AshLogger.h"
+#include "Ash/AshBuffer.h"
 #include "AshLogger/AshLoggerTag.h"
 #include "fmt/base.h"
 
@@ -94,6 +95,23 @@ namespace ash
         }
     
         return this->LogWithFormatArguments(shortTag, LoggerFormat, LoggerFormatArgs);
+    }
+
+    ash::AshLoggerTagRegistry AshLogger::GetTagRegistry()
+    {
+        return classInternalAshLogger->loggerTagRegistry;
+    }
+
+    ash::AshSize AshLogger::GetLongestTagLength()
+    {
+        ash::AshSize maxLength = 0;
+
+        for(auto currentTag : classInternalAshLogger->loggerTagRegistry.GetTagMap())
+        {
+            maxLength = maxLength > currentTag.second.GetPrefix().length() ? maxLength : currentTag.second.GetPrefix().length();
+        }
+
+        return 0;
     }
 
 }
