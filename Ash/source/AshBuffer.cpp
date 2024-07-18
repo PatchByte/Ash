@@ -138,7 +138,7 @@ namespace ash
     bool AshBuffer::ShrinkSize(AshSize Size)
     {
         signed long long shrunkBufferSize = ((signed long long)classInternalAshBuffer->bufferSize) - ((signed long long)Size);
-        
+
         if(shrunkBufferSize <= 0)
         {
             classInternalAshBuffer->Reset();
@@ -225,7 +225,7 @@ namespace ash
         classInternalAshBuffer->flags.bits.isReleasable = false;
         return true;
     }
-    
+
     bool AshBuffer::ReleaseMemory()
     {
         if(classInternalAshBuffer->bufferPointer != nullptr && classInternalAshBuffer->flags.bits.isReleasable == true)
@@ -300,7 +300,7 @@ namespace ash
         {
             return AshResult(false, "File size is zero or well less.");
         }
-        
+
         this->AllocateSize(istreamSize);
         istream.read(reinterpret_cast<char*>(this->GetPointer()), istreamSize);
         istream.close();
@@ -331,6 +331,16 @@ namespace ash
     }
 
     // Memory operations
+
+    std::string AshBuffer::GetAsString()
+    {
+        return std::string(GetBuffer<char>(), GetSize());
+    }
+
+    bool AshBuffer::SetAsString(std::string Text)
+    {
+        return ImportPointer(Text.data(), Text.size());
+    }
 
     bool AshBuffer::ClearBytesWithValue(unsigned char Value)
     {
