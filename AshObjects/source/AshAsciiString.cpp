@@ -3,18 +3,18 @@
 
 /*
  * AshString Recipe
- * 
+ *
  * <unsigned char : 1 : text seed for xor>
  * <unsigned short : 2 : text length>
  * <char[] : 1 * text length : text content>
- * 
+ *
  */
 
 namespace ash::objects
 {
 
     static constexpr AshStringLength smAshStringLimitLength = 512;
-    
+
     // AshAsciiString
 
     AshAsciiString::AshAsciiString():
@@ -61,10 +61,7 @@ namespace ash::objects
 
     bool AshAsciiString::Export(ash::AshStream* Stream)
     {
-        std::random_device rd;
-        std::mt19937 engine(rd());
-        std::uniform_int_distribution<int> distribution(1, 255);
-        unsigned char textSeed = (unsigned char)distribution(engine);
+        unsigned char textSeed = 0;
 
         Stream->Write<unsigned char>(textSeed);
         Stream->Write<AshStringLength>((AshStringLength)(m_Text.length()));
