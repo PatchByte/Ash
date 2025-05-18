@@ -5,7 +5,7 @@
 #include <functional>
 #include <iostream>
 
-#include "LoggerTag.h"
+#include "LoggerTag.hpp"
 
 namespace ash::logger
 {

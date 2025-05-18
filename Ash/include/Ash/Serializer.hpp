@@ -1,7 +1,7 @@
 #ifndef ASH_SERIALIZER_H
 #define ASH_SERIALIZER_H
 
-#include "Buffer.h"
+#include "Buffer.hpp"
 
 namespace ash
 {

@@ -1,4 +1,4 @@
-#include "AshLogger/LoggerTag.h"
+#include "AshLogger/LoggerTag.hpp"
 #include <algorithm>
 
 namespace ash::logger

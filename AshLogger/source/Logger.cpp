@@ -1,6 +1,6 @@
-#include "AshLogger/Logger.h"
-#include "Ash/Buffer.h"
-#include "AshLogger/LoggerTag.h"
+#include "AshLogger/Logger.hpp"
+#include "Ash/Buffer.hpp"
+#include "AshLogger/LoggerTag.hpp"
 #include "fmt/base.h"
 
 namespace ash::logger

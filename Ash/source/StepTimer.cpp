@@ -1,4 +1,4 @@
-#include "Ash/StepTimer.h"
+#include "Ash/StepTimer.hpp"
 #include <chrono>
 
 namespace ash

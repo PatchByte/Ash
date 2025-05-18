@@ -4,12 +4,13 @@
 #include <functional>
 #include <iostream>
 
-#include "Ash/Buffer.h"
-#include "Ash/Class.h"
 #include "fmt/format.h"
 
-#include "LoggerPassage.h"
-#include "LoggerTag.h"
+#include "Ash/Buffer.hpp"
+#include "Ash/Class.hpp"
+
+#include "LoggerPassage.hpp"
+#include "LoggerTag.hpp"
 
 namespace ash::logger
 {

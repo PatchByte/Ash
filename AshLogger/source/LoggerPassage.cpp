@@ -1,3 +1,3 @@
-#include "AshLogger/LoggerPassage.h"
+#include "AshLogger/LoggerPassage.hpp"
 
 // Stub file, for compilation

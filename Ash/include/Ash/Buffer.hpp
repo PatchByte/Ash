@@ -1,8 +1,8 @@
 #ifndef ASH_BUFFER_H
 #define ASH_BUFFER_H
 
-#include "Class.h"
-#include "Result.h"
+#include "Class.hpp"
+#include "Result.hpp"
 
 #include <filesystem>
 #include <vector>

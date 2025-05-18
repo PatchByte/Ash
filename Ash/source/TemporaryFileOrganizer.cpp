@@ -1,7 +1,7 @@
-#include "Ash/Buffer.h"
-#include "Ash/Result.h"
-#include <Ash/CRC32.h>
-#include <Ash/TemporaryFileOrganizer.h>
+#include "Ash/Buffer.hpp"
+#include "Ash/Result.hpp"
+#include "Ash/CRC32.hpp"
+#include "Ash/TemporaryFileOrganizer.hpp"
 
 #include <filesystem>
 #include <iterator>

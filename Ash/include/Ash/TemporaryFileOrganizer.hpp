@@ -4,8 +4,7 @@
 #include <filesystem>
 #include <iostream>
 
-#include <Ash/Class.h>
-#include <Ash/Result.h>
+#include "Ash/Result.hpp"
 
 namespace ash
 {

@@ -1,7 +1,7 @@
 #ifndef ASH_REFERENCEABLEBUFFER_H
 #define ASH_REFERENCEABLEBUFFER_H
 
-#include "Buffer.h"
+#include "Buffer.hpp"
 
 namespace ash
 {
