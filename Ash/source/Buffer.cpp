@@ -1,7 +1,7 @@
 #include "Ash/Buffer.h"
-#include <iostream>
 #include <cstring>
 #include <fstream>
+#include <iostream>
 
 namespace ash
 {
@@ -22,15 +22,19 @@ namespace ash
             bufferPointer = nullptr;
         }
 
-        union {
+        union
+        {
             unsigned char value;
-            struct {
+
+            struct
+            {
                 bool isAllocated : 1;
                 bool isImported : 1;
                 bool isArray : 1;
                 bool isReleasable : 1;
             } bits;
         } flags;
+
         Size bufferSize;
         void* bufferPointer;
     };
@@ -41,8 +45,7 @@ namespace ash
         this->Release();
     }
 
-    Buffer::Buffer(Pointer Pointer, Size Size):
-        Buffer::Buffer()
+    Buffer::Buffer(Pointer Pointer, Size Size) : Buffer::Buffer()
     {
         this->ImportPointer(Pointer, Size);
     }
@@ -74,7 +77,7 @@ namespace ash
 
         memset(classInternalAshBuffer->bufferPointer, 0, classInternalAshBuffer->bufferSize);
 
-        if(classInternalAshBuffer->bufferPointer != nullptr)
+        if (classInternalAshBuffer->bufferPointer != nullptr)
         {
             return true;
         }
@@ -96,7 +99,7 @@ namespace ash
 
         memset(classInternalAshBuffer->bufferPointer, 0, classInternalAshBuffer->bufferSize);
 
-        if(classInternalAshBuffer->bufferPointer != nullptr)
+        if (classInternalAshBuffer->bufferPointer != nullptr)
         {
             return true;
         }
@@ -108,7 +111,7 @@ namespace ash
     bool Buffer::ExpandSize(Size Size)
     {
 
-        if(this->IsAllocated())
+        if (this->IsAllocated())
         {
             ash::Size expandedBufferSize = classInternalAshBuffer->bufferSize + Size;
             void* expandedBufferPointer = operator new(expandedBufferSize);
@@ -121,7 +124,7 @@ namespace ash
             classInternalAshBuffer->bufferPointer = expandedBufferPointer;
             classInternalAshBuffer->bufferSize = expandedBufferSize;
 
-            if(classInternalAshBuffer->bufferPointer != nullptr)
+            if (classInternalAshBuffer->bufferPointer != nullptr)
             {
                 return true;
             }
@@ -139,7 +142,7 @@ namespace ash
     {
         signed long long shrunkBufferSize = ((signed long long)classInternalAshBuffer->bufferSize) - ((signed long long)Size);
 
-        if(shrunkBufferSize <= 0)
+        if (shrunkBufferSize <= 0)
         {
             classInternalAshBuffer->Reset();
             return false;
@@ -168,7 +171,7 @@ namespace ash
         classInternalAshBuffer->bufferSize = Size;
         classInternalAshBuffer->bufferPointer = Pointer;
 
-        if(classInternalAshBuffer->bufferPointer != nullptr)
+        if (classInternalAshBuffer->bufferPointer != nullptr)
         {
             return true;
         }
@@ -180,7 +183,7 @@ namespace ash
     bool Buffer::CopyPointer(Pointer Pointer, Size Size)
     {
         this->Release();
-        if(this->AllocateSize(Size) == false)
+        if (this->AllocateSize(Size) == false)
         {
             return false;
         }
@@ -192,7 +195,7 @@ namespace ash
     bool Buffer::CopyBytesVector(BytesVector Vector)
     {
         this->Release();
-        if(this->AllocateSize(Vector.size()) == false)
+        if (this->AllocateSize(Vector.size()) == false)
         {
             return false;
         }
@@ -219,7 +222,6 @@ namespace ash
         return true;
     }
 
-
     bool Buffer::MarkAsConsumed()
     {
         classInternalAshBuffer->flags.bits.isReleasable = false;
@@ -228,7 +230,7 @@ namespace ash
 
     bool Buffer::Release()
     {
-        if(classInternalAshBuffer->bufferPointer != nullptr && classInternalAshBuffer->flags.bits.isReleasable == true)
+        if (classInternalAshBuffer->bufferPointer != nullptr && classInternalAshBuffer->flags.bits.isReleasable == true)
         {
             memset(classInternalAshBuffer->bufferPointer, 0, classInternalAshBuffer->bufferSize);
             operator delete(classInternalAshBuffer->bufferPointer);
@@ -276,7 +278,7 @@ namespace ash
     {
         Release();
 
-        if(std::filesystem::exists(Path) == false)
+        if (std::filesystem::exists(Path) == false)
         {
             return Result(false, "File does not exist.");
         }
@@ -286,7 +288,7 @@ namespace ash
 
         istream.open(Path, std::ios::binary);
 
-        if(istream.bad())
+        if (istream.bad())
         {
             istream.close();
             return Result(false, "Stream is bad.");
@@ -296,7 +298,7 @@ namespace ash
         istreamSize = istream.tellg();
         istream.seekg(0);
 
-        if(istreamSize <= 0)
+        if (istreamSize <= 0)
         {
             return Result(false, "File size is zero or well less.");
         }
@@ -310,7 +312,7 @@ namespace ash
 
     Result Buffer::WriteToFile(std::filesystem::path Path)
     {
-        if(this->GetPointer() == nullptr)
+        if (this->GetPointer() == nullptr)
         {
             return Result(false, "Buffer is nullptr.");
         }
@@ -319,7 +321,7 @@ namespace ash
 
         ostream.open(Path, std::ios::binary | std::ios::trunc);
 
-        if(ostream.bad())
+        if (ostream.bad())
         {
             return Result(false, "Stream is bad.");
         }
@@ -344,7 +346,7 @@ namespace ash
 
     bool Buffer::ClearBytesWithValue(unsigned char Value)
     {
-        if(classInternalAshBuffer->flags.bits.isAllocated == false)
+        if (classInternalAshBuffer->flags.bits.isAllocated == false)
         {
             return false;
         }
@@ -363,4 +365,4 @@ namespace ash
         return *this;
     }
 
-}
+} // namespace ash

@@ -14,10 +14,11 @@ namespace ash
 
         std::chrono::milliseconds Start();
         std::chrono::milliseconds Time();
+
     private:
         std::chrono::milliseconds m_StartTime;
     };
 
-}
+} // namespace ash
 
 #endif // !ASH_STEPTIMER_H

@@ -3,9 +3,9 @@
 
 #include <functional>
 #include <iostream>
-#include <vector>
 #include <map>
 #include <string>
+#include <vector>
 
 namespace ash
 {
@@ -23,20 +23,31 @@ namespace ash
     class AshLoggerTag
     {
     public:
-        inline AshLoggerTag(LoggerShortTag ShortTag, LoggerShortTagPrefix Prefix): shortTag(ShortTag), prefix(Prefix) {}
-        inline AshLoggerTag(LoggerShortTagPrefix Prefix): prefix(Prefix)
+        inline AshLoggerTag(LoggerShortTag ShortTag, LoggerShortTagPrefix Prefix) : shortTag(ShortTag), prefix(Prefix)
+        {
+        }
+
+        inline AshLoggerTag(LoggerShortTagPrefix Prefix) : prefix(Prefix)
         {
             shortTag = sfCreateShortTagByName(Prefix);
         }
 
-        inline LoggerShortTag GetShortTag() { return shortTag; }
-        inline LoggerShortTagPrefix GetPrefix() { return prefix; }
+        inline LoggerShortTag GetShortTag()
+        {
+            return shortTag;
+        }
+
+        inline LoggerShortTagPrefix GetPrefix()
+        {
+            return prefix;
+        }
 
         static inline LoggerShortTag sfCreateShortTagByName(std::string Name)
         {
             auto nameHash = static_cast<LoggerShortTag>(std::hash<std::string>()(Name));
             return (nameHash & 0xFFFFFFFF) ^ (nameHash >> 31);
         }
+
     private:
         LoggerShortTag shortTag;
         LoggerShortTagPrefix prefix;
@@ -53,7 +64,7 @@ namespace ash
 
         inline bool AddTag(AshLoggerTag Tag)
         {
-            if(HasTag(Tag.GetShortTag()) == true)
+            if (HasTag(Tag.GetShortTag()) == true)
             {
                 return false;
             }
@@ -61,17 +72,27 @@ namespace ash
             tagMap.emplace(Tag.GetShortTag(), Tag);
             return true;
         }
-        bool HasTag(LoggerShortTag ShortTag) { return tagMap.count(ShortTag) > 0; }
+
+        bool HasTag(LoggerShortTag ShortTag)
+        {
+            return tagMap.count(ShortTag) > 0;
+        }
+
         AshLoggerTag GetTag(LoggerShortTag ShortTag)
         {
-            if(HasTag(ShortTag) == false)
+            if (HasTag(ShortTag) == false)
             {
                 return AshLoggerTag(-1, "InvalidTag");
             }
 
             return tagMap.at(ShortTag);
         }
-        inline LoggerTagMap GetTagMap() { return tagMap; }
+
+        inline LoggerTagMap GetTagMap()
+        {
+            return tagMap;
+        }
+
     private:
         LoggerTagMap tagMap;
     };
@@ -80,14 +101,20 @@ namespace ash
     class LoggerTagFilter
     {
     public:
-        inline LoggerTagFilter(LoggerTagFilterMode FilterMode, std::vector<LoggerShortTag> FilterTrigger): filterMode(FilterMode), filterTrigger(FilterTrigger) {}
-        inline LoggerTagFilter(): filterMode(LoggerTagFilterMode::INVALID), filterTrigger() {}
+        inline LoggerTagFilter(LoggerTagFilterMode FilterMode, std::vector<LoggerShortTag> FilterTrigger) : filterMode(FilterMode), filterTrigger(FilterTrigger)
+        {
+        }
+
+        inline LoggerTagFilter() : filterMode(LoggerTagFilterMode::INVALID), filterTrigger()
+        {
+        }
 
         bool DoFilter(LoggerShortTag Short);
+
     private:
         LoggerTagFilterMode filterMode;
         std::vector<LoggerShortTag> filterTrigger;
     };
-}
+} // namespace ash
 
 #endif // !ASHLOGGER_LOGGERTAG_H

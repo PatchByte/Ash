@@ -6,10 +6,9 @@ namespace ash
     ASH_CLASS_IMPLEMENT_INTERNAL_OBJECT(AshReferenceableBuffer)
     {
     public:
-        ClassAshReferenceableBufferInternalObject():
-            referencesCount(0),
-            referencesMap()
-        {}
+        ClassAshReferenceableBufferInternalObject() : referencesCount(0), referencesMap()
+        {
+        }
 
         ~ClassAshReferenceableBufferInternalObject()
         {
@@ -21,6 +20,7 @@ namespace ash
             referencesCount = 0;
             referencesMap.clear();
         }
+
     private:
         ReferenceableHandleId referencesCount;
         std::map<ReferenceableHandleId, ReferenceableHandle*> referencesMap;
@@ -31,12 +31,9 @@ namespace ash
     ASH_CLASS_IMPLEMENT_INTERNAL_OBJECT(AshReferenceableHandle)
     {
     public:
-        ClassAshReferenceableHandleInternalObject():
-            referenceId(ReferenceableHandle::INVALID_REFERENCE_ID),
-            parent(nullptr),
-            offset(0),
-            size(0)
-        {}
+        ClassAshReferenceableHandleInternalObject() : referenceId(ReferenceableHandle::INVALID_REFERENCE_ID), parent(nullptr), offset(0), size(0)
+        {
+        }
 
         ~ClassAshReferenceableHandleInternalObject()
         {
@@ -50,6 +47,7 @@ namespace ash
             offset = 0;
             size = 0;
         }
+
     private:
         ReferenceableHandleId referenceId;
         ReferenceableBuffer* parent;
@@ -62,20 +60,17 @@ namespace ash
 
     // AshReferenceableBuffer
 
-    ReferenceableBuffer::ReferenceableBuffer():
-        Buffer::Buffer()
+    ReferenceableBuffer::ReferenceableBuffer() : Buffer::Buffer()
     {
         ASH_CLASS_IMPLEMENT_INTERNAL_OBJECT_ALLOCATION(AshReferenceableBuffer);
     }
 
-    ReferenceableBuffer::ReferenceableBuffer(Pointer Pointer, Size Size):
-        Buffer::Buffer()
+    ReferenceableBuffer::ReferenceableBuffer(Pointer Pointer, Size Size) : Buffer::Buffer()
     {
         ASH_CLASS_IMPLEMENT_INTERNAL_OBJECT_ALLOCATION(AshReferenceableBuffer);
     }
 
-    ReferenceableBuffer::ReferenceableBuffer(ReferenceableBuffer& Source):
-        Buffer::Buffer(Source)
+    ReferenceableBuffer::ReferenceableBuffer(ReferenceableBuffer& Source) : Buffer::Buffer(Source)
     {
         ASH_CLASS_IMPLEMENT_INTERNAL_OBJECT_ALLOCATION(AshReferenceableBuffer);
     }
@@ -92,7 +87,7 @@ namespace ash
     {
         bool result = Buffer::Release();
 
-        for(auto currentReferencesIterator : classInternalAshReferenceableBuffer->referencesMap)
+        for (auto currentReferencesIterator : classInternalAshReferenceableBuffer->referencesMap)
         {
             currentReferencesIterator.second->Invalidate();
         }
@@ -116,7 +111,7 @@ namespace ash
         referenceHandle->classInternalAshReferenceableHandle->parent = this;
         referenceHandle->classInternalAshReferenceableHandle->referenceId = referenceHandleId;
 
-        if(classInternalAshReferenceableBuffer->referencesMap.count(referenceHandleId) > 0)
+        if (classInternalAshReferenceableBuffer->referencesMap.count(referenceHandleId) > 0)
         {
             delete referenceHandle;
             return nullptr;
@@ -131,25 +126,22 @@ namespace ash
     {
         std::vector<ReferenceableHandle*> results = {};
 
-        for(auto currentReferenceableHandleIterator : classInternalAshReferenceableBuffer->referencesMap)
+        for (auto currentReferenceableHandleIterator : classInternalAshReferenceableBuffer->referencesMap)
         {
             ReferenceableHandle* currentReferenceableHandle = currentReferenceableHandleIterator.second;
             ash::Size startAddress = currentReferenceableHandle->GetOffset();
             ash::Size endAddress = currentReferenceableHandle->GetOffset() + currentReferenceableHandle->GetSize();
 
-            if(OnlyOffsetsDirectlyAtAddress)
+            if (OnlyOffsetsDirectlyAtAddress)
             {
-                if(Offset == startAddress)
+                if (Offset == startAddress)
                 {
                     results.push_back(currentReferenceableHandle);
                 }
             }
             else
             {
-                if(
-                    Offset >= startAddress &&
-                    Offset <= endAddress
-                )
+                if (Offset >= startAddress && Offset <= endAddress)
                 {
                     results.push_back(currentReferenceableHandle);
                 }
@@ -163,12 +155,12 @@ namespace ash
     {
         std::vector<ReferenceableHandle*> references = {};
 
-        for(auto currentReferenceableHandleIterator : classInternalAshReferenceableBuffer->referencesMap)
+        for (auto currentReferenceableHandleIterator : classInternalAshReferenceableBuffer->referencesMap)
         {
             references.push_back(currentReferenceableHandleIterator.second);
         }
 
-        for(auto currentReferenceableHandleIterator : references)
+        for (auto currentReferenceableHandleIterator : references)
         {
             this->NotifyReferenceRemoval(currentReferenceableHandleIterator->GetId());
             currentReferenceableHandleIterator->Invalidate();
@@ -195,7 +187,7 @@ namespace ash
 
     bool ReferenceableBuffer::NotifyReferenceRemoval(ReferenceableHandleId ReferenceId)
     {
-        if(classInternalAshReferenceableBuffer->referencesMap.count(ReferenceId) <= 0)
+        if (classInternalAshReferenceableBuffer->referencesMap.count(ReferenceId) <= 0)
         {
             return false;
         }
@@ -214,7 +206,7 @@ namespace ash
 
     ReferenceableHandle::~ReferenceableHandle()
     {
-        if(this->IsValid())
+        if (this->IsValid())
         {
             classInternalAshReferenceableHandle->parent->NotifyReferenceRemoval(classInternalAshReferenceableHandle->referenceId);
         }
@@ -235,7 +227,7 @@ namespace ash
 
     ash::Size ReferenceableHandle::GetOffset()
     {
-        if(this->IsValid() == false)
+        if (this->IsValid() == false)
         {
             return 0;
         }
@@ -245,7 +237,7 @@ namespace ash
 
     void* ReferenceableHandle::GetLocation()
     {
-        if(this->IsValid() == false)
+        if (this->IsValid() == false)
         {
             return nullptr;
         }
@@ -255,7 +247,7 @@ namespace ash
 
     ash::Size ReferenceableHandle::GetSize()
     {
-        if(this->IsValid() == false)
+        if (this->IsValid() == false)
         {
             return 0;
         }
@@ -265,12 +257,13 @@ namespace ash
 
     bool ReferenceableHandle::IsValid()
     {
-        if(classInternalAshReferenceableHandle->parent == nullptr) { return false; }
-        if(
-            classInternalAshReferenceableHandle->referenceId == ReferenceableHandle::INVALID_REFERENCE_ID ||
+        if (classInternalAshReferenceableHandle->parent == nullptr)
+        {
+            return false;
+        }
+        if (classInternalAshReferenceableHandle->referenceId == ReferenceableHandle::INVALID_REFERENCE_ID ||
             classInternalAshReferenceableHandle->offset >= classInternalAshReferenceableHandle->parent->GetSize() ||
-            (classInternalAshReferenceableHandle->offset + classInternalAshReferenceableHandle->size) > classInternalAshReferenceableHandle->parent->GetSize()
-        )
+            (classInternalAshReferenceableHandle->offset + classInternalAshReferenceableHandle->size) > classInternalAshReferenceableHandle->parent->GetSize())
         {
             return false;
         }
@@ -283,4 +276,4 @@ namespace ash
         // Should be good enough
         classInternalAshReferenceableHandle->Reset();
     }
-}
+} // namespace ash

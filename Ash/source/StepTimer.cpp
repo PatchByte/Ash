@@ -22,4 +22,4 @@ namespace ash
         return v;
     }
 
-}
+} // namespace ash

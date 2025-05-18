@@ -21,7 +21,8 @@ namespace ash
 
             for (size_t j = 0; j < 8; j++)
             {
-                if (c & 1) {
+                if (c & 1)
+                {
                     c = polynomial ^ (c >> 1);
                 }
                 else
@@ -39,12 +40,12 @@ namespace ash
     CRC32 CRC32Utils::UpdateWithCustomTable(CRC32Table Table, CRC32 InitialValue, Buffer* Buffer)
     {
         uint32_t c = InitialValue ^ 0xFFFFFFFF;
-		uint8_t* u = Buffer->GetBytes();
-		for (size_t i = 0; i < Buffer->GetSize(); ++i)
-		{
-			c = Table[(c ^ u[i]) & 0xFF] ^ (c >> 8);
-		}
-		return c ^ 0xFFFFFFFF;
+        uint8_t* u = Buffer->GetBytes();
+        for (size_t i = 0; i < Buffer->GetSize(); ++i)
+        {
+            c = Table[(c ^ u[i]) & 0xFF] ^ (c >> 8);
+        }
+        return c ^ 0xFFFFFFFF;
     }
 
     CRC32 CRC32Utils::Calculate(CRC32 InitialValue, Buffer* Buffer)
@@ -55,14 +56,12 @@ namespace ash
 
     // AshCRC32
 
-    CRC32State::CRC32State():
-        m_CrcValue(0)
+    CRC32State::CRC32State() : m_CrcValue(0)
     {
         this->Init();
     }
 
-    CRC32State::CRC32State(CRC32 Value):
-        m_CrcValue(Value)
+    CRC32State::CRC32State(CRC32 Value) : m_CrcValue(Value)
     {
         this->Init();
     }
@@ -88,4 +87,4 @@ namespace ash
         delete buffer;
         return result;
     }
-}
+} // namespace ash

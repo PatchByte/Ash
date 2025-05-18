@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "Buffer.h"
+
 /*
  * Implementation stolen from https://gist.github.com/timepp/1f678e200d9e0f2a043a9ec6b3690635
  */
@@ -29,25 +30,50 @@ namespace ash
         CRC32State(CRC32 InitialValue);
 
         bool Init();
-        inline bool Clear() { m_CrcValue = 0; return true; }
-        inline bool InitAndClear() { bool r = Init(); r &= Clear(); return r; }
-        bool Update(ash::Buffer* Buffer);
-        bool Update(ash::Buffer& Buffer) { return this->Update(static_cast<ash::Buffer*>(&Buffer)); }
-        bool Update(void* BufferPointer, Size BufferSize);
-        bool Update(const void* BufferPointer, Size BufferSize) { return this->Update(const_cast<void*>(BufferPointer), BufferSize); }
 
-        template<typename T>
+        inline bool Clear()
+        {
+            m_CrcValue = 0;
+            return true;
+        }
+
+        inline bool InitAndClear()
+        {
+            bool r = Init();
+            r &= Clear();
+            return r;
+        }
+
+        bool Update(ash::Buffer* Buffer);
+
+        bool Update(ash::Buffer& Buffer)
+        {
+            return this->Update(static_cast<ash::Buffer*>(&Buffer));
+        }
+
+        bool Update(void* BufferPointer, Size BufferSize);
+
+        bool Update(const void* BufferPointer, Size BufferSize)
+        {
+            return this->Update(const_cast<void*>(BufferPointer), BufferSize);
+        }
+
+        template <typename T>
         bool UpdateWithPrimitive(T Value)
         {
             return this->Update(&Value, sizeof(Value));
         }
 
-        inline CRC32 GetValue() { return m_CrcValue; }
+        inline CRC32 GetValue()
+        {
+            return m_CrcValue;
+        }
+
     private:
         CRC32Table m_CrcTable;
         CRC32 m_CrcValue;
     };
 
-}
+} // namespace ash
 
 #endif // !ASH_CRC32_H

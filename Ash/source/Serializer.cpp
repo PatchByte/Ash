@@ -7,11 +7,11 @@ namespace ash
     {
         std::string Result = "";
 
-        for(size_t i = 0; i < Buffer->GetSize(); i++)
+        for (size_t i = 0; i < Buffer->GetSize(); i++)
         {
             unsigned char currentByte = Buffer->GetBytes()[i];
 
-            char firstHalfPartOfByte =  EncodeShuffle + ((currentByte >> 0) & 0xF);
+            char firstHalfPartOfByte = EncodeShuffle + ((currentByte >> 0) & 0xF);
             char secondHalfPartOfByte = EncodeShuffle + ((currentByte >> 4) & 0xF);
 
             Result += firstHalfPartOfByte;
@@ -23,7 +23,7 @@ namespace ash
 
     Buffer* TextSerializer::Decode(std::string Text, char DecodeShuffle)
     {
-        if(Text.length() <= 0)
+        if (Text.length() <= 0)
         {
             return nullptr;
         }
@@ -31,17 +31,17 @@ namespace ash
         Buffer* buffer = new Buffer();
         size_t bufferSize = Text.length() / 2;
 
-        if((bufferSize * 2) != Text.length())
+        if ((bufferSize * 2) != Text.length())
         {
             return nullptr;
         }
 
-        if(buffer->AllocateSize(bufferSize) == false)
+        if (buffer->AllocateSize(bufferSize) == false)
         {
             return nullptr;
         }
 
-        for(size_t i = 0; i < bufferSize; i++)
+        for (size_t i = 0; i < bufferSize; i++)
         {
             unsigned char currentByte = 0;
 
@@ -54,4 +54,4 @@ namespace ash
         return buffer;
     }
 
-}
+} // namespace ash

@@ -1,15 +1,15 @@
 #ifndef ASHLOGGER_LOGGER_H
 #define ASHLOGGER_LOGGER_H
 
-#include <iostream>
 #include <functional>
+#include <iostream>
 
-#include "fmt/format.h"
-#include "Ash/Class.h"
 #include "Ash/Buffer.h"
+#include "Ash/Class.h"
+#include "fmt/format.h"
 
-#include "LoggerTag.h"
 #include "LoggerPassage.h"
+#include "LoggerTag.h"
 
 namespace ash
 {
@@ -47,10 +47,11 @@ namespace ash
 
         virtual ash::LoggerTagRegistry GetTagRegistry();
         virtual ash::Size GetLongestTagLength();
+
     private:
         ASH_CLASS_ADD_INTERNAL_OBJECT(AshLogger);
     };
 
-}
+} // namespace ash
 
 #endif // !ASHLOGGER_LOGGER_H
