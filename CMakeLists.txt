@@ -3,7 +3,6 @@ project("AshBuild")
 
 option(ASH_ENABLE_DEVELOPMENT_ENVIRONMENT "Enables a few specific tweaks to be able to develope ash" OFF)
 option(ASH_ENABLE_TESTS "Enable ash tests." OFF)
-option(ASH_ENABLE_OBJECTS "Enable ash objects." ON)
 option(ASH_ENABLE_LOGGER "Enable ash logger, does require fmt." OFF)
 option(ASH_ENABLE_USAGE_OF_EXTERNAL_VENDORS "Enable usage of external Vendors." OFF)
 
@@ -20,10 +19,6 @@ if(NOT ASH_ENABLE_USAGE_OF_EXTERNAL_VENDORS)
 endif(NOT ASH_ENABLE_USAGE_OF_EXTERNAL_VENDORS)
 
 add_subdirectory("Ash")
-
-if(ASH_ENABLE_OBJECTS)
-    add_subdirectory("AshObjects")
-endif(ASH_ENABLE_OBJECTS)
 
 if(ASH_ENABLE_LOGGER)
     add_subdirectory("AshLogger")
