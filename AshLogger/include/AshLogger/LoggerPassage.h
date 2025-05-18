@@ -7,86 +7,86 @@
 
 #include "LoggerTag.h"
 
-namespace ash
+namespace ash::logger
 {
 
     class Logger;
 
-    class LoggerPassage
+    class Passage
     {
     public:
-        virtual ~LoggerPassage() = default;
+        virtual ~Passage() = default;
 
         virtual void SetParent(Logger* Parent, std::string ParentRegistrationName)
         {
         }
 
-        virtual void DoPassthrough(AshLoggerTag Tag, std::string Format, fmt::format_args Args, std::string FormattedString)
+        virtual void DoPassthrough(Tag Tag, std::string Format, fmt::format_args Args, std::string FormattedString)
         {
         }
 
-        virtual void ApplyFilterForPassage(LoggerTagFilter LoggerTagFilter)
+        virtual void ApplyFilterForPassage(TagFilter LoggerTagFilter)
         {
         }
     };
 
-    class LoggerDefaultPassage : public LoggerPassage
+    class DefaultPassage : public Passage
     {
     public:
-        LoggerDefaultPassage() : parent(nullptr), parentRegistrationName(), loggerTagFilter()
+        DefaultPassage() : m_Parent(nullptr), m_ParentRegistrationName(), m_LoggerTagFilter()
         {
         }
 
         void SetParent(Logger* Parent, std::string ParentRegistrationName)
         {
-            parent = Parent;
-            parentRegistrationName = ParentRegistrationName;
+            m_Parent = Parent;
+            m_ParentRegistrationName = ParentRegistrationName;
         }
 
-        void ApplyFilterForPassage(LoggerTagFilter LoggerTagFilter)
+        void ApplyFilterForPassage(TagFilter LoggerTagFilter)
         {
-            loggerTagFilter = LoggerTagFilter;
+            m_LoggerTagFilter = LoggerTagFilter;
         }
 
         virtual Logger* GetParent()
         {
-            return parent;
+            return m_Parent;
         }
 
         virtual std::string GetParentRegistrationName()
         {
-            return parentRegistrationName;
+            return m_ParentRegistrationName;
         }
 
-        virtual LoggerTagFilter GetLoggerTagFilter()
+        virtual TagFilter GetLoggerTagFilter()
         {
-            return loggerTagFilter;
+            return m_LoggerTagFilter;
         }
 
     private:
-        Logger* parent;
-        std::string parentRegistrationName;
-        LoggerTagFilter loggerTagFilter;
+        Logger* m_Parent;
+        std::string m_ParentRegistrationName;
+        TagFilter m_LoggerTagFilter;
     };
 
-    class LoggerFunctionPassage : public LoggerDefaultPassage
+    class FunctionPassage : public DefaultPassage
     {
     public:
-        using Delegate = std::function<void(LoggerDefaultPassage* This, AshLoggerTag Tag, std::string Format, fmt::format_args Args, std::string FormattedString)>;
+        using Delegate = std::function<void(DefaultPassage* This, Tag Tag, std::string Format, fmt::format_args Args, std::string FormattedString)>;
 
-        LoggerFunctionPassage(Delegate DelegateFunction) : delegateFunction(DelegateFunction)
+        FunctionPassage(Delegate DelegateFunction) : m_DelegateFunction(DelegateFunction)
         {
         }
 
-        ~LoggerFunctionPassage() = default;
+        ~FunctionPassage() = default;
 
-        void DoPassthrough(AshLoggerTag Tag, std::string Format, fmt::format_args Args, std::string FormattedString)
+        void DoPassthrough(Tag Tag, std::string Format, fmt::format_args Args, std::string FormattedString)
         {
-            delegateFunction(this, Tag, Format, Args, FormattedString);
+            m_DelegateFunction(this, Tag, Format, Args, FormattedString);
         }
 
     private:
-        Delegate delegateFunction;
+        Delegate m_DelegateFunction;
     };
 
 } // namespace ash

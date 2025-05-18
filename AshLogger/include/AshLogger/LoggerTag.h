@@ -7,113 +7,113 @@
 #include <string>
 #include <vector>
 
-namespace ash
+namespace ash::logger
 {
 
-    using LoggerShortTag = unsigned int;
-    using LoggerShortTagPrefix = std::string;
+    using ShortTag = unsigned int;
+    using ShortTagPrefix = std::string;
 
-    enum LoggerTagFilterMode : char
+    enum TagFilterMode : char
     {
         INVALID = 0,
         IGNORE_WHEN_LOGGED = 1,
         ONLY_LOG_WHEN = 2
     };
 
-    class AshLoggerTag
+    class Tag
     {
     public:
-        inline AshLoggerTag(LoggerShortTag ShortTag, LoggerShortTagPrefix Prefix) : shortTag(ShortTag), prefix(Prefix)
+        inline Tag(ShortTag ShortTag, ShortTagPrefix Prefix) : shortTag(ShortTag), prefix(Prefix)
         {
         }
 
-        inline AshLoggerTag(LoggerShortTagPrefix Prefix) : prefix(Prefix)
+        inline Tag(ShortTagPrefix Prefix) : prefix(Prefix)
         {
             shortTag = sfCreateShortTagByName(Prefix);
         }
 
-        inline LoggerShortTag GetShortTag()
+        inline ShortTag GetShortTag()
         {
             return shortTag;
         }
 
-        inline LoggerShortTagPrefix GetPrefix()
+        inline ShortTagPrefix GetPrefix()
         {
             return prefix;
         }
 
-        static inline LoggerShortTag sfCreateShortTagByName(std::string Name)
+        static inline ShortTag sfCreateShortTagByName(std::string Name)
         {
-            auto nameHash = static_cast<LoggerShortTag>(std::hash<std::string>()(Name));
+            auto nameHash = static_cast<ShortTag>(std::hash<std::string>()(Name));
             return (nameHash & 0xFFFFFFFF) ^ (nameHash >> 31);
         }
 
     private:
-        LoggerShortTag shortTag;
-        LoggerShortTagPrefix prefix;
+        ShortTag shortTag;
+        ShortTagPrefix prefix;
     };
 
-    using LoggerTagInitializer = std::vector<AshLoggerTag>;
-    using LoggerTagMap = std::map<LoggerShortTag, AshLoggerTag>;
+    using TagInitializer = std::vector<Tag>;
+    using TagMap = std::map<ShortTag, Tag>;
 
-    class LoggerTagRegistry
+    class TagRegistry
     {
     public:
-        inline LoggerTagRegistry() = default;
-        inline ~LoggerTagRegistry() = default;
+        inline TagRegistry() = default;
+        inline ~TagRegistry() = default;
 
-        inline bool AddTag(AshLoggerTag Tag)
+        inline bool AddTag(Tag Tag)
         {
             if (HasTag(Tag.GetShortTag()) == true)
             {
                 return false;
             }
 
-            tagMap.emplace(Tag.GetShortTag(), Tag);
+            m_TagMap.emplace(Tag.GetShortTag(), Tag);
             return true;
         }
 
-        bool HasTag(LoggerShortTag ShortTag)
+        bool HasTag(ShortTag ShortTag)
         {
-            return tagMap.count(ShortTag) > 0;
+            return m_TagMap.count(ShortTag) > 0;
         }
 
-        AshLoggerTag GetTag(LoggerShortTag ShortTag)
+        Tag GetTag(ShortTag ShortTag)
         {
             if (HasTag(ShortTag) == false)
             {
-                return AshLoggerTag(-1, "InvalidTag");
+                return Tag(-1, "InvalidTag");
             }
 
-            return tagMap.at(ShortTag);
+            return m_TagMap.at(ShortTag);
         }
 
-        inline LoggerTagMap GetTagMap()
+        inline TagMap GetTagMap()
         {
-            return tagMap;
+            return m_TagMap;
         }
 
     private:
-        LoggerTagMap tagMap;
+        TagMap m_TagMap;
     };
 
     // @todo Change LoggerTag Filter to virtual.
-    class LoggerTagFilter
+    class TagFilter
     {
     public:
-        inline LoggerTagFilter(LoggerTagFilterMode FilterMode, std::vector<LoggerShortTag> FilterTrigger) : filterMode(FilterMode), filterTrigger(FilterTrigger)
+        inline TagFilter(TagFilterMode FilterMode, std::vector<ShortTag> FilterTrigger) : m_FilterMode(FilterMode), m_FilterTrigger(FilterTrigger)
         {
         }
 
-        inline LoggerTagFilter() : filterMode(LoggerTagFilterMode::INVALID), filterTrigger()
+        inline TagFilter() : m_FilterMode(TagFilterMode::INVALID), m_FilterTrigger()
         {
         }
 
-        bool DoFilter(LoggerShortTag Short);
+        bool DoFilter(ShortTag Short);
 
     private:
-        LoggerTagFilterMode filterMode;
-        std::vector<LoggerShortTag> filterTrigger;
+        TagFilterMode m_FilterMode;
+        std::vector<ShortTag> m_FilterTrigger;
     };
 } // namespace ash
 

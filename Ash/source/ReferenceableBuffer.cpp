@@ -6,7 +6,7 @@ namespace ash
     ASH_CLASS_IMPLEMENT_INTERNAL_OBJECT(AshReferenceableBuffer)
     {
     public:
-        ClassAshReferenceableBufferInternalObject() : referencesCount(0), referencesMap()
+        ClassAshReferenceableBufferInternalObject() : m_ReferencesCount(0), m_ReferencesMap()
         {
         }
 
@@ -17,13 +17,13 @@ namespace ash
 
         void Reset()
         {
-            referencesCount = 0;
-            referencesMap.clear();
+            m_ReferencesCount = 0;
+            m_ReferencesMap.clear();
         }
 
     private:
-        ReferenceableHandleId referencesCount;
-        std::map<ReferenceableHandleId, ReferenceableHandle*> referencesMap;
+        ReferenceableHandleId m_ReferencesCount;
+        std::map<ReferenceableHandleId, ReferenceableHandle*> m_ReferencesMap;
 
         ASH_CLASS_DECLARE_FRIEND(ReferenceableBuffer);
     };
@@ -31,7 +31,7 @@ namespace ash
     ASH_CLASS_IMPLEMENT_INTERNAL_OBJECT(AshReferenceableHandle)
     {
     public:
-        ClassAshReferenceableHandleInternalObject() : referenceId(ReferenceableHandle::INVALID_REFERENCE_ID), parent(nullptr), offset(0), size(0)
+        ClassAshReferenceableHandleInternalObject() : m_ReferenceId(ReferenceableHandle::INVALID_REFERENCE_ID), m_Parent(nullptr), m_Offset(0), m_Size(0)
         {
         }
 
@@ -42,17 +42,17 @@ namespace ash
 
         void Reset()
         {
-            referenceId = ReferenceableHandle::INVALID_REFERENCE_ID;
-            parent = nullptr;
-            offset = 0;
-            size = 0;
+            m_ReferenceId = ReferenceableHandle::INVALID_REFERENCE_ID;
+            m_Parent = nullptr;
+            m_Offset = 0;
+            m_Size = 0;
         }
 
     private:
-        ReferenceableHandleId referenceId;
-        ReferenceableBuffer* parent;
-        Size offset;
-        Size size;
+        ReferenceableHandleId m_ReferenceId;
+        ReferenceableBuffer* m_Parent;
+        Size m_Offset;
+        Size m_Size;
 
         ASH_CLASS_DECLARE_FRIEND(ReferenceableBuffer);
         ASH_CLASS_DECLARE_FRIEND(ReferenceableHandle);
@@ -87,7 +87,7 @@ namespace ash
     {
         bool result = Buffer::Release();
 
-        for (auto currentReferencesIterator : classInternalAshReferenceableBuffer->referencesMap)
+        for (auto currentReferencesIterator : classInternalAshReferenceableBuffer->m_ReferencesMap)
         {
             currentReferencesIterator.second->Invalidate();
         }
@@ -101,23 +101,23 @@ namespace ash
 
     ReferenceableHandle* ReferenceableBuffer::ReferenceOffset(ash::Size Offset, ash::Size Size)
     {
-        ++classInternalAshReferenceableBuffer->referencesCount;
+        ++classInternalAshReferenceableBuffer->m_ReferencesCount;
 
         ReferenceableHandle* referenceHandle = new ReferenceableHandle();
-        ReferenceableHandleId referenceHandleId = classInternalAshReferenceableBuffer->referencesCount;
+        ReferenceableHandleId referenceHandleId = classInternalAshReferenceableBuffer->m_ReferencesCount;
 
-        referenceHandle->classInternalAshReferenceableHandle->offset = Offset;
-        referenceHandle->classInternalAshReferenceableHandle->size = Size;
-        referenceHandle->classInternalAshReferenceableHandle->parent = this;
-        referenceHandle->classInternalAshReferenceableHandle->referenceId = referenceHandleId;
+        referenceHandle->classInternalAshReferenceableHandle->m_Offset = Offset;
+        referenceHandle->classInternalAshReferenceableHandle->m_Size = Size;
+        referenceHandle->classInternalAshReferenceableHandle->m_Parent = this;
+        referenceHandle->classInternalAshReferenceableHandle->m_ReferenceId = referenceHandleId;
 
-        if (classInternalAshReferenceableBuffer->referencesMap.count(referenceHandleId) > 0)
+        if (classInternalAshReferenceableBuffer->m_ReferencesMap.count(referenceHandleId) > 0)
         {
             delete referenceHandle;
             return nullptr;
         }
 
-        classInternalAshReferenceableBuffer->referencesMap.emplace(referenceHandleId, referenceHandle);
+        classInternalAshReferenceableBuffer->m_ReferencesMap.emplace(referenceHandleId, referenceHandle);
 
         return referenceHandle;
     }
@@ -126,7 +126,7 @@ namespace ash
     {
         std::vector<ReferenceableHandle*> results = {};
 
-        for (auto currentReferenceableHandleIterator : classInternalAshReferenceableBuffer->referencesMap)
+        for (auto currentReferenceableHandleIterator : classInternalAshReferenceableBuffer->m_ReferencesMap)
         {
             ReferenceableHandle* currentReferenceableHandle = currentReferenceableHandleIterator.second;
             ash::Size startAddress = currentReferenceableHandle->GetOffset();
@@ -155,7 +155,7 @@ namespace ash
     {
         std::vector<ReferenceableHandle*> references = {};
 
-        for (auto currentReferenceableHandleIterator : classInternalAshReferenceableBuffer->referencesMap)
+        for (auto currentReferenceableHandleIterator : classInternalAshReferenceableBuffer->m_ReferencesMap)
         {
             references.push_back(currentReferenceableHandleIterator.second);
         }
@@ -171,7 +171,7 @@ namespace ash
 
     ash::Size ReferenceableBuffer::GetReferencesCount()
     {
-        return classInternalAshReferenceableBuffer->referencesMap.size();
+        return classInternalAshReferenceableBuffer->m_ReferencesMap.size();
     }
 
     ReferenceableBuffer& ReferenceableBuffer::operator=(ReferenceableBuffer Source)
@@ -179,20 +179,20 @@ namespace ash
         Buffer::operator=(Source);
 
         // The Buffer wouldn't know where to assign the existing references.
-        classInternalAshReferenceableBuffer->referencesCount = 0;
-        classInternalAshReferenceableBuffer->referencesMap = {};
+        classInternalAshReferenceableBuffer->m_ReferencesCount = 0;
+        classInternalAshReferenceableBuffer->m_ReferencesMap = {};
 
         return *this;
     }
 
     bool ReferenceableBuffer::NotifyReferenceRemoval(ReferenceableHandleId ReferenceId)
     {
-        if (classInternalAshReferenceableBuffer->referencesMap.count(ReferenceId) <= 0)
+        if (classInternalAshReferenceableBuffer->m_ReferencesMap.count(ReferenceId) <= 0)
         {
             return false;
         }
 
-        classInternalAshReferenceableBuffer->referencesMap.erase(ReferenceId);
+        classInternalAshReferenceableBuffer->m_ReferencesMap.erase(ReferenceId);
 
         return true;
     }
@@ -208,7 +208,7 @@ namespace ash
     {
         if (this->IsValid())
         {
-            classInternalAshReferenceableHandle->parent->NotifyReferenceRemoval(classInternalAshReferenceableHandle->referenceId);
+            classInternalAshReferenceableHandle->m_Parent->NotifyReferenceRemoval(classInternalAshReferenceableHandle->m_ReferenceId);
         }
 
         classInternalAshReferenceableHandle->Reset();
@@ -217,12 +217,12 @@ namespace ash
 
     ash::Size ReferenceableHandle::GetId()
     {
-        return classInternalAshReferenceableHandle->referenceId;
+        return classInternalAshReferenceableHandle->m_ReferenceId;
     }
 
     ash::ReferenceableBuffer* ReferenceableHandle::GetParent()
     {
-        return classInternalAshReferenceableHandle->parent;
+        return classInternalAshReferenceableHandle->m_Parent;
     }
 
     ash::Size ReferenceableHandle::GetOffset()
@@ -232,7 +232,7 @@ namespace ash
             return 0;
         }
 
-        return classInternalAshReferenceableHandle->offset;
+        return classInternalAshReferenceableHandle->m_Offset;
     }
 
     void* ReferenceableHandle::GetLocation()
@@ -242,7 +242,7 @@ namespace ash
             return nullptr;
         }
 
-        return static_cast<void*>(classInternalAshReferenceableHandle->parent->GetBytes() + classInternalAshReferenceableHandle->offset);
+        return static_cast<void*>(classInternalAshReferenceableHandle->m_Parent->GetBytes() + classInternalAshReferenceableHandle->m_Offset);
     }
 
     ash::Size ReferenceableHandle::GetSize()
@@ -252,18 +252,18 @@ namespace ash
             return 0;
         }
 
-        return classInternalAshReferenceableHandle->size;
+        return classInternalAshReferenceableHandle->m_Size;
     }
 
     bool ReferenceableHandle::IsValid()
     {
-        if (classInternalAshReferenceableHandle->parent == nullptr)
+        if (classInternalAshReferenceableHandle->m_Parent == nullptr)
         {
             return false;
         }
-        if (classInternalAshReferenceableHandle->referenceId == ReferenceableHandle::INVALID_REFERENCE_ID ||
-            classInternalAshReferenceableHandle->offset >= classInternalAshReferenceableHandle->parent->GetSize() ||
-            (classInternalAshReferenceableHandle->offset + classInternalAshReferenceableHandle->size) > classInternalAshReferenceableHandle->parent->GetSize())
+        if (classInternalAshReferenceableHandle->m_ReferenceId == ReferenceableHandle::INVALID_REFERENCE_ID ||
+            classInternalAshReferenceableHandle->m_Offset >= classInternalAshReferenceableHandle->m_Parent->GetSize() ||
+            (classInternalAshReferenceableHandle->m_Offset + classInternalAshReferenceableHandle->m_Size) > classInternalAshReferenceableHandle->m_Parent->GetSize())
         {
             return false;
         }

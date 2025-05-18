@@ -3,41 +3,41 @@
 #include "AshLogger/LoggerTag.h"
 #include "fmt/base.h"
 
-namespace ash
+namespace ash::logger
 {
 
     ASH_CLASS_IMPLEMENT_INTERNAL_OBJECT(AshLogger)
     {
     public:
         ClassAshLoggerInternalObject()
-            : loggerName("Invalid"), loggerTagRegistry({}),
-              loggerPrefixFunction([](AshLoggerTag LoggerTag, std::string LoggerFormat, fmt::format_args LoggerFormatArgs) -> std::string { return fmt::format("[{}]", LoggerTag.GetPrefix()); })
+            : m_Name("Invalid"), m_TagRegistry({}),
+              m_PrefixFunction([](Tag LoggerTag, std::string LoggerFormat, fmt::format_args LoggerFormatArgs) -> std::string { return fmt::format("[{}]", LoggerTag.GetPrefix()); })
         {
         }
 
         ~ClassAshLoggerInternalObject() = default;
 
-        std::string loggerName;
-        LoggerTagRegistry loggerTagRegistry;
-        LoggerPrefixFunctionDelegate loggerPrefixFunction;
-        std::vector<LoggerPassage*> loggerPassages;
+        std::string m_Name;
+        TagRegistry m_TagRegistry;
+        LoggerPrefixFunctionDelegate m_PrefixFunction;
+        std::vector<Passage*> m_Passages;
     };
 
-    Logger::Logger(std::string LoggerName, LoggerTagInitializer LoggerTags)
+    Logger::Logger(std::string LoggerName, TagInitializer LoggerTags)
     {
         ASH_CLASS_IMPLEMENT_INTERNAL_OBJECT_ALLOCATION(AshLogger);
 
-        classInternalAshLogger->loggerName = LoggerName;
+        classInternalAshLogger->m_Name = LoggerName;
 
-        for (AshLoggerTag c : LoggerTags)
+        for (Tag c : LoggerTags)
         {
-            classInternalAshLogger->loggerTagRegistry.AddTag(c);
+            classInternalAshLogger->m_TagRegistry.AddTag(c);
         }
     }
 
     Logger::~Logger()
     {
-        for (LoggerPassage* c : classInternalAshLogger->loggerPassages)
+        for (Passage* c : classInternalAshLogger->m_Passages)
         {
             delete c;
         }
@@ -47,37 +47,37 @@ namespace ash
 
     void Logger::SetPrefixFunction(LoggerPrefixFunctionDelegate PrefixFunction)
     {
-        classInternalAshLogger->loggerPrefixFunction = PrefixFunction;
+        classInternalAshLogger->m_PrefixFunction = PrefixFunction;
     }
 
     std::string Logger::GetLoggerName()
     {
-        return classInternalAshLogger->loggerName;
+        return classInternalAshLogger->m_Name;
     }
 
     LoggerPrefixFunctionDelegate Logger::GetPrefixFunction()
     {
-        return classInternalAshLogger->loggerPrefixFunction;
+        return classInternalAshLogger->m_PrefixFunction;
     }
 
-    void Logger::AddLoggerPassage(LoggerPassage* LoggerPassage)
+    void Logger::AddLoggerPassage(Passage* LoggerPassage)
     {
-        LoggerPassage->SetParent(this, this->classInternalAshLogger->loggerName);
-        this->classInternalAshLogger->loggerPassages.push_back(LoggerPassage);
+        LoggerPassage->SetParent(this, this->classInternalAshLogger->m_Name);
+        this->classInternalAshLogger->m_Passages.push_back(LoggerPassage);
     }
 
-    bool Logger::LogWithFormatArguments(LoggerShortTag LoggerTag, std::string LoggerFormat, fmt::format_args LoggerFormatArgs)
+    bool Logger::LogWithFormatArguments(ShortTag LoggerTag, std::string LoggerFormat, fmt::format_args LoggerFormatArgs)
     {
-        if (this->classInternalAshLogger->loggerTagRegistry.HasTag(LoggerTag) == false)
+        if (this->classInternalAshLogger->m_TagRegistry.HasTag(LoggerTag) == false)
         {
             // @todo Implement a sort of "Backup LoggerTag"
             return false;
         }
 
-        AshLoggerTag resolvedLoggerTag = this->classInternalAshLogger->loggerTagRegistry.GetTag(LoggerTag);
+        Tag resolvedLoggerTag = this->classInternalAshLogger->m_TagRegistry.GetTag(LoggerTag);
         std::string formattedString = fmt::vformat(LoggerFormat, LoggerFormatArgs);
 
-        for (auto currentPassage : classInternalAshLogger->loggerPassages)
+        for (auto currentPassage : classInternalAshLogger->m_Passages)
         {
             currentPassage->DoPassthrough(resolvedLoggerTag, LoggerFormat, LoggerFormatArgs, formattedString);
         }
@@ -87,26 +87,26 @@ namespace ash
 
     bool Logger::LogWithFormatArgumentsStringTag(std::string LoggerTag, std::string LoggerFormat, fmt::format_args LoggerFormatArgs)
     {
-        LoggerShortTag shortTag = AshLoggerTag::sfCreateShortTagByName(LoggerTag);
+        ShortTag shortTag = Tag::sfCreateShortTagByName(LoggerTag);
 
-        if (classInternalAshLogger->loggerTagRegistry.HasTag(shortTag) == false)
+        if (classInternalAshLogger->m_TagRegistry.HasTag(shortTag) == false)
         {
-            classInternalAshLogger->loggerTagRegistry.AddTag(AshLoggerTag(LoggerTag));
+            classInternalAshLogger->m_TagRegistry.AddTag(Tag(LoggerTag));
         }
 
         return this->LogWithFormatArguments(shortTag, LoggerFormat, LoggerFormatArgs);
     }
 
-    ash::LoggerTagRegistry Logger::GetTagRegistry()
+    TagRegistry Logger::GetTagRegistry()
     {
-        return classInternalAshLogger->loggerTagRegistry;
+        return classInternalAshLogger->m_TagRegistry;
     }
 
     ash::Size Logger::GetLongestTagLength()
     {
         ash::Size maxLength = 0;
 
-        for (auto currentTag : classInternalAshLogger->loggerTagRegistry.GetTagMap())
+        for (auto currentTag : classInternalAshLogger->m_TagRegistry.GetTagMap())
         {
             maxLength = maxLength > currentTag.second.GetPrefix().length() ? maxLength : currentTag.second.GetPrefix().length();
         }

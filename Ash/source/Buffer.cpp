@@ -17,26 +17,26 @@ namespace ash
         // You may ask "Why is this not in hte AshBuffer.h?", simple answer, it's dangerous, you know memory leaky stuff...
         void Reset()
         {
-            flags.value = 0;
-            bufferSize = 0;
-            bufferPointer = nullptr;
+            m_Flags.m_Value = 0;
+            m_BufferSize = 0;
+            m_BufferPointer = nullptr;
         }
 
         union
         {
-            unsigned char value;
+            unsigned char m_Value;
 
             struct
             {
-                bool isAllocated : 1;
-                bool isImported : 1;
-                bool isArray : 1;
-                bool isReleasable : 1;
-            } bits;
-        } flags;
+                bool m_IsAllocated : 1;
+                bool m_IsImported : 1;
+                bool m_IsArray : 1;
+                bool m_IsReleasable : 1;
+            } m_Bits;
+        } m_Flags;
 
-        Size bufferSize;
-        void* bufferPointer;
+        Size m_BufferSize;
+        void* m_BufferPointer;
     };
 
     Buffer::Buffer()
@@ -69,15 +69,15 @@ namespace ash
     {
         this->Release();
 
-        classInternalAshBuffer->flags.bits.isAllocated = true;
-        classInternalAshBuffer->flags.bits.isReleasable = true;
+        classInternalAshBuffer->m_Flags.m_Bits.m_IsAllocated = true;
+        classInternalAshBuffer->m_Flags.m_Bits.m_IsReleasable = true;
 
-        classInternalAshBuffer->bufferSize = Size;
-        classInternalAshBuffer->bufferPointer = operator new(Size);
+        classInternalAshBuffer->m_BufferSize = Size;
+        classInternalAshBuffer->m_BufferPointer = operator new(Size);
 
-        memset(classInternalAshBuffer->bufferPointer, 0, classInternalAshBuffer->bufferSize);
+        memset(classInternalAshBuffer->m_BufferPointer, 0, classInternalAshBuffer->m_BufferSize);
 
-        if (classInternalAshBuffer->bufferPointer != nullptr)
+        if (classInternalAshBuffer->m_BufferPointer != nullptr)
         {
             return true;
         }
@@ -90,16 +90,16 @@ namespace ash
     {
         this->Release();
 
-        classInternalAshBuffer->flags.bits.isAllocated = true;
-        classInternalAshBuffer->flags.bits.isArray = true;
-        classInternalAshBuffer->flags.bits.isReleasable = true;
+        classInternalAshBuffer->m_Flags.m_Bits.m_IsAllocated = true;
+        classInternalAshBuffer->m_Flags.m_Bits.m_IsArray = true;
+        classInternalAshBuffer->m_Flags.m_Bits.m_IsReleasable = true;
 
-        classInternalAshBuffer->bufferSize = ElementSize * ElementCount;
-        classInternalAshBuffer->bufferPointer = operator new(ElementSize * ElementCount);
+        classInternalAshBuffer->m_BufferSize = ElementSize * ElementCount;
+        classInternalAshBuffer->m_BufferPointer = operator new(ElementSize * ElementCount);
 
-        memset(classInternalAshBuffer->bufferPointer, 0, classInternalAshBuffer->bufferSize);
+        memset(classInternalAshBuffer->m_BufferPointer, 0, classInternalAshBuffer->m_BufferSize);
 
-        if (classInternalAshBuffer->bufferPointer != nullptr)
+        if (classInternalAshBuffer->m_BufferPointer != nullptr)
         {
             return true;
         }
@@ -113,18 +113,18 @@ namespace ash
 
         if (this->IsAllocated())
         {
-            ash::Size expandedBufferSize = classInternalAshBuffer->bufferSize + Size;
+            ash::Size expandedBufferSize = classInternalAshBuffer->m_BufferSize + Size;
             void* expandedBufferPointer = operator new(expandedBufferSize);
 
             memset(expandedBufferPointer, 0, expandedBufferSize);
-            memcpy(expandedBufferPointer, classInternalAshBuffer->bufferPointer, classInternalAshBuffer->bufferSize);
+            memcpy(expandedBufferPointer, classInternalAshBuffer->m_BufferPointer, classInternalAshBuffer->m_BufferSize);
 
-            operator delete(classInternalAshBuffer->bufferPointer);
+            operator delete(classInternalAshBuffer->m_BufferPointer);
 
-            classInternalAshBuffer->bufferPointer = expandedBufferPointer;
-            classInternalAshBuffer->bufferSize = expandedBufferSize;
+            classInternalAshBuffer->m_BufferPointer = expandedBufferPointer;
+            classInternalAshBuffer->m_BufferSize = expandedBufferSize;
 
-            if (classInternalAshBuffer->bufferPointer != nullptr)
+            if (classInternalAshBuffer->m_BufferPointer != nullptr)
             {
                 return true;
             }
@@ -140,7 +140,7 @@ namespace ash
 
     bool Buffer::ShrinkSize(Size Size)
     {
-        signed long long shrunkBufferSize = ((signed long long)classInternalAshBuffer->bufferSize) - ((signed long long)Size);
+        signed long long shrunkBufferSize = ((signed long long)classInternalAshBuffer->m_BufferSize) - ((signed long long)Size);
 
         if (shrunkBufferSize <= 0)
         {
@@ -151,12 +151,12 @@ namespace ash
         void* shrunkBufferPointer = operator new(shrunkBufferSize);
 
         memset(shrunkBufferPointer, 0, shrunkBufferSize);
-        memcpy(shrunkBufferPointer, classInternalAshBuffer->bufferPointer, shrunkBufferSize);
+        memcpy(shrunkBufferPointer, classInternalAshBuffer->m_BufferPointer, shrunkBufferSize);
 
-        operator delete(classInternalAshBuffer->bufferPointer);
+        operator delete(classInternalAshBuffer->m_BufferPointer);
 
-        classInternalAshBuffer->bufferPointer = shrunkBufferPointer;
-        classInternalAshBuffer->bufferSize = shrunkBufferSize;
+        classInternalAshBuffer->m_BufferPointer = shrunkBufferPointer;
+        classInternalAshBuffer->m_BufferSize = shrunkBufferSize;
 
         return true;
     }
@@ -165,13 +165,13 @@ namespace ash
     {
         this->Release();
 
-        classInternalAshBuffer->flags.bits.isAllocated = true;
-        classInternalAshBuffer->flags.bits.isReleasable = false;
+        classInternalAshBuffer->m_Flags.m_Bits.m_IsAllocated = true;
+        classInternalAshBuffer->m_Flags.m_Bits.m_IsReleasable = false;
 
-        classInternalAshBuffer->bufferSize = Size;
-        classInternalAshBuffer->bufferPointer = Pointer;
+        classInternalAshBuffer->m_BufferSize = Size;
+        classInternalAshBuffer->m_BufferPointer = Pointer;
 
-        if (classInternalAshBuffer->bufferPointer != nullptr)
+        if (classInternalAshBuffer->m_BufferPointer != nullptr)
         {
             return true;
         }
@@ -218,23 +218,23 @@ namespace ash
 
     bool Buffer::SetReleasable(bool Releasable)
     {
-        classInternalAshBuffer->flags.bits.isReleasable = Releasable;
+        classInternalAshBuffer->m_Flags.m_Bits.m_IsReleasable = Releasable;
         return true;
     }
 
     bool Buffer::MarkAsConsumed()
     {
-        classInternalAshBuffer->flags.bits.isReleasable = false;
+        classInternalAshBuffer->m_Flags.m_Bits.m_IsReleasable = false;
         return true;
     }
 
     bool Buffer::Release()
     {
-        if (classInternalAshBuffer->bufferPointer != nullptr && classInternalAshBuffer->flags.bits.isReleasable == true)
+        if (classInternalAshBuffer->m_BufferPointer != nullptr && classInternalAshBuffer->m_Flags.m_Bits.m_IsReleasable == true)
         {
-            memset(classInternalAshBuffer->bufferPointer, 0, classInternalAshBuffer->bufferSize);
-            operator delete(classInternalAshBuffer->bufferPointer);
-            classInternalAshBuffer->bufferPointer = nullptr;
+            memset(classInternalAshBuffer->m_BufferPointer, 0, classInternalAshBuffer->m_BufferSize);
+            operator delete(classInternalAshBuffer->m_BufferPointer);
+            classInternalAshBuffer->m_BufferPointer = nullptr;
         }
 
         classInternalAshBuffer->Reset();
@@ -244,32 +244,32 @@ namespace ash
 
     bool Buffer::IsAllocated()
     {
-        return classInternalAshBuffer->flags.bits.isAllocated;
+        return classInternalAshBuffer->m_Flags.m_Bits.m_IsAllocated;
     }
 
     bool Buffer::IsImported()
     {
-        return classInternalAshBuffer->flags.bits.isImported;
+        return classInternalAshBuffer->m_Flags.m_Bits.m_IsImported;
     }
 
     bool Buffer::IsArray()
     {
-        return classInternalAshBuffer->flags.bits.isArray;
+        return classInternalAshBuffer->m_Flags.m_Bits.m_IsArray;
     }
 
     bool Buffer::IsReleasable()
     {
-        return classInternalAshBuffer->flags.bits.isReleasable;
+        return classInternalAshBuffer->m_Flags.m_Bits.m_IsReleasable;
     }
 
     void* Buffer::GetPointer()
     {
-        return classInternalAshBuffer->bufferPointer;
+        return classInternalAshBuffer->m_BufferPointer;
     }
 
     Size Buffer::GetSize()
     {
-        return classInternalAshBuffer->bufferSize;
+        return classInternalAshBuffer->m_BufferSize;
     }
 
     // File Utilities
@@ -346,12 +346,12 @@ namespace ash
 
     bool Buffer::ClearBytesWithValue(unsigned char Value)
     {
-        if (classInternalAshBuffer->flags.bits.isAllocated == false)
+        if (classInternalAshBuffer->m_Flags.m_Bits.m_IsAllocated == false)
         {
             return false;
         }
 
-        memset(classInternalAshBuffer->bufferPointer, 0, classInternalAshBuffer->bufferSize);
+        memset(classInternalAshBuffer->m_BufferPointer, 0, classInternalAshBuffer->m_BufferSize);
         return true;
     }
 

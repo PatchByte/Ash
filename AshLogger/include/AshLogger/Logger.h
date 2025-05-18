@@ -11,18 +11,18 @@
 #include "LoggerPassage.h"
 #include "LoggerTag.h"
 
-namespace ash
+namespace ash::logger
 {
     /*
      * This only creates a prefix string, this does not format the actual message.
      * Example: [Error] [17:42:05] [Thread:10]
      */
-    using LoggerPrefixFunctionDelegate = std::function<std::string(AshLoggerTag LoggerTag, std::string LoggerFormat, fmt::format_args LoggerFormatArgs)>;
+    using LoggerPrefixFunctionDelegate = std::function<std::string(Tag LoggerTag, std::string LoggerFormat, fmt::format_args LoggerFormatArgs)>;
 
     class Logger
     {
     public:
-        Logger(std::string LoggerName, LoggerTagInitializer LoggerTags);
+        Logger(std::string LoggerName, TagInitializer LoggerTags);
         ~Logger();
 
         virtual void SetPrefixFunction(LoggerPrefixFunctionDelegate PrefixFunction);
@@ -30,9 +30,9 @@ namespace ash
         virtual std::string GetLoggerName();
         virtual LoggerPrefixFunctionDelegate GetPrefixFunction();
 
-        virtual void AddLoggerPassage(LoggerPassage* LoggerPassage);
+        virtual void AddLoggerPassage(Passage* LoggerPassage);
 
-        inline bool Log(LoggerShortTag LoggerTag, std::string LoggerFormat, const auto&... LoggerFormatArgs)
+        inline bool Log(ShortTag LoggerTag, std::string LoggerFormat, const auto&... LoggerFormatArgs)
         {
             return this->LogWithFormatArguments(LoggerTag, LoggerFormat, fmt::make_format_args(LoggerFormatArgs...));
         }
@@ -42,10 +42,10 @@ namespace ash
             return this->LogWithFormatArgumentsStringTag(Tag, LoggerFormat, fmt::make_format_args(LoggerFormatArgs...));
         }
 
-        virtual bool LogWithFormatArguments(LoggerShortTag LoggerTag, std::string LoggerFormat, fmt::format_args LoggerFormatArgs);
+        virtual bool LogWithFormatArguments(ShortTag LoggerTag, std::string LoggerFormat, fmt::format_args LoggerFormatArgs);
         virtual bool LogWithFormatArgumentsStringTag(std::string LoggerTag, std::string LoggerFormat, fmt::format_args LoggerFormatArgs);
 
-        virtual ash::LoggerTagRegistry GetTagRegistry();
+        virtual TagRegistry GetTagRegistry();
         virtual ash::Size GetLongestTagLength();
 
     private:
