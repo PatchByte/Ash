@@ -1,4 +1,4 @@
-#include "Ash/AshCRC32.h"
+#include "Ash/CRC32.h"
 #include <iostream>
 
 /*

@@ -1,8 +1,8 @@
 #pragma once
 #include <iostream>
 #include <filesystem>
-#include <Ash/AshClass.h>
-#include <Ash/AshResult.h>
+#include <Ash/Class.h>
+#include <Ash/Result.h>
 
 namespace ash
 {

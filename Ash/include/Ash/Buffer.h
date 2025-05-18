@@ -1,6 +1,6 @@
 #pragma once
-#include "AshClass.h"
-#include "AshResult.h"
+#include "Class.h"
+#include "Result.h"
 
 #include <filesystem>
 #include <iostream>

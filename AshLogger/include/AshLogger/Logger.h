@@ -1,14 +1,15 @@
 #pragma once
-#include <Ash/AshClass.h>
-#include <fmt/format.h>
 
 #include <iostream>
 #include <functional>
 
-#include "Ash/AshBuffer.h"
-#include "AshLoggerTag.h"
-#include "AshLoggerPassage.h"
+#include "fmt/format.h"
 #include "fmt/base.h"
+#include "Ash/Class.h"
+#include "Ash/Buffer.h"
+
+#include "LoggerTag.h"
+#include "LoggerPassage.h"
 
 namespace ash
 {
@@ -16,22 +17,22 @@ namespace ash
      * This only creates a prefix string, this does not format the actual message.
      * Example: [Error] [17:42:05] [Thread:10]
      */
-    using AshLoggerPrefixFunctionDelegate = std::function<std::string(AshLoggerTag LoggerTag, std::string LoggerFormat, fmt::format_args LoggerFormatArgs)>;
+    using LoggerPrefixFunctionDelegate = std::function<std::string(AshLoggerTag LoggerTag, std::string LoggerFormat, fmt::format_args LoggerFormatArgs)>;
 
-    class AshLogger
+    class Logger
     {
     public:
-        AshLogger(std::string LoggerName, AshLoggerTagInitializer LoggerTags);
-        ~AshLogger();
+        Logger(std::string LoggerName, LoggerTagInitializer LoggerTags);
+        ~Logger();
 
-        virtual void SetPrefixFunction(AshLoggerPrefixFunctionDelegate PrefixFunction);
+        virtual void SetPrefixFunction(LoggerPrefixFunctionDelegate PrefixFunction);
 
         virtual std::string GetLoggerName();
-        virtual AshLoggerPrefixFunctionDelegate GetPrefixFunction();
+        virtual LoggerPrefixFunctionDelegate GetPrefixFunction();
 
-        virtual void AddLoggerPassage(AshLoggerPassage* LoggerPassage);
+        virtual void AddLoggerPassage(LoggerPassage* LoggerPassage);
 
-        inline bool Log(AshLoggerShortTag LoggerTag, std::string LoggerFormat, const auto&... LoggerFormatArgs)
+        inline bool Log(LoggerShortTag LoggerTag, std::string LoggerFormat, const auto&... LoggerFormatArgs)
         {
             return this->LogWithFormatArguments(LoggerTag, LoggerFormat, fmt::make_format_args(LoggerFormatArgs...));
         }
@@ -41,10 +42,10 @@ namespace ash
             return this->LogWithFormatArgumentsStringTag(Tag, LoggerFormat, fmt::make_format_args(LoggerFormatArgs...));
         }
 
-        virtual bool LogWithFormatArguments(AshLoggerShortTag LoggerTag, std::string LoggerFormat, fmt::format_args LoggerFormatArgs);
+        virtual bool LogWithFormatArguments(LoggerShortTag LoggerTag, std::string LoggerFormat, fmt::format_args LoggerFormatArgs);
         virtual bool LogWithFormatArgumentsStringTag(std::string LoggerTag, std::string LoggerFormat, fmt::format_args LoggerFormatArgs);
 
-        virtual ash::AshLoggerTagRegistry GetTagRegistry();
+        virtual ash::LoggerTagRegistry GetTagRegistry();
         virtual ash::Size GetLongestTagLength();
     private:
         ASH_CLASS_ADD_INTERNAL_OBJECT(AshLogger);

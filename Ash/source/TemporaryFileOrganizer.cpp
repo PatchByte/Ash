@@ -1,7 +1,7 @@
-#include "Ash/AshBuffer.h"
-#include "Ash/AshResult.h"
-#include <Ash/AshTemporaryFileOrganizer.h>
-#include <Ash/AshCRC32.h>
+#include "Ash/Buffer.h"
+#include "Ash/Result.h"
+#include <Ash/TemporaryFileOrganizer.h>
+#include <Ash/CRC32.h>
 #include <algorithm>
 #include <cstddef>
 #include <filesystem>

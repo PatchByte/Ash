@@ -1,4 +1,4 @@
-#include "Ash/AshBuffer.h"
+#include "Ash/Buffer.h"
 #include <iostream>
 #include <cstring>
 #include <fstream>

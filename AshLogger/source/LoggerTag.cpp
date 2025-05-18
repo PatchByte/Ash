@@ -1,20 +1,20 @@
-#include "AshLogger/AshLoggerTag.h"
+#include "AshLogger/LoggerTag.h"
 #include <algorithm>
 
 namespace ash
 {
 
-    bool AshLoggerTagFilter::DoFilter(AshLoggerShortTag Short)
+    bool LoggerTagFilter::DoFilter(LoggerShortTag Short)
     {
         bool hasBeenFoundInList = (std::find(this->filterTrigger.begin(), this->filterTrigger.end(), Short) != this->filterTrigger.end());
 
         switch (this->filterMode)
         {
-        case AshLoggerTagFilterMode::IGNORE_WHEN_LOGGED: return (hasBeenFoundInList == false);
-        case AshLoggerTagFilterMode::ONLY_LOG_WHEN: return hasBeenFoundInList;
+        case LoggerTagFilterMode::IGNORE_WHEN_LOGGED: return (hasBeenFoundInList == false);
+        case LoggerTagFilterMode::ONLY_LOG_WHEN: return hasBeenFoundInList;
 
         // And you know, the other stuff that should not be supposed to be the case /*_*/
-        case AshLoggerTagFilterMode::INVALID:
+        case LoggerTagFilterMode::INVALID:
         default:
             return true;
         }
