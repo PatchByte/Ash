@@ -54,7 +54,7 @@ namespace ash
     {
         ASH_CLASS_IMPLEMENT_INTERNAL_OBJECT_ALLOCATION(AshBuffer);
         this->Release();
-        this->AllocateSize(Source.GetSize());
+        this->AllocateBySize(Source.GetSize());
         memcpy(this->GetPointer(), Source.GetPointer(), Source.GetSize());
     }
 
@@ -65,7 +65,7 @@ namespace ash
         ASH_CLASS_IMPLEMENT_INTERNAL_OBJECT_DEALLOCATION(AshBuffer);
     }
 
-    bool Buffer::AllocateSize(Size Size)
+    bool Buffer::AllocateBySize(Size Size)
     {
         this->Release();
 
@@ -131,7 +131,7 @@ namespace ash
         }
         else
         {
-            return this->AllocateSize(Size);
+            return this->AllocateBySize(Size);
         }
 
         classInternalAshBuffer->Reset();
@@ -183,7 +183,7 @@ namespace ash
     bool Buffer::CopyPointer(Pointer Pointer, Size Size)
     {
         this->Release();
-        if (this->AllocateSize(Size) == false)
+        if (this->AllocateBySize(Size) == false)
         {
             return false;
         }
@@ -195,7 +195,7 @@ namespace ash
     bool Buffer::CopyBytesVector(BytesVector Vector)
     {
         this->Release();
-        if (this->AllocateSize(Vector.size()) == false)
+        if (this->AllocateBySize(Vector.size()) == false)
         {
             return false;
         }
@@ -303,7 +303,7 @@ namespace ash
             return Result(false, "File size is zero or well less.");
         }
 
-        this->AllocateSize(istreamSize);
+        this->AllocateBySize(istreamSize);
         istream.read(reinterpret_cast<char*>(this->GetPointer()), istreamSize);
         istream.close();
 
@@ -360,7 +360,7 @@ namespace ash
         this->Release();
         ASH_CLASS_IMPLEMENT_INTERNAL_OBJECT_DEALLOCATION(AshBuffer);
         ASH_CLASS_IMPLEMENT_INTERNAL_OBJECT_ALLOCATION(AshBuffer);
-        this->AllocateSize(Source.GetSize());
+        this->AllocateBySize(Source.GetSize());
         memcpy(this->GetPointer(), Source.GetPointer(), Source.GetSize());
         return *this;
     }

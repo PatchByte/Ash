@@ -22,13 +22,13 @@ namespace ash
         Buffer(Buffer& Source);
         virtual ~Buffer();
 
-        virtual bool AllocateSize(Size Size);
+        virtual bool AllocateBySize(Size Size);
         virtual bool AllocateArray(Size ElementSize, Size ElementCount);
 
         template <typename T>
-        inline bool AllocateType()
+        inline bool AllocateByType()
         {
-            return this->AllocateSize(sizeof(T));
+            return this->AllocateBySize(sizeof(T));
         }
 
         virtual bool ExpandSize(Size Size);

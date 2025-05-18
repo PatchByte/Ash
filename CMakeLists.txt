@@ -4,6 +4,7 @@ project("AshBuild")
 option(ASH_ENABLE_DEVELOPMENT_ENVIRONMENT "Enables a few specific tweaks to be able to develope ash" OFF)
 option(ASH_ENABLE_LOGGER "Enable ash logger, does require fmt." OFF)
 option(ASH_ENABLE_USAGE_OF_EXTERNAL_VENDORS "Enable usage of external Vendors." OFF)
+option(ASH_ENABLE_DESCRIPTORS "Enable ash descriptors" OFF)
 
 option(ASH_OBJECTS_ERASE_NAMES "Choose to erase the names of the AshObjects." OFF)
 
@@ -22,3 +23,7 @@ add_subdirectory("Ash")
 if(ASH_ENABLE_LOGGER)
     add_subdirectory("AshLogger")
 endif(ASH_ENABLE_LOGGER)
+
+if(ASH_ENABLE_DESCRIPTORS)
+    add_subdirectory("AshDescriptors")
+endif(ASH_ENABLE_DESCRIPTORS)

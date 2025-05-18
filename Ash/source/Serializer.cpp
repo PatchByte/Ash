@@ -36,7 +36,7 @@ namespace ash
             return nullptr;
         }
 
-        if (buffer->AllocateSize(bufferSize) == false)
+        if (buffer->AllocateBySize(bufferSize) == false)
         {
             return nullptr;
         }
