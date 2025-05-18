@@ -18,14 +18,14 @@ static std::vector<ash::objects::AshAsciiString*> smTestVector = {
         new ash::objects::AshAsciiString("64"),
 };
 
-ash::AshResult PointerVectorTest::Do()
+ash::Result PointerVectorTest::Do()
 {
-    ash::AshBuffer* buffer = nullptr;
-    ash::AshCRC32 expectedCRC = 0;
+    ash::Buffer* buffer = nullptr;
+    ash::CRC32State expectedCRC = ash::CRC32State();
 
     // Write
     {
-        ash::AshStreamExpandableExportBuffer* bufferStream = new ash::AshStreamExpandableExportBuffer();
+        ash::StreamExpandableExportBuffer* bufferStream = new ash::StreamExpandableExportBuffer();
         ash::objects::AshPointerVector<ash::objects::AshAsciiString> testVector = ash::objects::AshPointerVector<ash::objects::AshAsciiString>();
 
         int i = 0;
@@ -37,13 +37,13 @@ ash::AshResult PointerVectorTest::Do()
 
             std::string cs = c->GetText();
 
-            expectedCRC.UpdateWithTemplateValue(i);
+            expectedCRC.UpdateWithPrimitive(i);
             expectedCRC.Update(cs.data(), cs.length());
         }
 
         if(testVector.Export(bufferStream) == false)
         {
-            return ash::AshResult(false, "The vector testVector export failed.");
+            return ash::Result(false, "The vector testVector export failed.");
         }
 
         buffer = bufferStream->MakeCopyOfBuffer();
@@ -53,13 +53,13 @@ ash::AshResult PointerVectorTest::Do()
 
     // Read
     {
-        ash::AshStream* bufferStream = new ash::AshStreamStaticBuffer(buffer, ash::AshStreamMode::READ);
+        ash::Stream* bufferStream = new ash::StreamStaticBuffer(buffer, ash::StreamMode::READ);
         ash::objects::AshPointerVector<ash::objects::AshAsciiString> testVector = ash::objects::AshPointerVector<ash::objects::AshAsciiString>();
-        ash::AshCRC32 calculatedCRC = ash::AshCRC32();
+        ash::CRC32State calculatedCRC = ash::CRC32State();
 
         if(testVector.Import(bufferStream) == false)
         {
-            return ash::AshResult(false, "The vector testVector import failed.");
+            return ash::Result(false, "The vector testVector import failed.");
         }
 
         int i = 0;
@@ -70,17 +70,17 @@ ash::AshResult PointerVectorTest::Do()
 
             std::string cs = c->GetText();
 
-            calculatedCRC.UpdateWithTemplateValue(i);
+            calculatedCRC.UpdateWithPrimitive(i);
             calculatedCRC.Update(cs.data(), cs.length());
         }
 
         if(calculatedCRC.GetValue() != expectedCRC.GetValue())
         {
-            return ash::AshResult(false, "The calculatedCRC and expectedCRC did not match.");
+            return ash::Result(false, "The calculatedCRC and expectedCRC did not match.");
         }
 
         delete bufferStream;
     }
 
-    return ash::AshResult(true);
+    return ash::Result(true);
 }

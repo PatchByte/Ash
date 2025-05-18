@@ -2,7 +2,7 @@
 #include <Ash/AshBase64.h>
 #include <iostream>
 
-ash::AshResult Base64RunTest::Do()
+ash::Result Base64RunTest::Do()
 {
     constexpr int expectedVar = 40;
     int var = 40;
@@ -10,22 +10,22 @@ ash::AshResult Base64RunTest::Do()
 
     {
         // Encode
-        auto encodedBuffer = new ash::AshBuffer(&var, sizeof(var));
-        encodedVar = ash::AshBase64::Encode(encodedBuffer);
+        auto encodedBuffer = new ash::Buffer(&var, sizeof(var));
+        encodedVar = ash::Base64::Encode(encodedBuffer);
         delete encodedBuffer;
     }
 
     {
         // Decode
-        auto decodedBuffer = ash::AshBase64::Decode(encodedVar);
+        auto decodedBuffer = ash::Base64::Decode(encodedVar);
         var = *decodedBuffer->GetBuffer<int>();
         delete decodedBuffer;
     }
 
     if(var != expectedVar)
     {
-        return ash::AshResult(false, "Base64 var does not match.");
+        return ash::Result(false, "Base64 var does not match.");
     }
 
-    return ash::AshResult(true);
+    return ash::Result(true);
 }

@@ -11,11 +11,11 @@
 namespace ash
 {
 
-    AshTemporaryFilePathOrganizer::AshTemporaryFilePathOrganizer(std::string Name)
+    TemporaryFilePathOrganizer::TemporaryFilePathOrganizer(std::string Name)
     {
-        ash::AshBuffer nameBuffer = ash::AshBuffer();
+        ash::Buffer nameBuffer = ash::Buffer();
         nameBuffer.CopyPointer((void*)(Name.data()), Name.length());
-        ash::AshCRC32Value nameHashValue = ash::AshCRC32Utils::Calculate(0xfeeddeed, &nameBuffer);
+        ash::CRC32 nameHashValue = ash::CRC32Utils::Calculate(0xfeeddeed, &nameBuffer);
         m_Name = "";
         m_Name += ".";
         m_Name += std::to_string(nameHashValue);
@@ -23,12 +23,12 @@ namespace ash
         this->CreateTemporaryFolder();
     }
 
-    AshTemporaryFilePathOrganizer::~AshTemporaryFilePathOrganizer()
+    TemporaryFilePathOrganizer::~TemporaryFilePathOrganizer()
     {
         this->RemoveTemporaryFolder();
     }
 
-    ash::AshResult AshTemporaryFilePathOrganizer::CreateTemporaryFolder()
+    ash::Result TemporaryFilePathOrganizer::CreateTemporaryFolder()
     {
         std::filesystem::path temporaryFolderPath = std::filesystem::current_path() / this->m_Name;
 
@@ -42,37 +42,37 @@ namespace ash
 
         std::filesystem::create_directory(temporaryFolderPath);
 
-        return ash::AshResult(true);
+        return ash::Result(true);
     }
 
-    ash::AshResult AshTemporaryFilePathOrganizer::RemoveTemporaryFolder()
+    ash::Result TemporaryFilePathOrganizer::RemoveTemporaryFolder()
     {
         std::filesystem::path temporaryFolderPath = std::filesystem::current_path() / this->m_Name;
 
         if(std::filesystem::exists(temporaryFolderPath) == false)
         {
-            return ash::AshResult(true, "The folder has already been removed.");
+            return ash::Result(true, "The folder has already been removed.");
         }
-    
+
         for(std::filesystem::directory_entry currentTemporaryFolderPathIteratorEntry : std::filesystem::directory_iterator(temporaryFolderPath))
         {
             if(currentTemporaryFolderPathIteratorEntry.is_directory())
             {
-                return ash::AshResult(false, "Found an another directory inside of a temporary directory.");
+                return ash::Result(false, "Found an another directory inside of a temporary directory.");
             }
 
             if(std::filesystem::remove(currentTemporaryFolderPathIteratorEntry) == false)
             {
-                return ash::AshResult(false, "Failed to remove file.");
+                return ash::Result(false, "Failed to remove file.");
             }
         }
 
         std::filesystem::remove(temporaryFolderPath);
 
-        return ash::AshResult(true);
+        return ash::Result(true);
     }
 
-    ash::AshCustomResult<std::filesystem::path> AshTemporaryFilePathOrganizer::FindFreePath()
+    ash::CustomResult<std::filesystem::path> TemporaryFilePathOrganizer::FindFreePath()
     {
         std::filesystem::path foundPath = std::filesystem::current_path() / this->m_Name;
 
@@ -80,18 +80,18 @@ namespace ash
         {
             unsigned long long seedModifier = 0;
 
-            ash::AshBuffer seedBufferLeft = ash::AshBuffer();
-            ash::AshBuffer seedBufferRight = ash::AshBuffer();
+            ash::Buffer seedBufferLeft = ash::Buffer();
+            ash::Buffer seedBufferRight = ash::Buffer();
 
-            ash::AshSize temporaryFolderFileCount = std::distance(std::filesystem::directory_iterator(foundPath), std::filesystem::directory_iterator());
+            ash::Size temporaryFolderFileCount = std::distance(std::filesystem::directory_iterator(foundPath), std::filesystem::directory_iterator());
 
             seedBufferLeft.ImportPointer(&this->m_Name, this->m_Name.length());
             seedBufferRight.ImportPointer(&temporaryFolderFileCount, sizeof(temporaryFolderFileCount));
 
-            seedModifier |= (AshCRC32Utils::Calculate( (AshCRC32Value) (this->m_Seed >> 1), &seedBufferLeft));
+            seedModifier |= (CRC32Utils::Calculate( (CRC32) (this->m_Seed >> 1), &seedBufferLeft));
             seedModifier <<= 32;
-            seedModifier |= (AshCRC32Utils::Calculate( (AshCRC32Value) (this->m_Seed >> 32), &seedBufferRight));
-            
+            seedModifier |= (CRC32Utils::Calculate( (CRC32) (this->m_Seed >> 32), &seedBufferRight));
+
             m_Seed = seedModifier;
             m_Seed += 1;
 
@@ -100,11 +100,11 @@ namespace ash
             if(std::filesystem::exists(foundPath / currentFileNameOfAttempt) == false)
             {
                 foundPath /= currentFileNameOfAttempt;
-                return ash::AshCustomResult<std::filesystem::path>(true).AttachResult(foundPath);
+                return ash::CustomResult<std::filesystem::path>(true).Attach(foundPath);
             }
 
             m_Seed *= 2;
         } while(true);
     }
-    
+
 }

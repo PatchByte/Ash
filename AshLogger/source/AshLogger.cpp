@@ -28,7 +28,7 @@ namespace ash
         ASH_CLASS_IMPLEMENT_INTERNAL_OBJECT_ALLOCATION(AshLogger);
 
         classInternalAshLogger->loggerName = LoggerName;
-        
+
         for(AshLoggerTag c : LoggerTags)
         {
             classInternalAshLogger->loggerTagRegistry.AddTag(c);
@@ -93,7 +93,7 @@ namespace ash
         {
             classInternalAshLogger->loggerTagRegistry.AddTag(AshLoggerTag(LoggerTag));
         }
-    
+
         return this->LogWithFormatArguments(shortTag, LoggerFormat, LoggerFormatArgs);
     }
 
@@ -102,9 +102,9 @@ namespace ash
         return classInternalAshLogger->loggerTagRegistry;
     }
 
-    ash::AshSize AshLogger::GetLongestTagLength()
+    ash::Size AshLogger::GetLongestTagLength()
     {
-        ash::AshSize maxLength = 0;
+        ash::Size maxLength = 0;
 
         for(auto currentTag : classInternalAshLogger->loggerTagRegistry.GetTagMap())
         {

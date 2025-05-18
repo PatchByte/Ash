@@ -4,11 +4,11 @@
 namespace ash
 {
 
-    class AshStepTimerSimpleMilliseconds
+    class StepTimerSimpleMilliseconds
     {
     public:
-        AshStepTimerSimpleMilliseconds();
-        ~AshStepTimerSimpleMilliseconds() = default;
+        StepTimerSimpleMilliseconds();
+        ~StepTimerSimpleMilliseconds() = default;
 
         std::chrono::milliseconds Start();
         std::chrono::milliseconds Time();

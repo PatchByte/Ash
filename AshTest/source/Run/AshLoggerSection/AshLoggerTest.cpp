@@ -7,11 +7,11 @@
 #define ASH_TAG_WARNING 0x2
 #define ASH_TAG_ERROR 0x3
 
-static constexpr ash::AshCRC32Value smAshLoggerTestExpectedCRC = 0xe2369e8c;
+static constexpr ash::CRC32 smAshLoggerTestExpectedCRC = 0xe2369e8c;
 
-ash::AshResult AshLoggerTest::Do()
+ash::Result AshLoggerTest::Do()
 {
-    ash::AshCRC32 testCRC = ash::AshCRC32();
+    ash::CRC32State testCRC = ash::CRC32State();
 
     ash::AshLogger* logger = new ash::AshLogger("TestLogger", ash::AshLoggerTagInitializer({
         ash::AshLoggerTag(ASH_TAG_INFO, "Info"),
@@ -19,11 +19,11 @@ ash::AshResult AshLoggerTest::Do()
         ash::AshLoggerTag(ASH_TAG_ERROR, "Error")
     }));
 
-    ash::AshLoggerPassage* testPassage = new ash::AshLoggerFunctionPassage([&testCRC] (ash::AshLoggerDefaultPassage* This, ash::AshLoggerTag Tag, std::string Format, fmt::format_args Args, std::string FormattedString) -> void 
+    ash::AshLoggerPassage* testPassage = new ash::AshLoggerFunctionPassage([&testCRC] (ash::AshLoggerDefaultPassage* This, ash::AshLoggerTag Tag, std::string Format, fmt::format_args Args, std::string FormattedString) -> void
     {
         if(This->GetLoggerTagFilter().DoFilter(Tag.GetShortTag()) == false)
         {
-            testCRC.UpdateWithTemplateValue<unsigned int>(0xdead);
+            testCRC.UpdateWithPrimitive<unsigned int>(0xdead);
             return;
         }
 
@@ -59,10 +59,10 @@ ash::AshResult AshLoggerTest::Do()
 
     if(testCRC.GetValue() != smAshLoggerTestExpectedCRC)
     {
-        return ash::AshResult(false, "Expected test crc value did not match with the actual crc value.");
+        return ash::Result(false, "Expected test crc value did not match with the actual crc value.");
     }
 
-    return ash::AshResult(true);
+    return ash::Result(true);
 }
 
 #endif

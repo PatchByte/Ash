@@ -4,24 +4,24 @@
 #include <iostream>
 #include <sstream>
 
-ash::AshResult StreamRunTest::Do()
+ash::Result StreamRunTest::Do()
 {
     unsigned char blob[64 * sizeof(int)] = { 0 };
 
     {
         // Write test
 
-        ash::AshStreamStaticBuffer* stream = new ash::AshStreamStaticBuffer(new ash::AshBuffer(blob, sizeof(blob)), ash::AshStreamMode::WRITE);
+        ash::StreamStaticBuffer* stream = new ash::StreamStaticBuffer(new ash::Buffer(blob, sizeof(blob)), ash::StreamMode::WRITE);
         stream->DeallocateBufferAfterUse();
 
         for(int i = 0; i < 64; i++)
         {
             stream->WriteFromPointer(&i);
         }
-        
+
         if(stream->IsEndOfStream() == false)
         {
-            return ash::AshResult(false, "Stream is not eof.");
+            return ash::Result(false, "Stream is not eof.");
         }
 
         delete stream;
@@ -29,7 +29,7 @@ ash::AshResult StreamRunTest::Do()
     {
         // Read Test
 
-        ash::AshStreamStaticBuffer* stream = new ash::AshStreamStaticBuffer(new ash::AshBuffer(blob, sizeof(blob)), ash::AshStreamMode::READ);
+        ash::StreamStaticBuffer* stream = new ash::StreamStaticBuffer(new ash::Buffer(blob, sizeof(blob)), ash::StreamMode::READ);
         stream->DeallocateBufferAfterUse();
 
         for(int i = 0; i < 64; i++)
@@ -37,12 +37,12 @@ ash::AshResult StreamRunTest::Do()
             int a = stream->Read<int>();
             if(a != i)
             {
-                return ash::AshResult(false, "Mismatch.");
+                return ash::Result(false, "Mismatch.");
             }
         }
 
         delete stream;
     }
 
-    return ash::AshResult(true);
+    return ash::Result(true);
 }

@@ -4,12 +4,12 @@
 namespace ash
 {
 
-    class AshSerializer
+    class TextSerializer
     {
     public:
-        static std::string Encode(AshBuffer* Buffer, char EncodeShuffle = 'A');
-        static std::string Encode(AshBuffer& Buffer, char EncodeShuffle = 'A') { return Encode(&Buffer, EncodeShuffle); }
-        static AshBuffer* Decode(std::string Text, char DecodeShuffle = 'A');
+        static std::string Encode(Buffer* Buffer, char EncodeShuffle = 'A');
+        static std::string Encode(Buffer& Buffer, char EncodeShuffle = 'A') { return Encode(&Buffer, EncodeShuffle); }
+        static Buffer* Decode(std::string Text, char DecodeShuffle = 'A');
     };
 
 }

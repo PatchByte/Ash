@@ -17,11 +17,11 @@ static std::vector<ash::AshLoggerShortTag> smAshLoggerTestTags = {
     LOG_TAG_TEST_FOUR
 };
 
-static constexpr ash::AshCRC32Value smAshLoggerFilterTestExpectedCRC = 0x17ab50ab;
+static constexpr ash::CRC32 smAshLoggerFilterTestExpectedCRC = 0x17ab50ab;
 
-ash::AshResult AshLoggerTagFilterTest::Do()
+ash::Result AshLoggerTagFilterTest::Do()
 {
-    ash::AshCRC32 testCRC = ash::AshCRC32();
+    ash::CRC32State testCRC = ash::CRC32();
 
     for(ash::AshLoggerTagFilterMode currentMode : std::vector<ash::AshLoggerTagFilterMode>({ ash::AshLoggerTagFilterMode::ONLY_LOG_WHEN, ash::AshLoggerTagFilterMode::IGNORE_WHEN_LOGGED }))
     {
@@ -34,16 +34,16 @@ ash::AshResult AshLoggerTagFilterTest::Do()
         {
             bool result = ashLoggerTagFilterTest.DoFilter(currentTag);
 
-            testCRC.UpdateWithTemplateValue(currentTag);
-            testCRC.UpdateWithTemplateValue(currentTag * result);
+            testCRC.UpdateWithPrimitive(currentTag);
+            testCRC.UpdateWithPrimitive(currentTag * result);
         }
     }
 
     if(testCRC.GetValue() != smAshLoggerFilterTestExpectedCRC)
     {
-        return ash::AshResult(false, "Expected test crc value did not match with the actual crc value.");
+        return ash::Result(false, "Expected test crc value did not match with the actual crc value.");
     }
 
-    return ash::AshResult(true);
+    return ash::Result(true);
 }
 #endif

@@ -4,5 +4,5 @@
 class CRC32RunTest : public AshBaseRunTest
 {
 public:
-    ash::AshResult Do();
+    ash::Result Do();
 };

@@ -11,7 +11,7 @@ namespace ash
         void Reset()
         {
             buffer = nullptr;
-            bufferMode = AshStreamMode::INVALID;
+            bufferMode = StreamMode::INVALID;
             bufferCursor = 0;
             flags.value = 0;
         }
@@ -21,9 +21,9 @@ namespace ash
             flags.bits.hasErrorOccurred = true;
         }
 
-        AshBuffer* buffer;
-        AshStreamMode bufferMode;
-        AshSize bufferCursor;
+        Buffer* buffer;
+        StreamMode bufferMode;
+        Size bufferCursor;
 
         union
         {
@@ -35,7 +35,7 @@ namespace ash
         } flags;
     };
 
-    AshStreamStaticBuffer::AshStreamStaticBuffer(ash::AshBuffer* StaticBuffer, AshStreamMode StaticBufferMode)
+    StreamStaticBuffer::StreamStaticBuffer(ash::Buffer* StaticBuffer, StreamMode StaticBufferMode)
     {
         ASH_CLASS_IMPLEMENT_INTERNAL_OBJECT_ALLOCATION(AshStreamStaticBuffer);
         classInternalAshStreamStaticBuffer->Reset();
@@ -44,7 +44,7 @@ namespace ash
         classInternalAshStreamStaticBuffer->bufferCursor = 0;
     }
 
-    AshStreamStaticBuffer::~AshStreamStaticBuffer()
+    StreamStaticBuffer::~StreamStaticBuffer()
     {
         if(classInternalAshStreamStaticBuffer->flags.bits.isSingleUseBuffer)
         {
@@ -54,93 +54,93 @@ namespace ash
         ASH_CLASS_IMPLEMENT_INTERNAL_OBJECT_DEALLOCATION(AshStreamStaticBuffer);
     }
 
-    AshStreamStaticBuffer* AshStreamStaticBuffer::DeallocateBufferAfterUse()
+    StreamStaticBuffer* StreamStaticBuffer::DeallocateBufferAfterUse()
     {
         classInternalAshStreamStaticBuffer->flags.bits.isSingleUseBuffer = true;
         return this;
     }
 
-    AshResult AshStreamStaticBuffer::ReadRawIntoPointer(void* Buffer, AshSize BufferSize)
+    Result StreamStaticBuffer::ReadRawIntoPointer(void* Buffer, Size BufferSize)
     {
         if(IsReadOnly() == false)
         {
-            return AshResult(false, "Stream is write only.");
+            return Result(false, "Stream is write only.");
         }
 
         if(IsEndOfStream())
         {
             classInternalAshStreamStaticBuffer->SetErrorHasOccurred();
-            return AshResult(false, "Stream is eof.");
+            return Result(false, "Stream is eof.");
         }
 
         if((classInternalAshStreamStaticBuffer->bufferCursor + BufferSize) > classInternalAshStreamStaticBuffer->buffer->GetSize())
         {
             classInternalAshStreamStaticBuffer->SetErrorHasOccurred();
-            return AshResult(false, "Size is overlapping the eof.");
+            return Result(false, "Size is overlapping the eof.");
         }
 
-        for(AshSize i = 0; i < BufferSize; i++)
+        for(Size i = 0; i < BufferSize; i++)
         {
             static_cast<unsigned char*>(Buffer)[i] = static_cast<unsigned char*>(classInternalAshStreamStaticBuffer->buffer->GetBytes())[classInternalAshStreamStaticBuffer->bufferCursor];
             ++classInternalAshStreamStaticBuffer->bufferCursor;
         }
 
-        return AshResult(true);
+        return Result(true);
     }
 
-    AshResult AshStreamStaticBuffer::WriteRawFromPointer(void* Buffer, AshSize BufferSize)
+    Result StreamStaticBuffer::WriteRawFromPointer(void* Buffer, Size BufferSize)
     {
         if(IsWriteOnly() == false)
         {
-            return AshResult(false, "Stream is read only.");
+            return Result(false, "Stream is read only.");
         }
 
         if(IsEndOfStream())
         {
             classInternalAshStreamStaticBuffer->SetErrorHasOccurred();
-            return AshResult(false, "Stream is eof.");
+            return Result(false, "Stream is eof.");
         }
 
         if((classInternalAshStreamStaticBuffer->bufferCursor + BufferSize) > classInternalAshStreamStaticBuffer->buffer->GetSize())
         {
             classInternalAshStreamStaticBuffer->SetErrorHasOccurred();
-            return AshResult(false, "Size is overlapping the eof.");
+            return Result(false, "Size is overlapping the eof.");
         }
 
-        for(AshSize i = 0; i < BufferSize; i++)
+        for(Size i = 0; i < BufferSize; i++)
         {
             static_cast<unsigned char*>(classInternalAshStreamStaticBuffer->buffer->GetBytes())[classInternalAshStreamStaticBuffer->bufferCursor] = static_cast<unsigned char*>(Buffer)[i];
             ++classInternalAshStreamStaticBuffer->bufferCursor;
         }
 
-        return AshResult(true);
+        return Result(true);
     }
 
-    bool AshStreamStaticBuffer::IsEndOfStream()
+    bool StreamStaticBuffer::IsEndOfStream()
     {
         return classInternalAshStreamStaticBuffer->bufferCursor >= classInternalAshStreamStaticBuffer->buffer->GetSize();
     }
 
-    bool AshStreamStaticBuffer::HasErrorOccurred()
+    bool StreamStaticBuffer::HasErrorOccurred()
     {
         return classInternalAshStreamStaticBuffer->flags.bits.hasErrorOccurred;
     }
 
-    AshStreamMode AshStreamStaticBuffer::GetStreamMode()
+    StreamMode StreamStaticBuffer::GetStreamMode()
     {
         return classInternalAshStreamStaticBuffer->bufferMode;
     }
 
-    ash::AshSize AshStreamStaticBuffer::GetCursorPosition()
+    ash::Size StreamStaticBuffer::GetCursorPosition()
     {
         return classInternalAshStreamStaticBuffer->bufferCursor;
     }
 
-    ash::AshResult AshStreamStaticBuffer::SetCursorPosition(ash::AshSize CursorPosition)
+    ash::Result StreamStaticBuffer::SetCursorPosition(ash::Size CursorPosition)
     {
         if( CursorPosition > ((classInternalAshStreamStaticBuffer->buffer->GetSize()) - 1) )
         {
-            return ash::AshResult(false, "The cursor position is larger than the buffer size.");
+            return ash::Result(false, "The cursor position is larger than the buffer size.");
         }
 
         classInternalAshStreamStaticBuffer->bufferCursor = CursorPosition;
@@ -176,53 +176,53 @@ namespace ash
             hasErrorOccurred = true;
         }
 
-        ash::AshBuffer* expandableBuffer;
-        ash::AshSize expandableBufferCursor;
+        ash::Buffer* expandableBuffer;
+        ash::Size expandableBufferCursor;
         bool hasErrorOccurred;
     };
 
-    AshStreamExpandableExportBuffer::AshStreamExpandableExportBuffer()
+    StreamExpandableExportBuffer::StreamExpandableExportBuffer()
     {
         ASH_CLASS_IMPLEMENT_INTERNAL_OBJECT_ALLOCATION(AshStreamExpandableExportBuffer);
-        classInternalAshStreamExpandableExportBuffer->expandableBuffer = new ash::AshBuffer();
+        classInternalAshStreamExpandableExportBuffer->expandableBuffer = new ash::Buffer();
     }
 
-    AshStreamExpandableExportBuffer::~AshStreamExpandableExportBuffer()
+    StreamExpandableExportBuffer::~StreamExpandableExportBuffer()
     {
         classInternalAshStreamExpandableExportBuffer->Reset();
         ASH_CLASS_IMPLEMENT_INTERNAL_OBJECT_DEALLOCATION(AshStreamExpandableExportBuffer);
     }
 
-    ash::AshBuffer* AshStreamExpandableExportBuffer::MakeCopyOfBuffer()
+    ash::Buffer* StreamExpandableExportBuffer::MakeCopyOfBuffer()
     {
-        return classInternalAshStreamExpandableExportBuffer->expandableBuffer->DuplicateAndCopyBuffer();
-    }
-    
-    AshResult AshStreamExpandableExportBuffer::ReadRawIntoPointer(void* Buffer, AshSize BufferSize)
-    {
-        return ash::AshResult(false, "ReadRawIntoPointer is not implemented because AshStreamExpandableExportBuffer is write only . ;-)");
+        return classInternalAshStreamExpandableExportBuffer->expandableBuffer->DuplicateAndCopy();
     }
 
-    AshResult AshStreamExpandableExportBuffer::WriteRawFromPointer(void* Buffer, AshSize BufferSize)
+    Result StreamExpandableExportBuffer::ReadRawIntoPointer(void* Buffer, Size BufferSize)
+    {
+        return ash::Result(false, "ReadRawIntoPointer is not implemented because AshStreamExpandableExportBuffer is write only . ;-)");
+    }
+
+    Result StreamExpandableExportBuffer::WriteRawFromPointer(void* Buffer, Size BufferSize)
     {
         classInternalAshStreamExpandableExportBuffer->expandableBuffer->ExpandSize(BufferSize);
-        
-        for(AshSize i = 0; i < BufferSize; i++)
+
+        for(Size i = 0; i < BufferSize; i++)
         {
             static_cast<unsigned char*>(classInternalAshStreamExpandableExportBuffer->expandableBuffer->GetBytes())[classInternalAshStreamExpandableExportBuffer->expandableBufferCursor] = static_cast<unsigned char*>(Buffer)[i];
             ++classInternalAshStreamExpandableExportBuffer->expandableBufferCursor;
         }
 
-        return ash::AshResult(true);
+        return ash::Result(true);
     }
 
-    bool AshStreamExpandableExportBuffer::HasErrorOccurred() 
-    { 
-        return classInternalAshStreamExpandableExportBuffer->hasErrorOccurred; 
+    bool StreamExpandableExportBuffer::HasErrorOccurred()
+    {
+        return classInternalAshStreamExpandableExportBuffer->hasErrorOccurred;
     }
 
-    ash::AshSize AshStreamExpandableExportBuffer::GetCursorPosition() 
-    { 
-        return classInternalAshStreamExpandableExportBuffer->expandableBufferCursor; 
+    ash::Size StreamExpandableExportBuffer::GetCursorPosition()
+    {
+        return classInternalAshStreamExpandableExportBuffer->expandableBufferCursor;
     }
 }

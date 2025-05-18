@@ -5,18 +5,18 @@
 
 static constexpr double smDoubleValueExpected = 9.F;
 
-ash::AshResult PrimitiveTest::Do()
+ash::Result PrimitiveTest::Do()
 {
-    ash::AshBuffer* buffer = nullptr;
+    ash::Buffer* buffer = nullptr;
 
     // Write
     {
-        ash::AshStreamExpandableExportBuffer* bufferStream = new ash::AshStreamExpandableExportBuffer();
+        ash::StreamExpandableExportBuffer* bufferStream = new ash::StreamExpandableExportBuffer();
         ash::objects::AshPrimitive<double> doublePrimitive = ash::objects::AshPrimitive<double>(smDoubleValueExpected);
 
         if(doublePrimitive.Export(bufferStream) == false)
         {
-            return ash::AshResult(false, "AshPrimitive (double) failed to export.");
+            return ash::Result(false, "AshPrimitive (double) failed to export.");
         }
 
         buffer = bufferStream->MakeCopyOfBuffer();
@@ -26,21 +26,21 @@ ash::AshResult PrimitiveTest::Do()
 
     // Read
     {
-        ash::AshStream* bufferStream = new ash::AshStreamStaticBuffer(buffer, ash::AshStreamMode::READ);
+        ash::Stream* bufferStream = new ash::StreamStaticBuffer(buffer, ash::StreamMode::READ);
         ash::objects::AshPrimitive<double> doublePrimitive = ash::objects::AshPrimitive<double>();
 
         if(doublePrimitive.Import(bufferStream) == false)
         {
-            return ash::AshResult(false, "AshPrimitive (double) failed to import.");
+            return ash::Result(false, "AshPrimitive (double) failed to import.");
         }
 
         if(doublePrimitive.GetDataValue() != smDoubleValueExpected)
         {
-            return ash::AshResult(false, "AshPrimitive (double) failed to match expected value.");
+            return ash::Result(false, "AshPrimitive (double) failed to match expected value.");
         }
 
         delete bufferStream;
     }
 
-    return ash::AshResult(true);
+    return ash::Result(true);
 }

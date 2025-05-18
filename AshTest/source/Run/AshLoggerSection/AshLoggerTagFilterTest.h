@@ -5,6 +5,6 @@
 class AshLoggerTagFilterTest : public AshBaseRunTest
 {
 public:
-    ash::AshResult Do();
+    ash::Result Do();
 };
 #endif

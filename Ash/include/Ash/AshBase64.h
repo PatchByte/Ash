@@ -9,12 +9,12 @@
 namespace ash
 {
 
-    class AshBase64
+    class Base64
     {
     public:
-        static std::string Encode(AshBuffer* Buffer);
-        static AshBuffer* Decode(std::string Text);
-        static inline std::string Encode(AshBuffer& Buffer) { return AshBase64::Encode(&Buffer); }
+        static std::string Encode(Buffer* Buffer);
+        static Buffer* Decode(std::string Text);
+        static inline std::string Encode(Buffer& Buffer) { return Base64::Encode(&Buffer); }
     };
 
 }

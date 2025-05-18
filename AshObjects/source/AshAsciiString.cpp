@@ -36,7 +36,7 @@ namespace ash::objects
         m_Text(Text)
     {}
 
-    bool AshAsciiString::Import(ash::AshStream* Stream)
+    bool AshAsciiString::Import(ash::Stream* Stream)
     {
         unsigned char textSeed = Stream->Read<unsigned char>();
         AshStringLength textLength = Stream->Read<AshStringLength>();
@@ -59,7 +59,7 @@ namespace ash::objects
         return Stream->HasErrorOccurred() == false;
     }
 
-    bool AshAsciiString::Export(ash::AshStream* Stream)
+    bool AshAsciiString::Export(ash::Stream* Stream)
     {
         unsigned char textSeed = 0;
 

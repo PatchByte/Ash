@@ -8,14 +8,14 @@ namespace ash::objects
     using AshStringLength = unsigned short;
 
     // Secure String
-    class AshAsciiString : public AshStreamableObject
+    class AshAsciiString : public StreamableObject
     {
     public:
         AshAsciiString();
         AshAsciiString(std::string Text);
         AshAsciiString(std::string_view Text);
         AshAsciiString(const char* Text);
-        
+
         inline AshAsciiString& operator=(std::string Text)
         {
             m_Text = std::move(Text);
@@ -55,7 +55,7 @@ namespace ash::objects
         AshStringLength m_TextLimitLength;
     };
 
-    class AshWideString : public AshStreamableObject 
+    class AshWideString : public StreamableObject
     {
     public:
         AshWideString();

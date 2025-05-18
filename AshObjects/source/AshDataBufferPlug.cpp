@@ -11,7 +11,7 @@
 namespace ash::objects
 {
 
-    static constexpr ash::AshSize smAshDataBufferPlugBufferSizeLimit = 0x1fff;
+    static constexpr ash::Size smAshDataBufferPlugBufferSizeLimit = 0x1fff;
 
     AshDataBufferPlug::AshDataBufferPlug():
         m_Buffer(nullptr),
@@ -19,12 +19,12 @@ namespace ash::objects
         m_BufferSizeLimit(smAshDataBufferPlugBufferSizeLimit)
     {}
 
-    AshDataBufferPlug::AshDataBufferPlug(ash::AshBuffer* Buffer):
-        m_Buffer(new ash::AshBuffer()),
+    AshDataBufferPlug::AshDataBufferPlug(ash::Buffer* Buffer):
+        m_Buffer(new ash::Buffer()),
         m_BufferEmpty(false),
         m_BufferSizeLimit(smAshDataBufferPlugBufferSizeLimit)
     {
-        m_Buffer->CopyAshBufferFromPointer(Buffer);
+        m_Buffer->CopyBufferFromPointer(Buffer);
     }
 
     AshDataBufferPlug::~AshDataBufferPlug()
@@ -36,16 +36,16 @@ namespace ash::objects
         }
     }
 
-    bool AshDataBufferPlug::Import(ash::AshStream* Stream)
+    bool AshDataBufferPlug::Import(ash::Stream* Stream)
     {
         if(this->m_Buffer != nullptr)
         {
-            this->m_Buffer->ReleaseMemory();
+            this->m_Buffer->Release();
             delete this->m_Buffer;
             this->m_Buffer = nullptr;
         }
 
-        AshSize bufferSize = Stream->Read<AshSize>();
+        Size bufferSize = Stream->Read<Size>();
 
         if(bufferSize > m_BufferSizeLimit)
         {
@@ -58,24 +58,24 @@ namespace ash::objects
             return Stream->IsOkay();
         }
 
-        this->m_Buffer = new ash::AshBuffer();
+        this->m_Buffer = new ash::Buffer();
         this->m_Buffer->AllocateSize(bufferSize);
-        
+
         Stream->ReadRawIntoPointer(this->m_Buffer->GetPointer(), bufferSize);
 
         return Stream->HasErrorOccurred() == false;
     }
 
-    bool AshDataBufferPlug::Export(ash::AshStream* Stream)
+    bool AshDataBufferPlug::Export(ash::Stream* Stream)
     {
         if(this->m_Buffer == nullptr)
         {
             // By-pass
-            Stream->Write<AshSize>(0);
+            Stream->Write<Size>(0);
             return true;
         }
 
-        Stream->Write<AshSize>(this->m_Buffer->GetSize());
+        Stream->Write<Size>(this->m_Buffer->GetSize());
 
         if(this->m_Buffer->GetSize() <= 0)
         {

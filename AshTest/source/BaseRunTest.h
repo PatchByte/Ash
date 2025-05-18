@@ -4,5 +4,5 @@
 class AshBaseRunTest
 {
 public:
-    virtual ash::AshResult Do() { return ash::AshResult(false, "Called a non implemented function"); }
+    virtual ash::Result Do() { return ash::Result(false, "Called a non implemented function"); }
 };

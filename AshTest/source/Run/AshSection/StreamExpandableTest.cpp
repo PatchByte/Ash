@@ -5,12 +5,12 @@
 #include <Ash/AshBuffer.h>
 #include <Ash/AshStream.h>
 
-ash::AshResult StreamExpandableTest::Do()
+ash::Result StreamExpandableTest::Do()
 {
-    ash::AshBuffer* copyOfStreamExpandableBuffer = nullptr;
+    ash::Buffer* copyOfStreamExpandableBuffer = nullptr;
 
     {
-        ash::AshStreamExpandableExportBuffer* streamExpandableWriter = new ash::AshStreamExpandableExportBuffer();
+        ash::StreamExpandableExportBuffer* streamExpandableWriter = new ash::StreamExpandableExportBuffer();
 
         streamExpandableWriter->Write<int>(0xdead);
         streamExpandableWriter->Write<int>(0xbeef);
@@ -20,11 +20,11 @@ ash::AshResult StreamExpandableTest::Do()
         delete streamExpandableWriter;
     }
     {
-        ash::AshStream* streamExpandableReader = new ash::AshStreamStaticBuffer(copyOfStreamExpandableBuffer, ash::AshStreamMode::READ);
+        ash::Stream* streamExpandableReader = new ash::StreamStaticBuffer(copyOfStreamExpandableBuffer, ash::StreamMode::READ);
 
         if(streamExpandableReader->Read<int>() != 0xdead || streamExpandableReader->Read<int>() != 0xbeef)
         {
-            return ash::AshResult(false, "The tests expected values did not match.");
+            return ash::Result(false, "The tests expected values did not match.");
         }
 
         delete streamExpandableReader;
@@ -32,5 +32,5 @@ ash::AshResult StreamExpandableTest::Do()
 
     delete copyOfStreamExpandableBuffer;
 
-    return ash::AshResult(true);
+    return ash::Result(true);
 }

@@ -3,7 +3,7 @@
 namespace ash::objects
 {
     AshFunctionBufferPlug::AshFunctionBufferPlug():
-        m_ExportFunction([]() -> ash::AshBuffer* { return nullptr; }),
+        m_ExportFunction([]() -> ash::Buffer* { return nullptr; }),
         m_ImportFunction([] (...) {}),
         m_CachedBuffer(nullptr)
     {}
@@ -17,7 +17,7 @@ namespace ash::objects
         }
     }
 
-    bool AshFunctionBufferPlug::Import(ash::AshStream* Stream)
+    bool AshFunctionBufferPlug::Import(ash::Stream* Stream)
     {
         AshDataBufferPlug* dataBufferPlug = new AshDataBufferPlug();
 
@@ -33,7 +33,7 @@ namespace ash::objects
         return Stream->HasErrorOccurred() == false;
     }
 
-    bool AshFunctionBufferPlug::Export(ash::AshStream* Stream)
+    bool AshFunctionBufferPlug::Export(ash::Stream* Stream)
     {
         if(m_CachedBuffer == nullptr)
         {

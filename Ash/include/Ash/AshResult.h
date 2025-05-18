@@ -1,56 +1,96 @@
 #pragma once
 
-#include <iostream>
 #include <future>
+#include <iostream>
 #include <malloc.h>
 
 namespace ash
 {
 
-    class AshResult
+    class Result
     {
     public:
-        AshResult(bool Successful): m_Success(Successful), m_Message("") {}
-        AshResult(bool Successful, std::string Message): m_Success(Successful), m_Message(Message) {}
-        virtual  ~AshResult() = default;
+        inline Result(bool Successful) : m_Success(Successful), m_Message("")
+        {
+        }
 
-        virtual bool WasSuccessful() { return m_Success; }
-        virtual bool HasError() { return m_Success == false; }
-        virtual std::string GetMessage() { return m_Message; }
+        inline Result(bool Successful, std::string Message) : m_Success(Successful), m_Message(Message)
+        {
+        }
+
+        virtual ~Result() = default;
+
+        virtual bool WasSuccessful()
+        {
+            return m_Success;
+        }
+
+        virtual bool HasError()
+        {
+            return m_Success == false;
+        }
+
+        virtual std::string GetMessage()
+        {
+            return m_Message;
+        }
+
     private:
         bool m_Success;
         std::string m_Message;
     };
 
-    class AshPointerResult : public AshResult
+    class PointerResult : public Result
     {
     public:
-        AshPointerResult(bool Successful): AshResult::AshResult(Successful) {}
-        AshPointerResult(bool Successful, std::string Message, void* Result): AshResult::AshResult(Successful, Message), m_Result(Result) {}
-    
-        void* GetRawResult() { return m_Result; }
-        template<typename T>
-        T* GetResult() { return static_cast<T*>(m_Result); }
+        PointerResult(bool Successful) : Result::Result(Successful)
+        {
+        }
+
+        PointerResult(bool Successful, std::string Message, void* Result) : Result::Result(Successful, Message), m_Result(Result)
+        {
+        }
+
+        void* AsRaw()
+        {
+            return m_Result;
+        }
+
+        template <typename T>
+        T* As()
+        {
+            return static_cast<T*>(m_Result);
+        }
+
     private:
         void* m_Result;
     };
 
-    template<typename T>
-    class AshCustomResult : public AshResult
+    template <typename T>
+    class CustomResult : public Result
     {
     public:
-        AshCustomResult(bool Successful): AshResult::AshResult(Successful) {}
-        AshCustomResult(bool Successful, std::string Message): AshResult::AshResult(Successful, Message) {}
+        CustomResult(bool Successful) : Result::Result(Successful)
+        {
+        }
 
-        AshCustomResult AttachResult(T Result)
+        CustomResult(bool Successful, std::string Message) : Result::Result(Successful, Message)
+        {
+        }
+
+        CustomResult Attach(T Result)
         {
             m_Result = Result;
             return *this;
         }
 
-        T GetResult() { return m_Result; }
+        T Get()
+        {
+            return m_Result;
+        }
+
     private:
         T m_Result;
     };
-    
-}
+
+} // namespace ash

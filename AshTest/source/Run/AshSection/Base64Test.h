@@ -4,5 +4,5 @@
 class Base64RunTest : public AshBaseRunTest
 {
 public:
-    ash::AshResult Do();
+    ash::Result Do();
 };

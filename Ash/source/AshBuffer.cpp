@@ -31,40 +31,40 @@ namespace ash
                 bool isReleasable : 1;
             } bits;
         } flags;
-        AshSize bufferSize;
+        Size bufferSize;
         void* bufferPointer;
     };
 
-    AshBuffer::AshBuffer()
+    Buffer::Buffer()
     {
         ASH_CLASS_IMPLEMENT_INTERNAL_OBJECT_ALLOCATION(AshBuffer);
-        this->ReleaseMemory();
+        this->Release();
     }
 
-    AshBuffer::AshBuffer(AshPointer Pointer, AshSize Size):
-        AshBuffer::AshBuffer()
+    Buffer::Buffer(Pointer Pointer, Size Size):
+        Buffer::Buffer()
     {
         this->ImportPointer(Pointer, Size);
     }
 
-    AshBuffer::AshBuffer(AshBuffer& Source)
+    Buffer::Buffer(Buffer& Source)
     {
         ASH_CLASS_IMPLEMENT_INTERNAL_OBJECT_ALLOCATION(AshBuffer);
-        this->ReleaseMemory();
+        this->Release();
         this->AllocateSize(Source.GetSize());
         memcpy(this->GetPointer(), Source.GetPointer(), Source.GetSize());
     }
 
-    AshBuffer::~AshBuffer()
+    Buffer::~Buffer()
     {
         // Actual release
-        this->ReleaseMemory();
+        this->Release();
         ASH_CLASS_IMPLEMENT_INTERNAL_OBJECT_DEALLOCATION(AshBuffer);
     }
 
-    bool AshBuffer::AllocateSize(AshSize Size)
+    bool Buffer::AllocateSize(Size Size)
     {
-        this->ReleaseMemory();
+        this->Release();
 
         classInternalAshBuffer->flags.bits.isAllocated = true;
         classInternalAshBuffer->flags.bits.isReleasable = true;
@@ -83,9 +83,9 @@ namespace ash
         return false;
     }
 
-    bool AshBuffer::AllocateArray(AshSize ElementSize, AshSize ElementCount)
+    bool Buffer::AllocateArray(Size ElementSize, Size ElementCount)
     {
-        this->ReleaseMemory();
+        this->Release();
 
         classInternalAshBuffer->flags.bits.isAllocated = true;
         classInternalAshBuffer->flags.bits.isArray = true;
@@ -105,12 +105,12 @@ namespace ash
         return false;
     }
 
-    bool AshBuffer::ExpandSize(AshSize Size)
+    bool Buffer::ExpandSize(Size Size)
     {
 
         if(this->IsAllocated())
         {
-            ash::AshSize expandedBufferSize = classInternalAshBuffer->bufferSize + Size;
+            ash::Size expandedBufferSize = classInternalAshBuffer->bufferSize + Size;
             void* expandedBufferPointer = operator new(expandedBufferSize);
 
             memset(expandedBufferPointer, 0, expandedBufferSize);
@@ -135,7 +135,7 @@ namespace ash
         return false;
     }
 
-    bool AshBuffer::ShrinkSize(AshSize Size)
+    bool Buffer::ShrinkSize(Size Size)
     {
         signed long long shrunkBufferSize = ((signed long long)classInternalAshBuffer->bufferSize) - ((signed long long)Size);
 
@@ -158,9 +158,9 @@ namespace ash
         return true;
     }
 
-    bool AshBuffer::ImportPointer(AshPointer Pointer, AshSize Size)
+    bool Buffer::ImportPointer(Pointer Pointer, Size Size)
     {
-        this->ReleaseMemory();
+        this->Release();
 
         classInternalAshBuffer->flags.bits.isAllocated = true;
         classInternalAshBuffer->flags.bits.isReleasable = false;
@@ -177,9 +177,9 @@ namespace ash
         return false;
     }
 
-    bool AshBuffer::CopyPointer(AshPointer Pointer, AshSize Size)
+    bool Buffer::CopyPointer(Pointer Pointer, Size Size)
     {
-        this->ReleaseMemory();
+        this->Release();
         if(this->AllocateSize(Size) == false)
         {
             return false;
@@ -189,9 +189,9 @@ namespace ash
         return true;
     }
 
-    bool AshBuffer::CopyBytesVector(AshBytesVector Vector)
+    bool Buffer::CopyBytesVector(BytesVector Vector)
     {
-        this->ReleaseMemory();
+        this->Release();
         if(this->AllocateSize(Vector.size()) == false)
         {
             return false;
@@ -201,32 +201,32 @@ namespace ash
         return true;
     }
 
-    bool AshBuffer::CopyAshBufferFromPointer(ash::AshBuffer* Buffer)
+    bool Buffer::CopyBufferFromPointer(ash::Buffer* Buffer)
     {
         return this->CopyPointer(Buffer->GetPointer(), Buffer->GetSize());
     }
 
-    AshBuffer* AshBuffer::DuplicateAndCopyBuffer()
+    Buffer* Buffer::DuplicateAndCopy()
     {
-        AshBuffer* duplicate = new AshBuffer();
+        Buffer* duplicate = new Buffer();
         duplicate->CopyPointer(this->GetPointer(), this->GetSize());
         return duplicate;
     }
 
-    bool AshBuffer::SetReleasable(bool Releasable)
+    bool Buffer::SetReleasable(bool Releasable)
     {
         classInternalAshBuffer->flags.bits.isReleasable = Releasable;
         return true;
     }
 
 
-    bool AshBuffer::MarkAsConsumed()
+    bool Buffer::MarkAsConsumed()
     {
         classInternalAshBuffer->flags.bits.isReleasable = false;
         return true;
     }
 
-    bool AshBuffer::ReleaseMemory()
+    bool Buffer::Release()
     {
         if(classInternalAshBuffer->bufferPointer != nullptr && classInternalAshBuffer->flags.bits.isReleasable == true)
         {
@@ -240,56 +240,56 @@ namespace ash
         return true;
     }
 
-    bool AshBuffer::IsAllocated()
+    bool Buffer::IsAllocated()
     {
         return classInternalAshBuffer->flags.bits.isAllocated;
     }
 
-    bool AshBuffer::IsImported()
+    bool Buffer::IsImported()
     {
         return classInternalAshBuffer->flags.bits.isImported;
     }
 
-    bool AshBuffer::IsArray()
+    bool Buffer::IsArray()
     {
         return classInternalAshBuffer->flags.bits.isArray;
     }
 
-    bool AshBuffer::IsReleasable()
+    bool Buffer::IsReleasable()
     {
         return classInternalAshBuffer->flags.bits.isReleasable;
     }
 
-    void* AshBuffer::GetPointer()
+    void* Buffer::GetPointer()
     {
         return classInternalAshBuffer->bufferPointer;
     }
 
-    AshSize AshBuffer::GetSize()
+    Size Buffer::GetSize()
     {
         return classInternalAshBuffer->bufferSize;
     }
 
     // File Utilities
 
-    AshResult AshBuffer::ReadFromFile(std::filesystem::path Path)
+    Result Buffer::ReadFromFile(std::filesystem::path Path)
     {
-        ReleaseMemory();
+        Release();
 
         if(std::filesystem::exists(Path) == false)
         {
-            return AshResult(false, "File does not exist.");
+            return Result(false, "File does not exist.");
         }
 
         std::ifstream istream = std::ifstream();
-        ash::AshSize istreamSize = 0;
+        ash::Size istreamSize = 0;
 
         istream.open(Path, std::ios::binary);
 
         if(istream.bad())
         {
             istream.close();
-            return AshResult(false, "Stream is bad.");
+            return Result(false, "Stream is bad.");
         }
 
         istream.seekg(0, std::ios::end);
@@ -298,21 +298,21 @@ namespace ash
 
         if(istreamSize <= 0)
         {
-            return AshResult(false, "File size is zero or well less.");
+            return Result(false, "File size is zero or well less.");
         }
 
         this->AllocateSize(istreamSize);
         istream.read(reinterpret_cast<char*>(this->GetPointer()), istreamSize);
         istream.close();
 
-        return AshResult(true);
+        return Result(true);
     }
 
-    AshResult AshBuffer::WriteToFile(std::filesystem::path Path)
+    Result Buffer::WriteToFile(std::filesystem::path Path)
     {
         if(this->GetPointer() == nullptr)
         {
-            return AshResult(false, "Buffer is nullptr.");
+            return Result(false, "Buffer is nullptr.");
         }
 
         std::ofstream ostream = std::ofstream();
@@ -321,28 +321,28 @@ namespace ash
 
         if(ostream.bad())
         {
-            return AshResult(false, "Stream is bad.");
+            return Result(false, "Stream is bad.");
         }
 
         ostream.write(reinterpret_cast<char*>(this->GetPointer()), this->GetSize());
         ostream.close();
 
-        return AshResult(true);
+        return Result(true);
     }
 
     // Memory operations
 
-    std::string AshBuffer::GetAsString()
+    std::string Buffer::GetAsString()
     {
         return std::string(GetBuffer<char>(), GetSize());
     }
 
-    bool AshBuffer::SetAsString(std::string Text)
+    bool Buffer::SetAsString(std::string Text)
     {
         return ImportPointer(Text.data(), Text.size());
     }
 
-    bool AshBuffer::ClearBytesWithValue(unsigned char Value)
+    bool Buffer::ClearBytesWithValue(unsigned char Value)
     {
         if(classInternalAshBuffer->flags.bits.isAllocated == false)
         {
@@ -353,9 +353,9 @@ namespace ash
         return true;
     }
 
-    AshBuffer& AshBuffer::operator=(AshBuffer Source)
+    Buffer& Buffer::operator=(Buffer Source)
     {
-        this->ReleaseMemory();
+        this->Release();
         ASH_CLASS_IMPLEMENT_INTERNAL_OBJECT_DEALLOCATION(AshBuffer);
         ASH_CLASS_IMPLEMENT_INTERNAL_OBJECT_ALLOCATION(AshBuffer);
         this->AllocateSize(Source.GetSize());

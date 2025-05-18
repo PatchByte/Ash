@@ -4,9 +4,9 @@
 
 namespace ash::objects
 {
-    
+
     template<typename T>
-    class AshPrimitive : public AshStreamableObject
+    class AshPrimitive : public StreamableObject
     {
     public:
         AshPrimitive(T DataValue):
@@ -17,16 +17,16 @@ namespace ash::objects
             m_DataValue()
         {}
 
-        bool Import(AshStream* Stream) override
+        bool Import(Stream* Stream) override
         {
             m_DataValue = Stream->Read<T>();
             return Stream->HasErrorOccurred() == false;
         }
-        
-        bool Export(AshStream* Stream) override
-        { 
+
+        bool Export(Stream* Stream) override
+        {
             Stream->Write<T>(m_DataValue);
-            return Stream->HasErrorOccurred() == false; 
+            return Stream->HasErrorOccurred() == false;
         }
 
         T GetDataValue()

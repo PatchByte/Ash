@@ -10,41 +10,41 @@
 namespace ash
 {
 
-    using AshCRC32Value = unsigned int;
-    using AshCRC32Table = std::vector<AshCRC32Value>;
+    using CRC32 = unsigned int;
+    using CRC32Table = std::vector<CRC32>;
 
-    class AshCRC32Utils
+    class CRC32Utils
     {
     public:
-        static AshCRC32Table GenerateTable();
-        static AshCRC32Value UpdateWithCustomTable(AshCRC32Table Table, AshCRC32Value InitialValue, AshBuffer* Buffer);
-        static AshCRC32Value Calculate(AshCRC32Value InitialValue, AshBuffer* Buffer);
+        static CRC32Table GenerateTable();
+        static CRC32 UpdateWithCustomTable(CRC32Table Table, CRC32 InitialValue, Buffer* Buffer);
+        static CRC32 Calculate(CRC32 InitialValue, Buffer* Buffer);
     };
 
-    class AshCRC32
+    class CRC32State
     {
     public:
-        AshCRC32();
-        AshCRC32(AshCRC32Value InitialValue);
+        CRC32State();
+        CRC32State(CRC32 InitialValue);
 
         bool Init();
         inline bool Clear() { m_CrcValue = 0; return true; }
         inline bool InitAndClear() { bool r = Init(); r &= Clear(); return r; }
-        bool Update(ash::AshBuffer* Buffer);
-        bool Update(ash::AshBuffer& Buffer) { return this->Update(static_cast<ash::AshBuffer*>(&Buffer)); }
-        bool Update(void* BufferPointer, AshSize BufferSize);
-        bool Update(const void* BufferPointer, AshSize BufferSize) { return this->Update(const_cast<void*>(BufferPointer), BufferSize); }
-        
+        bool Update(ash::Buffer* Buffer);
+        bool Update(ash::Buffer& Buffer) { return this->Update(static_cast<ash::Buffer*>(&Buffer)); }
+        bool Update(void* BufferPointer, Size BufferSize);
+        bool Update(const void* BufferPointer, Size BufferSize) { return this->Update(const_cast<void*>(BufferPointer), BufferSize); }
+
         template<typename T>
-        bool UpdateWithTemplateValue(T Value)
+        bool UpdateWithPrimitive(T Value)
         {
             return this->Update(&Value, sizeof(Value));
         }
 
-        inline AshCRC32Value GetValue() { return m_CrcValue; }
+        inline CRC32 GetValue() { return m_CrcValue; }
     private:
-        AshCRC32Table m_CrcTable;
-        AshCRC32Value m_CrcValue;
+        CRC32Table m_CrcTable;
+        CRC32 m_CrcValue;
     };
 
 }

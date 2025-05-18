@@ -1,25 +1,25 @@
 #include "BufferTest.h"
 #include "Ash/AshBuffer.h"
 
-ash::AshResult BufferRunTest::Do()
+ash::Result BufferRunTest::Do()
 {
     {
         // Import test
         constexpr int expectedVar = 10;
         int var = 10;
 
-        ash::AshBuffer* testBuffer = new ash::AshBuffer();
+        ash::Buffer* testBuffer = new ash::Buffer();
 
         if(testBuffer->ImportPointer(&var, sizeof(var)) == false)
         {
             delete testBuffer;
-            return ash::AshResult(false, "ImportPointer failed.");
+            return ash::Result(false, "ImportPointer failed.");
         }
 
         if(*testBuffer->GetBuffer<int>() != expectedVar)
         {
             delete testBuffer;
-            return ash::AshResult(false, "ImportPointer variables did not match.");
+            return ash::Result(false, "ImportPointer variables did not match.");
         }
 
         delete testBuffer;
@@ -29,12 +29,12 @@ ash::AshResult BufferRunTest::Do()
         constexpr int expectedVar = 20;
         int var = 20;
 
-        ash::AshBuffer* testBuffer = new ash::AshBuffer();
+        ash::Buffer* testBuffer = new ash::Buffer();
 
         if(testBuffer->AllocateSize(sizeof(int)) == false)
         {
             delete testBuffer;
-            return ash::AshResult(false, "AllocateSize failed.");
+            return ash::Result(false, "AllocateSize failed.");
         }
 
         *testBuffer->GetBuffer<int>() = expectedVar;
@@ -42,11 +42,11 @@ ash::AshResult BufferRunTest::Do()
         if(*testBuffer->GetBuffer<int>() != expectedVar)
         {
             delete testBuffer;
-            return ash::AshResult(false, "AllocateSize variables did not match.");
+            return ash::Result(false, "AllocateSize variables did not match.");
         }
 
         delete testBuffer;
     }
 
-    return ash::AshResult(true);
+    return ash::Result(true);
 }

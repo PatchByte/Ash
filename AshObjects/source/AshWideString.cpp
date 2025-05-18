@@ -36,7 +36,7 @@ namespace ash::objects
         m_Text(Text)
     {}
 
-    bool AshWideString::Import(ash::AshStream* Stream)
+    bool AshWideString::Import(ash::Stream* Stream)
     {
         unsigned short textSeed = Stream->Read<unsigned short>();
         AshStringLength textLength = Stream->Read<AshStringLength>();
@@ -59,7 +59,7 @@ namespace ash::objects
         return Stream->HasErrorOccurred() == false;
     }
 
-    bool AshWideString::Export(ash::AshStream* Stream)
+    bool AshWideString::Export(ash::Stream* Stream)
     {
         unsigned short textSeed = 0;
 

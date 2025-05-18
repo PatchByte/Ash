@@ -4,15 +4,15 @@
 #include <cstdlib>
 #include <string>
 
-ash::AshResult TemporaryFileTest::Do()
+ash::Result TemporaryFileTest::Do()
 {
-    ash::AshTemporaryFilePathOrganizer* temporaryFilePathOrganizer = new ash::AshTemporaryFilePathOrganizer("CoolNa1me!");
+    ash::TemporaryFilePathOrganizer* temporaryFilePathOrganizer = new ash::TemporaryFilePathOrganizer("CoolNa1me!");
 
     temporaryFilePathOrganizer->CreateTemporaryFolder();
 
-    if(temporaryFilePathOrganizer->FindFreePath().GetResult().string() == temporaryFilePathOrganizer->FindFreePath().GetResult().string())
+    if(temporaryFilePathOrganizer->FindFreePath().Get().string() == temporaryFilePathOrganizer->FindFreePath().Get().string())
     {
-        return ash::AshResult(false, "FindFreePath returned the same result two times.");
+        return ash::Result(false, "FindFreePath returned the same result two times.");
     }
 
     temporaryFilePathOrganizer->RemoveTemporaryFolder();
@@ -20,5 +20,5 @@ ash::AshResult TemporaryFileTest::Do()
     delete temporaryFilePathOrganizer;
     temporaryFilePathOrganizer = nullptr;
 
-    return ash::AshResult(true);
+    return ash::Result(true);
 }

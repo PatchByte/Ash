@@ -4,5 +4,5 @@
 class TemporaryFileTest : public AshBaseRunTest
 {
 public:
-    ash::AshResult Do();
+    ash::Result Do();
 };

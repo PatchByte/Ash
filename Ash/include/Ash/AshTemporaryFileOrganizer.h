@@ -6,20 +6,20 @@
 
 namespace ash
 {
-    class AshTemporaryFilePathOrganizer;
-    class AshTemporaryFileOrganizerHandle;
+    class TemporaryFilePathOrganizer;
+    class TemporaryFileOrganizerHandle;
 
-    class AshTemporaryFilePathOrganizer
+    class TemporaryFilePathOrganizer
     {
     public:
-        AshTemporaryFilePathOrganizer(std::string Name);
-        AshTemporaryFilePathOrganizer(AshTemporaryFilePathOrganizer&) = delete;
-        virtual ~AshTemporaryFilePathOrganizer();
-        virtual ash::AshResult CreateTemporaryFolder();
-        virtual ash::AshResult RemoveTemporaryFolder();
-        virtual ash::AshCustomResult<std::filesystem::path> FindFreePath();
+        TemporaryFilePathOrganizer(std::string Name);
+        TemporaryFilePathOrganizer(TemporaryFilePathOrganizer&) = delete;
+        virtual ~TemporaryFilePathOrganizer();
+        virtual ash::Result CreateTemporaryFolder();
+        virtual ash::Result RemoveTemporaryFolder();
+        virtual ash::CustomResult<std::filesystem::path> FindFreePath();
 
-        AshTemporaryFilePathOrganizer& operator=(AshTemporaryFilePathOrganizer) = delete;
+        TemporaryFilePathOrganizer& operator=(TemporaryFilePathOrganizer) = delete;
     private:
         std::string m_Name;
         unsigned long long m_Seed;

@@ -8,28 +8,21 @@
 
 namespace ash
 {
-    using AshPointer = void*;
-    using AshSize = unsigned long long;
-    using AshBytesVector = std::vector<unsigned char>;
+    using Pointer = void*;
+    using Size = unsigned long long;
+    using BytesVector = std::vector<unsigned char>;
 
-    enum class AshBufferStreamMode
-    {
-        INVALID,
-        READ,
-        WRITE
-    };
-
-    class AshBuffer
+    class Buffer
     {
     public:
-        AshBuffer();
+        Buffer();
         // Import Constructor
-        AshBuffer(AshPointer Pointer, AshSize Size);
-        AshBuffer(AshBuffer& Source);
-        virtual ~AshBuffer();
+        Buffer(Pointer Pointer, Size Size);
+        Buffer(Buffer& Source);
+        virtual ~Buffer();
 
-        virtual bool AllocateSize(AshSize Size);
-        virtual bool AllocateArray(AshSize ElementSize, AshSize ElementCount);
+        virtual bool AllocateSize(Size Size);
+        virtual bool AllocateArray(Size ElementSize, Size ElementCount);
 
         template <typename T>
         inline bool AllocateType()
@@ -37,29 +30,29 @@ namespace ash
             return this->AllocateSize(sizeof(T));
         }
 
-        virtual bool ExpandSize(AshSize Size);
-        virtual bool ShrinkSize(AshSize Size);
+        virtual bool ExpandSize(Size Size);
+        virtual bool ShrinkSize(Size Size);
 
         // This just sets the pointer and does not deallocate
 
-        virtual bool ImportPointer(AshPointer Pointer, AshSize Size);
+        virtual bool ImportPointer(Pointer Pointer, Size Size);
 
         // This will actually allocate memory that will be later on released.
 
-        virtual bool CopyPointer(AshPointer Pointer, AshSize Size);
-        virtual bool CopyBytesVector(AshBytesVector Vector);
-        virtual bool CopyAshBufferFromPointer(ash::AshBuffer* Buffer);
+        virtual bool CopyPointer(Pointer Pointer, Size Size);
+        virtual bool CopyBytesVector(BytesVector Vector);
+        virtual bool CopyBufferFromPointer(ash::Buffer* Buffer);
 
-        virtual bool CopyAshBuffer(ash::AshBuffer& Buffer)
+        virtual bool CopyBuffer(ash::Buffer& Buffer)
         {
-            return this->CopyAshBufferFromPointer(&Buffer);
+            return this->CopyBufferFromPointer(&Buffer);
         }
 
         // Allocates a new AshBuffer and copies the original AshBuffer
-        virtual AshBuffer* DuplicateAndCopyBuffer();
+        virtual Buffer* DuplicateAndCopy();
 
         // ReleaseMemory is also like a sort of "Reset" function
-        virtual bool ReleaseMemory();
+        virtual bool Release();
 
         virtual bool SetReleasable(bool Releasable);
         virtual bool MarkAsConsumed();
@@ -79,15 +72,15 @@ namespace ash
             return static_cast<unsigned char*>(GetPointer());
         }
 
-        inline virtual AshBytesVector GetBytesAsVector()
+        inline virtual BytesVector GetBytesAsVector()
         {
-            AshBytesVector vector = {};
+            BytesVector vector = {};
             vector.insert(vector.end(), GetBytes(), GetBytes() + GetSize());
             return vector;
         }
 
         template <typename T>
-        inline T* GetBufferAtOffset(ash::AshSize Offset)
+        inline T* GetBufferAtOffset(ash::Size Offset)
         {
             if (GetSize() <= Offset)
             {
@@ -98,12 +91,12 @@ namespace ash
             return reinterpret_cast<T*>(GetBytes() + Offset);
         }
 
-        virtual AshPointer GetPointer();
-        virtual AshSize GetSize();
+        virtual Pointer GetPointer();
+        virtual Size GetSize();
 
         // File Utils
-        virtual AshResult ReadFromFile(std::filesystem::path Path);
-        virtual AshResult WriteToFile(std::filesystem::path Path);
+        virtual Result ReadFromFile(std::filesystem::path Path);
+        virtual Result WriteToFile(std::filesystem::path Path);
 
         // Memory operations
 
@@ -120,7 +113,7 @@ namespace ash
         }
 
         // Assignment initialization
-        AshBuffer& operator=(AshBuffer Source);
+        Buffer& operator=(Buffer Source);
 
     private:
         ASH_CLASS_ADD_INTERNAL_OBJECT(AshBuffer);

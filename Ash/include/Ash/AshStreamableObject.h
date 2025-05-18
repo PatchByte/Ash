@@ -2,22 +2,22 @@
 #include "AshStream.h"
 
 #if ASH_OBJECTS_ERASE_NAMES
-#define ASH_STREAMABLE_OBJECT_IMPLEMENT_SIMPLE(_) bool Import(ash::AshStream* Stream); \
-                                                  bool Export(ash::AshStream* Stream);
+#define ASH_STREAMABLE_OBJECT_IMPLEMENT_SIMPLE(_) bool Import(ash::Stream* Stream); \
+                                                  bool Export(ash::Stream* Stream);
 #else
 #define ASH_STREAMABLE_OBJECT_IMPLEMENT_SIMPLE(name)    const char* GetName() override { return name ; } \
-                                                        bool Import(ash::AshStream* Stream) override;    \
-                                                        bool Export(ash::AshStream* Stream) override;
+                                                        bool Import(ash::Stream* Stream) override;    \
+                                                        bool Export(ash::Stream* Stream) override;
 #endif
 
 
 namespace ash
 {
 
-    class AshStreamableObject
+    class StreamableObject
     {
     public:
-        virtual ~AshStreamableObject() = default;
+        virtual ~StreamableObject() = default;
 
         #if ASH_OBJECTS_ERASE_NAMES
         inline const char* GetName() { return ""; }
@@ -25,8 +25,8 @@ namespace ash
         virtual const char* GetName() { return "AshStreamableObject"; }
         #endif
 
-        virtual bool Import(AshStream* Stream) { return false; }
-        virtual bool Export(AshStream* Stream) { return false; }
+        virtual bool Import(Stream* Stream) { return false; }
+        virtual bool Export(Stream* Stream) { return false; }
     };
 
 }

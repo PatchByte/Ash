@@ -15,14 +15,14 @@ static std::vector<int> smTestVector = {
     64
 };
 
-ash::AshResult VectorTest::Do()
+ash::Result VectorTest::Do()
 {
-    ash::AshBuffer* buffer = nullptr;
-    ash::AshCRC32 expectedCRC = 0;
+    ash::Buffer* buffer = nullptr;
+    ash::CRC32State expectedCRC = 0;
 
     // Write
     {
-        ash::AshStreamExpandableExportBuffer* bufferStream = new ash::AshStreamExpandableExportBuffer();
+        ash::StreamExpandableExportBuffer* bufferStream = new ash::StreamExpandableExportBuffer();
         ash::objects::AshVector<ash::objects::AshPrimitive<int>> testVector = ash::objects::AshVector<ash::objects::AshPrimitive<int>>();
 
         int i = 0;
@@ -36,10 +36,10 @@ ash::AshResult VectorTest::Do()
 
             expectedCRC.Update(&l, sizeof(l));
         }
-        
+
         if(testVector.Export(bufferStream) == false)
         {
-            return ash::AshResult(false, "The vector testVector export failed.");
+            return ash::Result(false, "The vector testVector export failed.");
         }
 
         buffer = bufferStream->MakeCopyOfBuffer();
@@ -49,13 +49,13 @@ ash::AshResult VectorTest::Do()
 
     // Read
     {
-        ash::AshStream* bufferStream = new ash::AshStreamStaticBuffer(buffer, ash::AshStreamMode::READ);
+        ash::Stream* bufferStream = new ash::StreamStaticBuffer(buffer, ash::StreamMode::READ);
         ash::objects::AshVector<ash::objects::AshPrimitive<int>> testVector = ash::objects::AshVector<ash::objects::AshPrimitive<int>>();
-        ash::AshCRC32 calculatedCRC = ash::AshCRC32();
+        ash::CRC32State calculatedCRC = ash::CRC32State();
 
         if(testVector.Import(bufferStream) == false)
         {
-            return ash::AshResult(false, "The vector testVector import failed.");
+            return ash::Result(false, "The vector testVector import failed.");
         }
 
         int i = 0;
@@ -69,11 +69,11 @@ ash::AshResult VectorTest::Do()
 
         if(calculatedCRC.GetValue() != expectedCRC.GetValue())
         {
-            return ash::AshResult(false, "The calculatedCRC and expectedCRC did not match.");
+            return ash::Result(false, "The calculatedCRC and expectedCRC did not match.");
         }
 
         delete bufferStream;
     }
 
-    return ash::AshResult(true);
+    return ash::Result(true);
 }

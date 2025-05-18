@@ -3,7 +3,7 @@
 namespace ash
 {
 
-    std::string AshSerializer::Encode(AshBuffer* Buffer, char EncodeShuffle)
+    std::string TextSerializer::Encode(Buffer* Buffer, char EncodeShuffle)
     {
         std::string Result = "";
 
@@ -20,15 +20,15 @@ namespace ash
 
         return Result;
     }
-    
-    AshBuffer* AshSerializer::Decode(std::string Text, char DecodeShuffle)
+
+    Buffer* TextSerializer::Decode(std::string Text, char DecodeShuffle)
     {
         if(Text.length() <= 0)
         {
             return nullptr;
         }
 
-        AshBuffer* buffer = new AshBuffer();
+        Buffer* buffer = new Buffer();
         size_t bufferSize = Text.length() / 2;
 
         if((bufferSize * 2) != Text.length())
@@ -44,7 +44,7 @@ namespace ash
         for(size_t i = 0; i < bufferSize; i++)
         {
             unsigned char currentByte = 0;
-            
+
             currentByte |= (Text[(i * 2) + 0] - DecodeShuffle) << 0;
             currentByte |= (Text[(i * 2) + 1] - DecodeShuffle) << 4;
 

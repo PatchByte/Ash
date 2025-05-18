@@ -25,7 +25,7 @@ namespace ash
         ~AshLogger();
 
         virtual void SetPrefixFunction(AshLoggerPrefixFunctionDelegate PrefixFunction);
-        
+
         virtual std::string GetLoggerName();
         virtual AshLoggerPrefixFunctionDelegate GetPrefixFunction();
 
@@ -40,12 +40,12 @@ namespace ash
         {
             return this->LogWithFormatArgumentsStringTag(Tag, LoggerFormat, fmt::make_format_args(LoggerFormatArgs...));
         }
-        
+
         virtual bool LogWithFormatArguments(AshLoggerShortTag LoggerTag, std::string LoggerFormat, fmt::format_args LoggerFormatArgs);
         virtual bool LogWithFormatArgumentsStringTag(std::string LoggerTag, std::string LoggerFormat, fmt::format_args LoggerFormatArgs);
 
         virtual ash::AshLoggerTagRegistry GetTagRegistry();
-        virtual ash::AshSize GetLongestTagLength();
+        virtual ash::Size GetLongestTagLength();
     private:
         ASH_CLASS_ADD_INTERNAL_OBJECT(AshLogger);
     };

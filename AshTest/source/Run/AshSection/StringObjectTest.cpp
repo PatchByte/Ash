@@ -5,18 +5,18 @@
 static constexpr std::string_view smStringAsciiObjectTestExpectedString = "Hello, world!";
 static constexpr std::wstring_view smStringWideObjectTestExpectedString = L"Hello, world!";
 
-ash::AshResult StringAsciiObjectTest::Do()
+ash::Result StringAsciiObjectTest::Do()
 {
-    ash::AshBuffer* buffer = nullptr;
+    ash::Buffer* buffer = nullptr;
 
     {
         // Write
-        ash::AshStreamExpandableExportBuffer* bufferStream = new ash::AshStreamExpandableExportBuffer();
+        ash::StreamExpandableExportBuffer* bufferStream = new ash::StreamExpandableExportBuffer();
         ash::objects::AshAsciiString testString = smStringAsciiObjectTestExpectedString;
 
         if(testString.Export(bufferStream) == false)
         {
-            return ash::AshResult(false, "Export failed.");
+            return ash::Result(false, "Export failed.");
         }
 
         buffer = bufferStream->MakeCopyOfBuffer();
@@ -25,38 +25,38 @@ ash::AshResult StringAsciiObjectTest::Do()
     }
     {
         // Read
-        ash::AshStream* bufferStream = new ash::AshStreamStaticBuffer(buffer, ash::AshStreamMode::READ);
+        ash::Stream* bufferStream = new ash::StreamStaticBuffer(buffer, ash::StreamMode::READ);
         ash::objects::AshAsciiString testString = "";
 
         if(testString.Import(bufferStream) == false)
         {
-            return ash::AshResult(false, "Import failed.");
+            return ash::Result(false, "Import failed.");
         }
 
         if(testString.GetText() != smStringAsciiObjectTestExpectedString)
         {
-            return ash::AshResult(false, "Imported string did not match.");
+            return ash::Result(false, "Imported string did not match.");
         }
 
         delete bufferStream;
     }
 
     delete buffer;
-    return ash::AshResult(true);
+    return ash::Result(true);
 }
 
-ash::AshResult StringWideObjectTest::Do()
+ash::Result StringWideObjectTest::Do()
 {
-    ash::AshBuffer* buffer = new ash::AshBuffer();
+    ash::Buffer* buffer = new ash::Buffer();
 
     {
         // Write
-        ash::AshStreamExpandableExportBuffer* bufferStream = new ash::AshStreamExpandableExportBuffer();
+        ash::StreamExpandableExportBuffer* bufferStream = new ash::StreamExpandableExportBuffer();
         ash::objects::AshWideString testString = smStringWideObjectTestExpectedString;
 
         if(testString.Export(bufferStream) == false)
         {
-            return ash::AshResult(false, "Export failed.");
+            return ash::Result(false, "Export failed.");
         }
 
         buffer = bufferStream->MakeCopyOfBuffer();
@@ -65,22 +65,22 @@ ash::AshResult StringWideObjectTest::Do()
     }
     {
         // Read
-        ash::AshStream* bufferStream = new ash::AshStreamStaticBuffer(buffer, ash::AshStreamMode::READ);
+        ash::Stream* bufferStream = new ash::StreamStaticBuffer(buffer, ash::StreamMode::READ);
         ash::objects::AshWideString testString = L"";
 
         if(testString.Import(bufferStream) == false)
         {
-            return ash::AshResult(false, "Import failed.");
+            return ash::Result(false, "Import failed.");
         }
 
         if(testString.GetText() != smStringWideObjectTestExpectedString)
         {
-            return ash::AshResult(false, "Imported string did not match.");
+            return ash::Result(false, "Imported string did not match.");
         }
 
         delete bufferStream;
     }
 
     delete buffer;
-    return ash::AshResult(true);
+    return ash::Result(true);
 }

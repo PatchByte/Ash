@@ -4,5 +4,5 @@
 class StreamRunTest : public AshBaseRunTest
 {
 public:
-    ash::AshResult Do();
+    ash::Result Do();
 };
