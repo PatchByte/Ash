@@ -5,7 +5,6 @@
 #include <functional>
 
 #include "fmt/format.h"
-#include "fmt/base.h"
 #include "Ash/Class.h"
 #include "Ash/Buffer.h"
 

@@ -1,9 +1,7 @@
 #ifndef ASH_RESULT_H
 #define ASH_RESULT_H
 
-#include <future>
 #include <iostream>
-#include <malloc.h>
 
 namespace ash
 {

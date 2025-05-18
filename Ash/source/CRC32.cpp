@@ -1,5 +1,4 @@
 #include "Ash/CRC32.h"
-#include <iostream>
 
 /*
  * Implementation stolen from https://gist.github.com/timepp/1f678e200d9e0f2a043a9ec6b3690635

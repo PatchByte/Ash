@@ -2,7 +2,6 @@
 #define ASHBASE64_H
 
 #include "Buffer.h"
-#include <iostream>
 
 // AshBase64 implementation being used from: https://stackoverflow.com/a/13935718 (https://stackoverflow.com/questions/180947/base64-decode-snippet-in-c)
 
