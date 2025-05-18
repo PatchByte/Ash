@@ -1,6 +1,8 @@
-#pragma once
+#ifndef ASH_STEPTIMER_H
+#define ASH_STEPTIMER_H
 
 #include <chrono>
+
 namespace ash
 {
 
@@ -17,3 +19,5 @@ namespace ash
     };
 
 }
+
+#endif // !ASH_STEPTIMER_H

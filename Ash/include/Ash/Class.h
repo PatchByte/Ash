@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ASH_CLASS_H
+#define ASH_CLASS_H
 
 // Class internal objects are classes that can only be accessed by the parent
 // It helps with the compile time and access management
@@ -10,3 +11,5 @@
 #define ASH_CLASS_DECLARE_FRIEND(name) friend class name;
 
 #define ASH_CLASS_IMPLEMENT_SIMPLE_INSTANCE_FUNCTION(_Class) static _Class * GetInstance() { static _Class _Class##Instance = _Class (); return & _Class##Instance ; }
+
+#endif // !ASH_CLASS_H

@@ -1,8 +1,9 @@
-#pragma once
-#include "Buffer.h"
+#ifndef ASH_CRC32_H
+#define ASH_CRC32_H
 
 #include <vector>
 
+#include "Buffer.h"
 /*
  * Implementation stolen from https://gist.github.com/timepp/1f678e200d9e0f2a043a9ec6b3690635
  */
@@ -48,3 +49,5 @@ namespace ash
     };
 
 }
+
+#endif // !ASH_CRC32_H

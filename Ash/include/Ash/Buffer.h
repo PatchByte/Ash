@@ -1,4 +1,6 @@
-#pragma once
+#ifndef ASH_BUFFER_H
+#define ASH_BUFFER_H
+
 #include "Class.h"
 #include "Result.h"
 
@@ -120,3 +122,5 @@ namespace ash
     };
 
 } // namespace ash
+
+#endif // !ASH_BUFFER_H

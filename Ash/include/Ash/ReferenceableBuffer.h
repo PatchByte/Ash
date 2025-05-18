@@ -1,4 +1,6 @@
-#pragma once
+#ifndef ASH_REFERENCEABLEBUFFER_H
+#define ASH_REFERENCEABLEBUFFER_H
+
 #include "Buffer.h"
 
 namespace ash
@@ -27,7 +29,7 @@ namespace ash
         {
             ash::Size offsetCalculated = (ash::Size)(Pointer) - (ash::Size)(this->GetPointer());
 
-            if(offsetCalculated > this->GetSize())
+            if (offsetCalculated > this->GetSize())
             {
                 return nullptr;
             }
@@ -35,7 +37,7 @@ namespace ash
             return this->ReferenceOffset(offsetCalculated, Size);
         }
 
-        template<typename T>
+        template <typename T>
         inline ReferenceableHandle* ReferenceTypeAddress(T* Pointer, ash::Size Size = 1)
         {
             return this->ReferenceAddress(reinterpret_cast<void*>(Pointer), Size);
@@ -47,9 +49,11 @@ namespace ash
         ash::Size GetReferencesCount();
 
         ReferenceableBuffer& operator=(ReferenceableBuffer Source);
+
     private:
         virtual bool NotifyReferenceRemoval(ReferenceableHandleId ReferenceId);
         ASH_CLASS_DECLARE_FRIEND(ReferenceableHandle);
+
     private:
         ASH_CLASS_ADD_INTERNAL_OBJECT(AshReferenceableBuffer);
     };
@@ -66,15 +70,18 @@ namespace ash
         virtual ash::ReferenceableBuffer* GetParent();
         virtual ash::Size GetOffset();
         virtual void* GetLocation();
-        template<typename T>
+
+        template <typename T>
         inline T* GetLocationAs()
         {
-            return static_cast<T*>( this->GetLocation() );
+            return static_cast<T*>(this->GetLocation());
         }
+
         virtual ash::Size GetSize();
         virtual bool IsValid();
 
         ReferenceableHandle& operator=(ReferenceableHandle Source) = delete;
+
     private:
         ReferenceableHandle();
         void Invalidate();
@@ -83,4 +90,6 @@ namespace ash
         ASH_CLASS_DECLARE_FRIEND(ReferenceableBuffer);
     };
 
-}
+} // namespace ash
+
+#endif // !ASH_REFERENCEABLEBUFFER_H

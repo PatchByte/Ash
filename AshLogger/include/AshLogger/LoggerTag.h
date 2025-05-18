@@ -1,4 +1,6 @@
-#pragma once
+#ifndef ASHLOGGER_LOGGERTAG_H
+#define ASHLOGGER_LOGGERTAG_H
+
 #include <functional>
 #include <iostream>
 #include <vector>
@@ -87,3 +89,5 @@ namespace ash
         std::vector<LoggerShortTag> filterTrigger;
     };
 }
+
+#endif // !ASHLOGGER_LOGGERTAG_H

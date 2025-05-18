@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ASHLOGGER_LOGGER_H
+#define ASHLOGGER_LOGGER_H
 
 #include <iostream>
 #include <functional>
@@ -52,3 +53,5 @@ namespace ash
     };
 
 }
+
+#endif // !ASHLOGGER_LOGGER_H

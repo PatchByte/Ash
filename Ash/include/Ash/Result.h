@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ASH_RESULT_H
+#define ASH_RESULT_H
 
 #include <future>
 #include <iostream>
@@ -94,3 +95,5 @@ namespace ash
     };
 
 } // namespace ash
+
+#endif // !ASH_RESULT_H

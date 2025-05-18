@@ -1,5 +1,5 @@
-#ifndef _ASHBASE64_H
-#define _ASHBASE64_H
+#ifndef ASHBASE64_H
+#define ASHBASE64_H
 
 #include "Buffer.h"
 #include <iostream>
@@ -14,9 +14,13 @@ namespace ash
     public:
         static std::string Encode(Buffer* Buffer);
         static Buffer* Decode(std::string Text);
-        static inline std::string Encode(Buffer& Buffer) { return Base64::Encode(&Buffer); }
+
+        static inline std::string Encode(Buffer& Buffer)
+        {
+            return Base64::Encode(&Buffer);
+        }
     };
 
-}
+} // namespace ash
 
-#endif // !_ASHBASE64_H
+#endif // !ASHBASE64_H

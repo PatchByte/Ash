@@ -1,4 +1,6 @@
-#pragma once
+#ifndef ASH_SERIALIZER_H
+#define ASH_SERIALIZER_H
+
 #include "Buffer.h"
 
 namespace ash
@@ -13,3 +15,5 @@ namespace ash
     };
 
 }
+
+#endif // !ASH_SERIALIZER_H

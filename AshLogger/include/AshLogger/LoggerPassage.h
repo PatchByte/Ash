@@ -1,4 +1,6 @@
-#pragma once
+#ifndef ASHLOGGER_LOGGERPASSAGE_H
+#define ASHLOGGER_LOGGERPASSAGE_H
+
 #include <iostream>
 #include <functional>
 #include <fmt/core.h>
@@ -65,3 +67,5 @@ namespace ash
     };
 
 }
+
+#endif // !ASHLOGGER_LOGGERPASSAGE_H

@@ -1,6 +1,9 @@
-#pragma once
+#ifndef ASH_TEMPORARYFILEORGANIZER_H
+#define ASH_TEMPORARYFILEORGANIZER_H
+
 #include <iostream>
 #include <filesystem>
+
 #include <Ash/Class.h>
 #include <Ash/Result.h>
 
@@ -26,3 +29,5 @@ namespace ash
     };
 
 }
+
+#endif // !ASH_TEMPORARYFILEORGANIZER_H
