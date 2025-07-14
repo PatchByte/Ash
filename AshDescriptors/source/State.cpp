@@ -3,16 +3,16 @@
 namespace ash::descriptors
 {
 
-    DescriptorState::DescriptorState(ash::Buffer* Buffer) : m_Buffer(Buffer), m_CurrentOffset(0), m_BytesLeft(m_Buffer->GetSize())
+    State::State(ash::Buffer* Buffer) : m_Buffer(Buffer), m_CurrentOffset(0), m_BytesLeft(m_Buffer->GetSize())
     {
     }
 
-    bool DescriptorState::HasBytesLeft(ash::Size Size)
+    bool State::HasBytesLeft(ash::Size Size)
     {
         return ((signed long long)m_BytesLeft - (signed long long)Size) >= 0;
     }
 
-    bool DescriptorState::ConsumeBytes(ash::Size Size)
+    bool State::ConsumeBytes(ash::Size Size)
     {
         if (HasBytesLeft(Size))
         {
@@ -25,7 +25,7 @@ namespace ash::descriptors
         return false;
     }
 
-    void* DescriptorState::ConsumeCheckAndReturnPreviousLocation(ash::Size Size)
+    void* State::ConsumeCheckAndReturnPreviousLocation(ash::Size Size)
     {
         if (HasBytesLeft(Size) == false)
         {

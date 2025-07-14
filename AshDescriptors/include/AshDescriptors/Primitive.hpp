@@ -16,8 +16,8 @@ namespace ash::descriptors
             m_ReferenceDataLength = sizeof(T);
         }
 
-        bool Serialize(DescriptorState& State) override;
-        bool Deserialize(DescriptorState& State) override;
+        bool Serialize(State& State) override;
+        bool Deserialize(State& State) override;
 
         ash::Size GetRequiredSerializationLength() override
         {

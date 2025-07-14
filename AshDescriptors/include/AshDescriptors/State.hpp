@@ -5,11 +5,11 @@
 namespace ash::descriptors
 {
 
-    class DescriptorState
+    class State
     {
     public:
         //! @warning Please check if @param[in, out] Buffer is actually a non-nullptr.
-        DescriptorState(ash::Buffer* Buffer);
+        State(ash::Buffer* Buffer);
 
         bool HasBytesLeft(ash::Size Size);
         bool ConsumeBytes(ash::Size Size);

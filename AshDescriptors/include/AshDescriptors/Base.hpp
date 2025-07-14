@@ -10,8 +10,8 @@ namespace ash::descriptors
     {
     public:
         virtual ~Base() = default;
-        virtual bool Serialize(DescriptorState& State) = 0;
-        virtual bool Deserialize(DescriptorState& State) = 0;
+        virtual bool Serialize(State& State) = 0;
+        virtual bool Deserialize(State& State) = 0;
         virtual ash::Size GetRequiredSerializationLength() = 0;
     };
 

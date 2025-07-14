@@ -19,7 +19,7 @@ namespace ash::descriptors
         }
     }
 
-    bool List::Serialize(DescriptorState& State)
+    bool List::Serialize(State& State)
     {
         dOrderSeed listRandomOrderSeed = rand();
 
@@ -47,7 +47,7 @@ namespace ash::descriptors
         return true;
     }
 
-    bool List::Deserialize(DescriptorState& State)
+    bool List::Deserialize(State& State)
     {
         dOrderSeed listRandomOrderSeed = 0;
 
@@ -95,7 +95,7 @@ namespace ash::descriptors
             return nullptr;
         }
 
-        DescriptorState state = DescriptorState(buffer);
+        State state = State(buffer);
 
         if (this->Serialize(state) == false)
         {
@@ -113,7 +113,7 @@ namespace ash::descriptors
             return false;
         }
 
-        DescriptorState state = DescriptorState(Buffer);
+        State state = State(Buffer);
         auto res = this->Deserialize(state);
 
         if (Deallocate == true)

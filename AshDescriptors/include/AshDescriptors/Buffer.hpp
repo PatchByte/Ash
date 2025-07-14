@@ -24,8 +24,8 @@ namespace ash::descriptors
             m_SizeFieldType = SizeFieldType;
         }
 
-        bool Serialize(DescriptorState& State) override;
-        bool Deserialize(DescriptorState& State) override;
+        bool Serialize(State& State) override;
+        bool Deserialize(State& State) override;
         ash::Size GetRequiredSerializationLength() override;
 
     private:

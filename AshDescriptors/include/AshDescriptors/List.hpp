@@ -19,8 +19,8 @@ namespace ash::descriptors
         List(std::vector<Base*> List);
         ~List() override;
 
-        bool Serialize(DescriptorState& State) override;
-        bool Deserialize(DescriptorState& State) override;
+        bool Serialize(State& State) override;
+        bool Deserialize(State& State) override;
         ash::Size GetRequiredSerializationLength() override;
 
         ash::Buffer* SerializeAndForget();

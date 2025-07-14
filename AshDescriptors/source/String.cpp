@@ -4,7 +4,7 @@
 namespace ash::descriptors
 {
 
-    bool String::Serialize(DescriptorState& State)
+    bool String::Serialize(State& State)
     {
         if (auto bufferSizeField = State.ConsumeCheckAndReturnPreviousLocation(static_cast<unsigned int>(m_SizeFieldType)))
         {
@@ -30,7 +30,7 @@ namespace ash::descriptors
         return true;
     }
 
-    bool String::Deserialize(DescriptorState& State)
+    bool String::Deserialize(State& State)
     {
         if (auto bufferSizeField = State.ConsumeCheckAndReturnPreviousLocation(static_cast<unsigned int>(m_SizeFieldType)))
         {

@@ -15,7 +15,7 @@ namespace ash::descriptors
             ALPHA_NUM = 1,
         };
 
-        inline String(std::string* Buffer, ash::Size MaxSize = 0xFF, FilterType Filter = FilterType::ALPHA_NUM, SizeType SizeFieldType = SizeType::U8)
+        inline String(std::string* Buffer, ash::Size MaxSize = 0xFF, FilterType Filter = FilterType::NONE, SizeType SizeFieldType = SizeType::U8)
         {
             m_Buffer = Buffer;
             m_MaxSize = MaxSize;
@@ -23,8 +23,8 @@ namespace ash::descriptors
             m_SizeFieldType = SizeFieldType;
         }
 
-        bool Serialize(DescriptorState& State) override;
-        bool Deserialize(DescriptorState& State) override;
+        bool Serialize(State& State) override;
+        bool Deserialize(State& State) override;
         ash::Size GetRequiredSerializationLength() override;
 
     private:

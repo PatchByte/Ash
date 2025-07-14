@@ -4,7 +4,7 @@
 namespace ash::descriptors
 {
 
-    bool Primitive::Serialize(DescriptorState& State)
+    bool Primitive::Serialize(State& State)
     {
         if (m_ReferenceDataBuffer == nullptr)
         {
@@ -23,7 +23,7 @@ namespace ash::descriptors
         return true;
     }
 
-    bool Primitive::Deserialize(DescriptorState& State)
+    bool Primitive::Deserialize(State& State)
     {
         if (m_ReferenceDataBuffer == nullptr)
         {
