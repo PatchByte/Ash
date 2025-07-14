@@ -18,13 +18,16 @@ namespace ash::descriptors
             return false;
         }
 
-        if (auto bufferDataField = State.ConsumeCheckAndReturnPreviousLocation(m_Buffer->size()))
+        if (m_Buffer->size() > 0)
         {
-            memcpy(bufferDataField, m_Buffer->data(), m_Buffer->size());
-        }
-        else
-        {
-            return false;
+            if (auto bufferDataField = State.ConsumeCheckAndReturnPreviousLocation(m_Buffer->size()))
+            {
+                memcpy(bufferDataField, m_Buffer->data(), m_Buffer->size());
+            }
+            else
+            {
+                return false;
+            }
         }
 
         return true;
