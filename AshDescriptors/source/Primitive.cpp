@@ -1,4 +1,5 @@
 #include "AshDescriptors/Primitive.hpp"
+#include <bit>
 #include <cstring>
 
 namespace ash::descriptors

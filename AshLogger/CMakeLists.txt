@@ -3,8 +3,6 @@ project("AshLogger")
 file(GLOB ASHLOGGER_HEADER_FILES ${CMAKE_CURRENT_SOURCE_DIR}/include/AshLogger/*.h)
 file(GLOB ASHLOGGER_SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/source/*.cpp)
 
-include_directories(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/include/)
-
 add_library(${PROJECT_NAME} STATIC  ${ASHLOGGER_HEADER_FILES}
                                     ${ASHLOGGER_SOURCE_FILES}
 )

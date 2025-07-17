@@ -1,15 +1,16 @@
 #include "Ash/Serializer.hpp"
+#include "Ash/Buffer.hpp"
 
 namespace ash
 {
 
-    std::string TextSerializer::Encode(Buffer* Buffer, char EncodeShuffle)
+    std::string TextSerializer::Encode(void* Data, Size Length, char EncodeShuffle)
     {
         std::string Result = "";
 
-        for (size_t i = 0; i < Buffer->GetSize(); i++)
+        for (Size i = 0; i < Length; i++)
         {
-            unsigned char currentByte = Buffer->GetBytes()[i];
+            unsigned char currentByte = static_cast<unsigned char*>(Data)[i];
 
             char firstHalfPartOfByte = EncodeShuffle + ((currentByte >> 0) & 0xF);
             char secondHalfPartOfByte = EncodeShuffle + ((currentByte >> 4) & 0xF);
@@ -21,34 +22,56 @@ namespace ash
         return Result;
     }
 
-    Buffer* TextSerializer::Decode(std::string Text, char DecodeShuffle)
+    bool TextSerializer::Decode(std::string Text, void* Data, Size Length, char Shuffle)
     {
-        if (Text.length() <= 0)
+        if (Text.length() <= 0 || (Text.length() % 2) != 0)
         {
-            return nullptr;
+            return false;
         }
 
-        Buffer* buffer = new Buffer();
         size_t bufferSize = Text.length() / 2;
 
         if ((bufferSize * 2) != Text.length())
         {
-            return nullptr;
-        }
-
-        if (buffer->AllocateBySize(bufferSize) == false)
-        {
-            return nullptr;
+            return false;
         }
 
         for (size_t i = 0; i < bufferSize; i++)
         {
             unsigned char currentByte = 0;
 
-            currentByte |= (Text[(i * 2) + 0] - DecodeShuffle) << 0;
-            currentByte |= (Text[(i * 2) + 1] - DecodeShuffle) << 4;
+            currentByte |= (Text[(i * 2) + 0] - Shuffle) << 0;
+            currentByte |= (Text[(i * 2) + 1] - Shuffle) << 4;
 
-            buffer->GetBytes()[i] = currentByte;
+            static_cast<unsigned char*>(Data)[i] = currentByte;
+        }
+
+        return true;
+    }
+
+    Buffer* TextSerializer::Decode(std::string Text, char DecodeShuffle)
+    {
+        if (Text.length() <= 0 || (Text.length() % 2) != 0)
+        {
+            return nullptr;
+        }
+
+        ash::Buffer* buffer = new ash::Buffer();
+
+        if (buffer->AllocateBySize(Text.length() / 2) == false)
+        {
+            delete buffer;
+            buffer = nullptr;
+
+            return buffer;
+        }
+
+        if (Decode(Text, buffer->GetPointer(), buffer->GetSize()) == false)
+        {
+            delete buffer;
+            buffer = nullptr;
+
+            return buffer;
         }
 
         return buffer;

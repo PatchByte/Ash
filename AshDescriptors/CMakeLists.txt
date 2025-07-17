@@ -3,8 +3,6 @@ project("AshDescriptors")
 file(GLOB ASHDESCRIPTORS_HEADER_FILES ${CMAKE_CURRENT_SOURCE_DIR}/include/AshDescriptors/*.h)
 file(GLOB ASHDESCRIPTORS_SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/source/*.cpp)
 
-include_directories(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/include/)
-
 add_library(${PROJECT_NAME} STATIC  ${ASHDESCRIPTORS_HEADER_FILES}
                                     ${ASHDESCRIPTORS_SOURCE_FILES}
 )
