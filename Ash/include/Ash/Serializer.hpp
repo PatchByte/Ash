@@ -21,7 +21,7 @@ namespace ash
             return Encode(Buffer.GetPointer(), Buffer.GetSize(), Shuffle);
         }
 
-        static bool Decode(std::string Text, void* Data, Size Length, char Shuffle = 'A');
+        static bool Decode(std::string Text, void* Data, Size* Length, char Shuffle = 'A');
 
         static Buffer* Decode(std::string Text, char Shuffle = 'A');
     };

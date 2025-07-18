@@ -22,29 +22,31 @@ namespace ash
         return Result;
     }
 
-    bool TextSerializer::Decode(std::string Text, void* Data, Size Length, char Shuffle)
+    bool TextSerializer::Decode(std::string Text, void* OutputData, Size* OutputLength, char Shuffle)
     {
         if (Text.length() <= 0 || (Text.length() % 2) != 0)
         {
             return false;
         }
 
-        size_t bufferSize = Text.length() / 2;
+        size_t actualOutputSize = Text.length() >> 1;
 
-        if ((bufferSize * 2) != Text.length())
+        if (actualOutputSize > *OutputLength)
         {
             return false;
         }
 
-        for (size_t i = 0; i < bufferSize; i++)
+        for (size_t i = 0; i < actualOutputSize; i++)
         {
             unsigned char currentByte = 0;
 
             currentByte |= (Text[(i * 2) + 0] - Shuffle) << 0;
             currentByte |= (Text[(i * 2) + 1] - Shuffle) << 4;
 
-            static_cast<unsigned char*>(Data)[i] = currentByte;
+            static_cast<unsigned char*>(OutputData)[i] = currentByte;
         }
+
+        *OutputLength = actualOutputSize;
 
         return true;
     }
@@ -58,7 +60,7 @@ namespace ash
 
         ash::Buffer* buffer = new ash::Buffer();
 
-        if (buffer->AllocateBySize(Text.length() / 2) == false)
+        if (buffer->AllocateBySize(Text.length() >> 1) == false)
         {
             delete buffer;
             buffer = nullptr;
@@ -66,7 +68,9 @@ namespace ash
             return buffer;
         }
 
-        if (Decode(Text, buffer->GetPointer(), buffer->GetSize()) == false)
+        ash::Size bufferSize = buffer->GetSize();
+
+        if (Decode(Text, buffer->GetPointer(), &bufferSize) == false)
         {
             delete buffer;
             buffer = nullptr;
