@@ -4,6 +4,7 @@
 #include "Ash/Result.hpp"
 #include "AshDescriptors/Base.hpp"
 #include <Ash/Buffer.hpp>
+#include <string>
 
 namespace ash::descriptors
 {
@@ -27,8 +28,11 @@ namespace ash::descriptors
         {
             ash::Result result = Deserialize(Descriptor, Buffer);
             delete Descriptor;
-            return std::move(Descriptor);
+            return std::move(result);
         }
+
+        static ash::CustomResult<std::string> SerializeAndConsumeToText(Base* Descriptor);
+        static ash::Result DeserializeAndConsumeFromText(Base* Descriptor, std::string Text);
     };
 
 } // namespace ash::descriptors

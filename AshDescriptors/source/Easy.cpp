@@ -1,6 +1,7 @@
 #include "AshDescriptors/Easy.hpp"
 #include "Ash/Buffer.hpp"
 #include "Ash/Result.hpp"
+#include "Ash/Serializer.hpp"
 #include "AshDescriptors/State.hpp"
 
 namespace ash::descriptors
@@ -35,6 +36,41 @@ namespace ash::descriptors
         }
 
         return ash::Result(true);
+    }
+
+    ash::CustomResult<std::string> Easy::SerializeAndConsumeToText(Base* Descriptor)
+    {
+        if (auto res = SerializeAndConsume(Descriptor); res.HasError())
+        {
+            return ash::CustomResult<std::string>(false, "Failed to serialize. " + res.GetMessage());
+        }
+        else
+        {
+            ash::Buffer* buffer = res.Get();
+            std::string text = ash::TextSerializer::Encode(buffer);
+
+            delete buffer;
+            buffer = nullptr;
+
+            return ash::CustomResult<std::string>(true).Attach(text);
+        }
+    }
+
+    ash::Result Easy::DeserializeAndConsumeFromText(Base* Descriptor, std::string Text)
+    {
+        if (ash::Buffer* buffer = ash::TextSerializer::Decode(Text); buffer == nullptr)
+        {
+            return ash::Result(false, "Failed to decode");
+        }
+        else
+        {
+            auto res = DeserializeAndConsume(Descriptor, buffer);
+
+            delete buffer;
+            buffer = nullptr;
+
+            return std::move(res);
+        }
     }
 
 } // namespace ash::descriptors

@@ -42,7 +42,7 @@ namespace ash
     class PointerResult : public Result
     {
     public:
-        PointerResult(bool Successful) : Result::Result(Successful)
+        PointerResult(bool Successful) : Result::Result(Successful), m_Result()
         {
         }
 
